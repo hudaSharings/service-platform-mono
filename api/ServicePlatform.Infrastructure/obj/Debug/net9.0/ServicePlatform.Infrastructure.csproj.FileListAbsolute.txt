@@ -1,0 +1,5 @@
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net9.0\ServicePlatform.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net9.0\ServicePlatform.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net9.0\ServicePlatform.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net9.0\ServicePlatform.Infrastructure.AssemblyInfo.cs
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net9.0\ServicePlatform.Infrastructure.csproj.CoreCompileInputs.cache

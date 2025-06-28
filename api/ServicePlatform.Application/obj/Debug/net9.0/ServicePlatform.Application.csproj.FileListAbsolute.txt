@@ -1,0 +1,15 @@
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\bin\Debug\net9.0\ServicePlatform.Application.deps.json
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\bin\Debug\net9.0\ServicePlatform.Application.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\bin\Debug\net9.0\ServicePlatform.Application.pdb
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\bin\Debug\net9.0\ServicePlatform.Domain.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\bin\Debug\net9.0\ServicePlatform.Domain.pdb
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.AssemblyInfoInputs.cache
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.AssemblyInfo.cs
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServiceP.6227FED7.Up2Date
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\refint\ServicePlatform.Application.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ServicePlatform.Application.pdb
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net9.0\ref\ServicePlatform.Application.dll

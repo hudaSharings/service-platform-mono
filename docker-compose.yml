@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: serviceplatform_db
+    restart: always
+    environment:
+      POSTGRES_USER: serviceplatform
+      POSTGRES_PASSWORD: serviceplatform_pw
+      POSTGRES_DB: serviceplatform_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - serviceplatform
+
+  api:
+    build:
+      context: ./api/ServicePlatform.Api
+      dockerfile: Dockerfile
+    container_name: serviceplatform_api
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:7001
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=serviceplatform_db;Username=serviceplatform;Password=serviceplatform_pw
+    ports:
+      - '7001:7001'
+    networks:
+      - serviceplatform
+    volumes:
+      - ./api:/app
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: serviceplatform_web
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:7001/api
+    ports:
+      - '3000:3000'
+    networks:
+      - serviceplatform
+    volumes:
+      - ./web:/app
+
+volumes:
+  db_data:
+
+networks:
+  serviceplatform:
+    driver: bridge 
