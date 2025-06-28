@@ -10,6 +10,18 @@ export interface User {
   isVerified: boolean;
   isActive: boolean;
   profilePicture?: string;
+  bio?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  skills?: string[];
+  hourlyRate?: number;
+  rating?: number;
+  reviewCount?: number;
+  totalEarnings?: number;
+  totalServices?: number;
   createdAt: string;
   lastLoginAt: string;
 }
@@ -46,6 +58,28 @@ export interface Service {
   createdAt: string;
 }
 
+export interface ServiceRequest {
+  id: string;
+  serviceId: string;
+  serviceTitle: string;
+  requesterId: string;
+  requesterName: string;
+  requesterAvatar?: string;
+  providerId: string;
+  providerName: string;
+  providerAvatar?: string;
+  requestType: 'Hourly' | 'Weekly' | 'Monthly' | 'FixedPrice' | 'Estimation';
+  startDate: string;
+  endDate?: string;
+  totalAmount: number;
+  status: 'Pending' | 'Accepted' | 'Rejected' | 'InProgress' | 'Completed' | 'Cancelled';
+  description: string;
+  specialRequirements?: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Contract {
   id: string;
   serviceId: string;
@@ -54,7 +88,7 @@ export interface Contract {
   providerName: string;
   requesterId: string;
   requesterName: string;
-  contractType: 'Hourly' | 'Weekly' | 'Monthly' | 'FixedPrice';
+  contractType: 'Hourly' | 'Weekly' | 'Monthly' | 'FixedPrice' | 'Estimation';
   startDate: string;
   endDate?: string;
   totalAmount: number;
@@ -66,7 +100,7 @@ export interface Contract {
 
 export interface Availability {
   id: string;
-  serviceId: string;
+  userId: string;
   dayOfWeek: number;
   startTime: string;
   endTime: string;
@@ -94,7 +128,20 @@ export interface Notification {
   createdAt: string;
 }
 
-// Mock Users
+export interface DashboardStats {
+  totalServices: number;
+  totalContracts: number;
+  totalEarnings: number;
+  averageRating: number;
+  activeContracts: number;
+  pendingRequests: number;
+  completedServices: number;
+  upcomingServices: number;
+  totalHours: number;
+  monthlyEarnings: number;
+}
+
+// Mock Users with enhanced profile information
 export const mockUsers: User[] = [
   {
     id: '1',
@@ -118,6 +165,18 @@ export const mockUsers: User[] = [
     isVerified: true,
     isActive: true,
     profilePicture: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    bio: 'Professional housekeeper with 5+ years of experience. Specializing in deep cleaning and organization.',
+    address: '123 Main Street',
+    city: 'New York',
+    state: 'NY',
+    zipCode: '10001',
+    country: 'USA',
+    skills: ['Deep Cleaning', 'Organization', 'Laundry', 'Pet Care'],
+    hourlyRate: 25,
+    rating: 4.8,
+    reviewCount: 47,
+    totalEarnings: 12500,
+    totalServices: 89,
     createdAt: '2024-01-02T00:00:00Z',
     lastLoginAt: '2024-01-15T09:15:00Z'
   },
@@ -131,6 +190,11 @@ export const mockUsers: User[] = [
     isVerified: true,
     isActive: true,
     profilePicture: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    address: '456 Oak Avenue',
+    city: 'Los Angeles',
+    state: 'CA',
+    zipCode: '90210',
+    country: 'USA',
     createdAt: '2024-01-03T00:00:00Z',
     lastLoginAt: '2024-01-15T11:45:00Z'
   },
@@ -143,8 +207,63 @@ export const mockUsers: User[] = [
     userType: 'Provider',
     isVerified: false,
     isActive: true,
+    bio: 'Experienced chef specializing in Italian and Mediterranean cuisine. Available for private events and meal prep.',
+    address: '789 Pine Street',
+    city: 'Chicago',
+    state: 'IL',
+    zipCode: '60601',
+    country: 'USA',
+    skills: ['Italian Cuisine', 'Mediterranean Cuisine', 'Meal Prep', 'Event Catering'],
+    hourlyRate: 35,
+    rating: 4.9,
+    reviewCount: 23,
+    totalEarnings: 8900,
+    totalServices: 34,
     createdAt: '2024-01-04T00:00:00Z',
     lastLoginAt: '2024-01-14T16:20:00Z'
+  },
+  {
+    id: '5',
+    email: 'sarah.johnson@example.com',
+    firstName: 'Sarah',
+    lastName: 'Johnson',
+    phoneNumber: '+1234567894',
+    userType: 'Requester',
+    isVerified: true,
+    isActive: true,
+    profilePicture: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    address: '321 Elm Street',
+    city: 'Miami',
+    state: 'FL',
+    zipCode: '33101',
+    country: 'USA',
+    createdAt: '2024-01-05T00:00:00Z',
+    lastLoginAt: '2024-01-15T08:30:00Z'
+  },
+  {
+    id: '6',
+    email: 'david.brown@example.com',
+    firstName: 'David',
+    lastName: 'Brown',
+    phoneNumber: '+1234567895',
+    userType: 'Provider',
+    isVerified: true,
+    isActive: true,
+    profilePicture: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    bio: 'Professional driver with clean record. Specializing in airport transfers and business travel.',
+    address: '654 Maple Drive',
+    city: 'Seattle',
+    state: 'WA',
+    zipCode: '98101',
+    country: 'USA',
+    skills: ['Airport Transfers', 'Business Travel', 'Luxury Vehicles', 'Long Distance'],
+    hourlyRate: 30,
+    rating: 4.7,
+    reviewCount: 56,
+    totalEarnings: 18200,
+    totalServices: 124,
+    createdAt: '2024-01-06T00:00:00Z',
+    lastLoginAt: '2024-01-15T12:15:00Z'
   }
 ];
 
@@ -156,7 +275,7 @@ export const mockCategories: ServiceCategory[] = [
     description: 'Professional cleaning and housekeeping services',
     icon: '🏠',
     isActive: true,
-    serviceCount: 15
+    serviceCount: 16
   },
   {
     id: '2',
@@ -322,10 +441,195 @@ export const mockServices: Service[] = [
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop'
     ],
     createdAt: '2024-01-09T00:00:00Z'
+  },
+  {
+    id: '6',
+    title: 'Laundry and Dry Cleaning',
+    description: 'Professional laundry and dry cleaning services for clothes, linens, and delicate fabrics. Pickup and delivery available. Pricing is estimated after inspection of items.',
+    categoryId: '1',
+    categoryName: 'Housekeeping',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    hourlyRate: 0,
+    weeklyRate: 0,
+    monthlyRate: 0,
+    location: 'Chicago, IL',
+    isAvailable: true,
+    isVerified: true,
+    rating: 4.6,
+    reviewCount: 34,
+    tags: ['laundry', 'dry-cleaning', 'pickup-delivery', 'housekeeping', 'inspection-based'],
+    images: [
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop'
+    ],
+    contractTypes: ['Estimation'],
+    createdAt: '2024-01-10T00:00:00Z'
   }
 ];
 
-// Mock Contracts
+// Mock Service Requests
+export const mockServiceRequests: ServiceRequest[] = [
+  {
+    id: '1',
+    serviceId: '1',
+    serviceTitle: 'Professional House Cleaning',
+    requesterId: '3',
+    requesterName: 'Jane Smith',
+    requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    providerId: '2',
+    providerName: 'John Doe',
+    providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    requestType: 'Hourly',
+    startDate: '2024-01-20T09:00:00Z',
+    endDate: '2024-01-20T13:00:00Z',
+    totalAmount: 100,
+    status: 'Pending',
+    description: 'Need weekly house cleaning service for my 2-bedroom apartment. Prefer morning hours.',
+    specialRequirements: 'Please bring eco-friendly cleaning products',
+    location: 'Los Angeles, CA',
+    createdAt: '2024-01-15T10:30:00Z',
+    updatedAt: '2024-01-15T10:30:00Z'
+  },
+  {
+    id: '2',
+    serviceId: '2',
+    serviceTitle: 'Private Chef Services',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    requestType: 'FixedPrice',
+    startDate: '2024-01-25T18:00:00Z',
+    endDate: '2024-01-25T22:00:00Z',
+    totalAmount: 200,
+    status: 'Accepted',
+    description: 'Dinner party for 8 people. Italian cuisine preferred.',
+    specialRequirements: 'Vegetarian options needed for 2 guests',
+    location: 'Miami, FL',
+    createdAt: '2024-01-14T14:20:00Z',
+    updatedAt: '2024-01-15T09:15:00Z'
+  },
+  {
+    id: '3',
+    serviceId: '3',
+    serviceTitle: 'Professional Driving Service',
+    requesterId: '3',
+    requesterName: 'Jane Smith',
+    requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    providerId: '6',
+    providerName: 'David Brown',
+    providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    requestType: 'Hourly',
+    startDate: '2024-01-22T07:00:00Z',
+    endDate: '2024-01-22T09:00:00Z',
+    totalAmount: 70,
+    status: 'InProgress',
+    description: 'Airport pickup from LAX to downtown LA.',
+    specialRequirements: 'Flight arrives at 6:30 AM, please arrive 15 minutes early',
+    location: 'Los Angeles, CA',
+    createdAt: '2024-01-13T16:45:00Z',
+    updatedAt: '2024-01-15T11:30:00Z'
+  },
+  {
+    id: '4',
+    serviceId: '4',
+    serviceTitle: 'Garden Maintenance',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    providerId: '2',
+    providerName: 'John Doe',
+    providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    requestType: 'Weekly',
+    startDate: '2024-01-23T08:00:00Z',
+    endDate: '2024-01-23T12:00:00Z',
+    totalAmount: 500,
+    status: 'Completed',
+    description: 'Weekly garden maintenance including mowing, trimming, and watering.',
+    specialRequirements: 'Please focus on the rose garden area',
+    location: 'Miami, FL',
+    createdAt: '2024-01-10T12:00:00Z',
+    updatedAt: '2024-01-15T14:20:00Z'
+  },
+  {
+    id: '5',
+    serviceId: '5',
+    serviceTitle: 'One-Time Deep Cleaning',
+    requesterId: '3',
+    requesterName: 'Jane Smith',
+    requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+    providerId: '2',
+    providerName: 'John Doe',
+    providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    requestType: 'FixedPrice',
+    startDate: '2024-01-28T10:00:00Z',
+    endDate: '2024-01-28T16:00:00Z',
+    totalAmount: 150,
+    status: 'Pending',
+    description: 'Deep cleaning needed for move-out. 3-bedroom house.',
+    specialRequirements: 'Include carpet cleaning and window washing',
+    location: 'Los Angeles, CA',
+    createdAt: '2024-01-15T13:45:00Z',
+    updatedAt: '2024-01-15T13:45:00Z'
+  },
+  {
+    id: '6',
+    serviceId: '6',
+    serviceTitle: 'Laundry and Dry Cleaning',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    requestType: 'Estimation',
+    startDate: '2024-01-30T09:00:00Z',
+    endDate: '2024-01-30T17:00:00Z',
+    totalAmount: 85,
+    status: 'InProgress',
+    description: 'Need laundry and dry cleaning service for various items including suits, dresses, and delicate fabrics. Require pickup and delivery.',
+    specialRequirements: 'Please inspect items first and provide cost estimate. Use hypoallergenic detergent and handle delicate items carefully. Some items have stains that need special treatment.',
+    location: 'Chicago, IL',
+    createdAt: '2024-01-16T11:20:00Z',
+    updatedAt: '2024-01-16T14:30:00Z'
+  }
+];
+
+// Mock Availability
+export const mockAvailability: Availability[] = [
+  // John Doe's availability
+  { id: '1', userId: '2', dayOfWeek: 1, startTime: '08:00', endTime: '17:00', isAvailable: true },
+  { id: '2', userId: '2', dayOfWeek: 2, startTime: '08:00', endTime: '17:00', isAvailable: true },
+  { id: '3', userId: '2', dayOfWeek: 3, startTime: '08:00', endTime: '17:00', isAvailable: true },
+  { id: '4', userId: '2', dayOfWeek: 4, startTime: '08:00', endTime: '17:00', isAvailable: true },
+  { id: '5', userId: '2', dayOfWeek: 5, startTime: '08:00', endTime: '17:00', isAvailable: true },
+  { id: '6', userId: '2', dayOfWeek: 6, startTime: '09:00', endTime: '15:00', isAvailable: true },
+  { id: '7', userId: '2', dayOfWeek: 0, startTime: '10:00', endTime: '14:00', isAvailable: false },
+  
+  // Mike Wilson's availability
+  { id: '8', userId: '4', dayOfWeek: 1, startTime: '10:00', endTime: '20:00', isAvailable: true },
+  { id: '9', userId: '4', dayOfWeek: 2, startTime: '10:00', endTime: '20:00', isAvailable: true },
+  { id: '10', userId: '4', dayOfWeek: 3, startTime: '10:00', endTime: '20:00', isAvailable: true },
+  { id: '11', userId: '4', dayOfWeek: 4, startTime: '10:00', endTime: '20:00', isAvailable: true },
+  { id: '12', userId: '4', dayOfWeek: 5, startTime: '10:00', endTime: '20:00', isAvailable: true },
+  { id: '13', userId: '4', dayOfWeek: 6, startTime: '12:00', endTime: '22:00', isAvailable: true },
+  { id: '14', userId: '4', dayOfWeek: 0, startTime: '12:00', endTime: '18:00', isAvailable: true },
+  
+  // David Brown's availability
+  { id: '15', userId: '6', dayOfWeek: 1, startTime: '06:00', endTime: '22:00', isAvailable: true },
+  { id: '16', userId: '6', dayOfWeek: 2, startTime: '06:00', endTime: '22:00', isAvailable: true },
+  { id: '17', userId: '6', dayOfWeek: 3, startTime: '06:00', endTime: '22:00', isAvailable: true },
+  { id: '18', userId: '6', dayOfWeek: 4, startTime: '06:00', endTime: '22:00', isAvailable: true },
+  { id: '19', userId: '6', dayOfWeek: 5, startTime: '06:00', endTime: '22:00', isAvailable: true },
+  { id: '20', userId: '6', dayOfWeek: 6, startTime: '08:00', endTime: '20:00', isAvailable: true },
+  { id: '21', userId: '6', dayOfWeek: 0, startTime: '08:00', endTime: '18:00', isAvailable: true }
+];
+
+// Enhanced Mock Contracts
 export const mockContracts: Contract[] = [
   {
     id: '1',
@@ -335,47 +639,116 @@ export const mockContracts: Contract[] = [
     providerName: 'John Doe',
     requesterId: '3',
     requesterName: 'Jane Smith',
-    contractType: 'Weekly',
-    startDate: '2024-01-15T00:00:00Z',
-    endDate: '2024-02-15T00:00:00Z',
-    totalAmount: 400,
+    contractType: 'Hourly',
+    startDate: '2024-01-20T09:00:00Z',
+    endDate: '2024-01-20T13:00:00Z',
+    totalAmount: 100,
     status: 'Active',
     paymentStatus: 'Paid',
-    createdAt: '2024-01-10T00:00:00Z',
-    updatedAt: '2024-01-15T00:00:00Z'
+    createdAt: '2024-01-15T10:30:00Z',
+    updatedAt: '2024-01-15T10:30:00Z'
   },
   {
     id: '2',
     serviceId: '2',
     serviceTitle: 'Private Chef Services',
-    providerId: '2',
-    providerName: 'John Doe',
-    requesterId: '3',
-    requesterName: 'Jane Smith',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
     contractType: 'FixedPrice',
-    startDate: '2024-01-20T00:00:00Z',
+    startDate: '2024-01-25T18:00:00Z',
+    endDate: '2024-01-25T22:00:00Z',
     totalAmount: 200,
     status: 'Pending',
     paymentStatus: 'Pending',
-    createdAt: '2024-01-18T00:00:00Z',
-    updatedAt: '2024-01-18T00:00:00Z'
+    createdAt: '2024-01-14T14:20:00Z',
+    updatedAt: '2024-01-15T09:15:00Z'
   },
   {
     id: '3',
     serviceId: '3',
     serviceTitle: 'Professional Driving Service',
-    providerId: '4',
-    providerName: 'Mike Wilson',
+    providerId: '6',
+    providerName: 'David Brown',
     requesterId: '3',
     requesterName: 'Jane Smith',
     contractType: 'Hourly',
-    startDate: '2024-01-12T00:00:00Z',
-    endDate: '2024-01-12T04:00:00Z',
-    totalAmount: 140,
+    startDate: '2024-01-22T07:00:00Z',
+    endDate: '2024-01-22T09:00:00Z',
+    totalAmount: 70,
+    status: 'Active',
+    paymentStatus: 'Paid',
+    createdAt: '2024-01-13T16:45:00Z',
+    updatedAt: '2024-01-15T11:30:00Z'
+  },
+  {
+    id: '4',
+    serviceId: '4',
+    serviceTitle: 'Garden Maintenance',
+    providerId: '2',
+    providerName: 'John Doe',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    contractType: 'Weekly',
+    startDate: '2024-01-23T08:00:00Z',
+    endDate: '2024-01-23T12:00:00Z',
+    totalAmount: 500,
     status: 'Completed',
     paymentStatus: 'Paid',
-    createdAt: '2024-01-10T00:00:00Z',
-    updatedAt: '2024-01-12T04:00:00Z'
+    createdAt: '2024-01-10T12:00:00Z',
+    updatedAt: '2024-01-15T14:20:00Z'
+  },
+  {
+    id: '5',
+    serviceId: '1',
+    serviceTitle: 'Professional House Cleaning',
+    providerId: '2',
+    providerName: 'John Doe',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    contractType: 'Weekly',
+    startDate: '2024-01-16T09:00:00Z',
+    endDate: '2024-01-16T13:00:00Z',
+    totalAmount: 100,
+    status: 'Completed',
+    paymentStatus: 'Paid',
+    createdAt: '2024-01-10T08:00:00Z',
+    updatedAt: '2024-01-16T13:00:00Z'
+  },
+  {
+    id: '6',
+    serviceId: '3',
+    serviceTitle: 'Professional Driving Service',
+    providerId: '6',
+    providerName: 'David Brown',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    contractType: 'Hourly',
+    startDate: '2024-01-18T14:00:00Z',
+    endDate: '2024-01-18T16:00:00Z',
+    totalAmount: 60,
+    status: 'Completed',
+    paymentStatus: 'Paid',
+    createdAt: '2024-01-12T10:00:00Z',
+    updatedAt: '2024-01-18T16:00:00Z'
+  },
+  {
+    id: '7',
+    serviceId: '6',
+    serviceTitle: 'Laundry and Dry Cleaning',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    requesterId: '5',
+    requesterName: 'Sarah Johnson',
+    contractType: 'Estimation',
+    startDate: '2024-01-30T09:00:00Z',
+    endDate: '2024-01-30T17:00:00Z',
+    totalAmount: 85,
+    status: 'Active',
+    paymentStatus: 'Paid',
+    createdAt: '2024-01-16T11:20:00Z',
+    updatedAt: '2024-01-16T14:30:00Z'
   }
 ];
 
@@ -388,18 +761,58 @@ export const mockRatings: Rating[] = [
     userId: '3',
     userName: 'Jane Smith',
     rating: 5,
-    comment: 'Excellent service! Very professional and thorough cleaning.',
-    createdAt: '2024-01-16T00:00:00Z'
+    comment: 'Excellent service! John was very professional and thorough. The house looks spotless.',
+    createdAt: '2024-01-16T14:30:00Z'
   },
   {
     id: '2',
     serviceId: '1',
-    contractId: '1',
+    contractId: '5',
+    userId: '5',
+    userName: 'Sarah Johnson',
+    rating: 4,
+    comment: 'Good cleaning service. Very reliable and punctual.',
+    createdAt: '2024-01-17T10:15:00Z'
+  },
+  {
+    id: '3',
+    serviceId: '2',
+    contractId: '2',
+    userId: '5',
+    userName: 'Sarah Johnson',
+    rating: 5,
+    comment: 'Amazing chef! The dinner party was a huge success. Everyone loved the food.',
+    createdAt: '2024-01-26T20:30:00Z'
+  },
+  {
+    id: '4',
+    serviceId: '3',
+    contractId: '3',
     userId: '3',
     userName: 'Jane Smith',
     rating: 4,
-    comment: 'Good service, arrived on time and did a great job.',
-    createdAt: '2024-01-17T00:00:00Z'
+    comment: 'Professional driver, arrived on time and got me to the airport safely.',
+    createdAt: '2024-01-22T09:30:00Z'
+  },
+  {
+    id: '5',
+    serviceId: '4',
+    contractId: '4',
+    userId: '5',
+    userName: 'Sarah Johnson',
+    rating: 5,
+    comment: 'Beautiful garden work! The roses look amazing and everything is well maintained.',
+    createdAt: '2024-01-23T13:45:00Z'
+  },
+  {
+    id: '6',
+    serviceId: '6',
+    contractId: '7',
+    userId: '5',
+    userName: 'Sarah Johnson',
+    rating: 4,
+    comment: 'Great laundry service! Provider inspected items first and gave accurate cost estimate. Very reliable pickup and delivery. Clothes come back clean and fresh.',
+    createdAt: '2024-01-31T10:20:00Z'
   }
 ];
 
@@ -407,9 +820,9 @@ export const mockRatings: Rating[] = [
 export const mockNotifications: Notification[] = [
   {
     id: '1',
-    userId: '3',
-    title: 'New Contract Request',
-    message: 'You have a new contract request for "Professional House Cleaning"',
+    userId: '2',
+    title: 'New Service Request',
+    message: 'Jane Smith has requested your Professional House Cleaning service.',
     type: 'Info',
     isRead: false,
     createdAt: '2024-01-15T10:30:00Z'
@@ -417,53 +830,134 @@ export const mockNotifications: Notification[] = [
   {
     id: '2',
     userId: '3',
-    title: 'Payment Received',
-    message: 'Payment of $400 has been received for your weekly cleaning service',
+    title: 'Service Accepted',
+    message: 'John Doe has accepted your service request for Professional House Cleaning.',
     type: 'Success',
     isRead: true,
-    createdAt: '2024-01-15T09:15:00Z'
+    createdAt: '2024-01-15T11:00:00Z'
   },
   {
     id: '3',
-    userId: '2',
-    title: 'Service Verification',
-    message: 'Your "Professional House Cleaning" service has been verified',
+    userId: '4',
+    title: 'Payment Received',
+    message: 'Payment of $200 has been received for your Private Chef Services.',
     type: 'Success',
     isRead: false,
-    createdAt: '2024-01-14T16:20:00Z'
+    createdAt: '2024-01-15T09:15:00Z'
+  },
+  {
+    id: '4',
+    userId: '5',
+    title: 'Service Reminder',
+    message: 'Your scheduled Garden Maintenance service is tomorrow at 8:00 AM.',
+    type: 'Warning',
+    isRead: false,
+    createdAt: '2024-01-15T08:00:00Z'
+  },
+  {
+    id: '5',
+    userId: '6',
+    title: 'New Review',
+    message: 'Jane Smith left a 4-star review for your Professional Driving Service.',
+    type: 'Info',
+    isRead: true,
+    createdAt: '2024-01-22T09:30:00Z'
   }
 ];
 
-// Dashboard Statistics
-export const mockDashboardStats = {
-  totalUsers: 1250,
-  totalServices: 89,
-  totalContracts: 234,
-  totalRevenue: 45600,
-  activeUsers: 890,
-  pendingVerifications: 12,
-  recentActivity: [
-    { type: 'new_user', message: 'New user registered', time: '2 hours ago' },
-    { type: 'new_service', message: 'New service added', time: '4 hours ago' },
-    { type: 'contract_completed', message: 'Contract completed', time: '6 hours ago' }
-  ]
-};
+// Mock Dashboard Stats
+export const mockDashboardStats: DashboardStats[] = [
+  // John Doe (Provider)
+  {
+    totalServices: 89,
+    totalContracts: 67,
+    totalEarnings: 12500,
+    averageRating: 4.8,
+    activeContracts: 2,
+    pendingRequests: 1,
+    completedServices: 65,
+    upcomingServices: 3,
+    totalHours: 320,
+    monthlyEarnings: 2800
+  },
+  // Jane Smith (Requester)
+  {
+    totalServices: 0,
+    totalContracts: 4,
+    totalEarnings: 0,
+    averageRating: 0,
+    activeContracts: 2,
+    pendingRequests: 0,
+    completedServices: 2,
+    upcomingServices: 0,
+    totalHours: 0,
+    monthlyEarnings: 0
+  },
+  // Mike Wilson (Provider)
+  {
+    totalServices: 34,
+    totalContracts: 28,
+    totalEarnings: 8900,
+    averageRating: 4.9,
+    activeContracts: 1,
+    pendingRequests: 0,
+    completedServices: 27,
+    upcomingServices: 1,
+    totalHours: 180,
+    monthlyEarnings: 1200
+  },
+  // Sarah Johnson (Requester)
+  {
+    totalServices: 0,
+    totalContracts: 3,
+    totalEarnings: 0,
+    averageRating: 0,
+    activeContracts: 1,
+    pendingRequests: 0,
+    completedServices: 2,
+    upcomingServices: 0,
+    totalHours: 0,
+    monthlyEarnings: 0
+  },
+  // David Brown (Provider)
+  {
+    totalServices: 124,
+    totalContracts: 98,
+    totalEarnings: 18200,
+    averageRating: 4.7,
+    activeContracts: 1,
+    pendingRequests: 0,
+    completedServices: 97,
+    upcomingServices: 2,
+    totalHours: 450,
+    monthlyEarnings: 3200
+  }
+];
 
-// Search and Filter Options
+// Mock Search Filters
 export const mockSearchFilters = {
   categories: mockCategories,
-  priceRanges: [
-    { label: 'Under $20', value: '0-20' },
-    { label: '$20 - $50', value: '20-50' },
-    { label: '$50 - $100', value: '50-100' },
-    { label: 'Over $100', value: '100+' }
-  ],
   locations: [
     'New York, NY',
     'Los Angeles, CA',
     'Chicago, IL',
     'Miami, FL',
-    'Houston, TX'
+    'Seattle, WA',
+    'Boston, MA',
+    'San Francisco, CA',
+    'Denver, CO'
   ],
-  ratings: [5, 4, 3, 2, 1]
+  priceRanges: [
+    { label: 'Under $25', min: 0, max: 25 },
+    { label: '$25 - $50', min: 25, max: 50 },
+    { label: '$50 - $100', min: 50, max: 100 },
+    { label: 'Over $100', min: 100, max: null }
+  ],
+  ratings: [1, 2, 3, 4, 5],
+  availability: [
+    'Available Now',
+    'Available Today',
+    'Available This Week',
+    'Available Next Week'
+  ]
 }; 

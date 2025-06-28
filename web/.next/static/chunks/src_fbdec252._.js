@@ -599,12 +599,14 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 {
 // Mock data for standalone UI development
 __turbopack_context__.s({
+    "mockAvailability": (()=>mockAvailability),
     "mockCategories": (()=>mockCategories),
     "mockContracts": (()=>mockContracts),
     "mockDashboardStats": (()=>mockDashboardStats),
     "mockNotifications": (()=>mockNotifications),
     "mockRatings": (()=>mockRatings),
     "mockSearchFilters": (()=>mockSearchFilters),
+    "mockServiceRequests": (()=>mockServiceRequests),
     "mockServices": (()=>mockServices),
     "mockUsers": (()=>mockUsers)
 });
@@ -631,6 +633,23 @@ const mockUsers = [
         isVerified: true,
         isActive: true,
         profilePicture: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        bio: 'Professional housekeeper with 5+ years of experience. Specializing in deep cleaning and organization.',
+        address: '123 Main Street',
+        city: 'New York',
+        state: 'NY',
+        zipCode: '10001',
+        country: 'USA',
+        skills: [
+            'Deep Cleaning',
+            'Organization',
+            'Laundry',
+            'Pet Care'
+        ],
+        hourlyRate: 25,
+        rating: 4.8,
+        reviewCount: 47,
+        totalEarnings: 12500,
+        totalServices: 89,
         createdAt: '2024-01-02T00:00:00Z',
         lastLoginAt: '2024-01-15T09:15:00Z'
     },
@@ -644,6 +663,11 @@ const mockUsers = [
         isVerified: true,
         isActive: true,
         profilePicture: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        address: '456 Oak Avenue',
+        city: 'Los Angeles',
+        state: 'CA',
+        zipCode: '90210',
+        country: 'USA',
         createdAt: '2024-01-03T00:00:00Z',
         lastLoginAt: '2024-01-15T11:45:00Z'
     },
@@ -656,8 +680,73 @@ const mockUsers = [
         userType: 'Provider',
         isVerified: false,
         isActive: true,
+        bio: 'Experienced chef specializing in Italian and Mediterranean cuisine. Available for private events and meal prep.',
+        address: '789 Pine Street',
+        city: 'Chicago',
+        state: 'IL',
+        zipCode: '60601',
+        country: 'USA',
+        skills: [
+            'Italian Cuisine',
+            'Mediterranean Cuisine',
+            'Meal Prep',
+            'Event Catering'
+        ],
+        hourlyRate: 35,
+        rating: 4.9,
+        reviewCount: 23,
+        totalEarnings: 8900,
+        totalServices: 34,
         createdAt: '2024-01-04T00:00:00Z',
         lastLoginAt: '2024-01-14T16:20:00Z'
+    },
+    {
+        id: '5',
+        email: 'sarah.johnson@example.com',
+        firstName: 'Sarah',
+        lastName: 'Johnson',
+        phoneNumber: '+1234567894',
+        userType: 'Requester',
+        isVerified: true,
+        isActive: true,
+        profilePicture: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        address: '321 Elm Street',
+        city: 'Miami',
+        state: 'FL',
+        zipCode: '33101',
+        country: 'USA',
+        createdAt: '2024-01-05T00:00:00Z',
+        lastLoginAt: '2024-01-15T08:30:00Z'
+    },
+    {
+        id: '6',
+        email: 'david.brown@example.com',
+        firstName: 'David',
+        lastName: 'Brown',
+        phoneNumber: '+1234567895',
+        userType: 'Provider',
+        isVerified: true,
+        isActive: true,
+        profilePicture: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        bio: 'Professional driver with clean record. Specializing in airport transfers and business travel.',
+        address: '654 Maple Drive',
+        city: 'Seattle',
+        state: 'WA',
+        zipCode: '98101',
+        country: 'USA',
+        skills: [
+            'Airport Transfers',
+            'Business Travel',
+            'Luxury Vehicles',
+            'Long Distance'
+        ],
+        hourlyRate: 30,
+        rating: 4.7,
+        reviewCount: 56,
+        totalEarnings: 18200,
+        totalServices: 124,
+        createdAt: '2024-01-06T00:00:00Z',
+        lastLoginAt: '2024-01-15T12:15:00Z'
     }
 ];
 const mockCategories = [
@@ -667,7 +756,7 @@ const mockCategories = [
         description: 'Professional cleaning and housekeeping services',
         icon: '🏠',
         isActive: true,
-        serviceCount: 15
+        serviceCount: 16
     },
     {
         id: '2',
@@ -851,6 +940,340 @@ const mockServices = [
             'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop'
         ],
         createdAt: '2024-01-09T00:00:00Z'
+    },
+    {
+        id: '6',
+        title: 'Laundry and Dry Cleaning',
+        description: 'Professional laundry and dry cleaning services for clothes, linens, and delicate fabrics. Pickup and delivery available. Pricing is estimated after inspection of items.',
+        categoryId: '1',
+        categoryName: 'Housekeeping',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        hourlyRate: 0,
+        weeklyRate: 0,
+        monthlyRate: 0,
+        location: 'Chicago, IL',
+        isAvailable: true,
+        isVerified: true,
+        rating: 4.6,
+        reviewCount: 34,
+        tags: [
+            'laundry',
+            'dry-cleaning',
+            'pickup-delivery',
+            'housekeeping',
+            'inspection-based'
+        ],
+        images: [
+            'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400&h=300&fit=crop'
+        ],
+        contractTypes: [
+            'Estimation'
+        ],
+        createdAt: '2024-01-10T00:00:00Z'
+    }
+];
+const mockServiceRequests = [
+    {
+        id: '1',
+        serviceId: '1',
+        serviceTitle: 'Professional House Cleaning',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Hourly',
+        startDate: '2024-01-20T09:00:00Z',
+        endDate: '2024-01-20T13:00:00Z',
+        totalAmount: 100,
+        status: 'Pending',
+        description: 'Need weekly house cleaning service for my 2-bedroom apartment. Prefer morning hours.',
+        specialRequirements: 'Please bring eco-friendly cleaning products',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-15T10:30:00Z',
+        updatedAt: '2024-01-15T10:30:00Z'
+    },
+    {
+        id: '2',
+        serviceId: '2',
+        serviceTitle: 'Private Chef Services',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        requestType: 'FixedPrice',
+        startDate: '2024-01-25T18:00:00Z',
+        endDate: '2024-01-25T22:00:00Z',
+        totalAmount: 200,
+        status: 'Accepted',
+        description: 'Dinner party for 8 people. Italian cuisine preferred.',
+        specialRequirements: 'Vegetarian options needed for 2 guests',
+        location: 'Miami, FL',
+        createdAt: '2024-01-14T14:20:00Z',
+        updatedAt: '2024-01-15T09:15:00Z'
+    },
+    {
+        id: '3',
+        serviceId: '3',
+        serviceTitle: 'Professional Driving Service',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '6',
+        providerName: 'David Brown',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Hourly',
+        startDate: '2024-01-22T07:00:00Z',
+        endDate: '2024-01-22T09:00:00Z',
+        totalAmount: 70,
+        status: 'InProgress',
+        description: 'Airport pickup from LAX to downtown LA.',
+        specialRequirements: 'Flight arrives at 6:30 AM, please arrive 15 minutes early',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-13T16:45:00Z',
+        updatedAt: '2024-01-15T11:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '4',
+        serviceTitle: 'Garden Maintenance',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Weekly',
+        startDate: '2024-01-23T08:00:00Z',
+        endDate: '2024-01-23T12:00:00Z',
+        totalAmount: 500,
+        status: 'Completed',
+        description: 'Weekly garden maintenance including mowing, trimming, and watering.',
+        specialRequirements: 'Please focus on the rose garden area',
+        location: 'Miami, FL',
+        createdAt: '2024-01-10T12:00:00Z',
+        updatedAt: '2024-01-15T14:20:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '5',
+        serviceTitle: 'One-Time Deep Cleaning',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'FixedPrice',
+        startDate: '2024-01-28T10:00:00Z',
+        endDate: '2024-01-28T16:00:00Z',
+        totalAmount: 150,
+        status: 'Pending',
+        description: 'Deep cleaning needed for move-out. 3-bedroom house.',
+        specialRequirements: 'Include carpet cleaning and window washing',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-15T13:45:00Z',
+        updatedAt: '2024-01-15T13:45:00Z'
+    },
+    {
+        id: '6',
+        serviceId: '6',
+        serviceTitle: 'Laundry and Dry Cleaning',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Estimation',
+        startDate: '2024-01-30T09:00:00Z',
+        endDate: '2024-01-30T17:00:00Z',
+        totalAmount: 85,
+        status: 'InProgress',
+        description: 'Need laundry and dry cleaning service for various items including suits, dresses, and delicate fabrics. Require pickup and delivery.',
+        specialRequirements: 'Please inspect items first and provide cost estimate. Use hypoallergenic detergent and handle delicate items carefully. Some items have stains that need special treatment.',
+        location: 'Chicago, IL',
+        createdAt: '2024-01-16T11:20:00Z',
+        updatedAt: '2024-01-16T14:30:00Z'
+    }
+];
+const mockAvailability = [
+    // John Doe's availability
+    {
+        id: '1',
+        userId: '2',
+        dayOfWeek: 1,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '2',
+        userId: '2',
+        dayOfWeek: 2,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '3',
+        userId: '2',
+        dayOfWeek: 3,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '4',
+        userId: '2',
+        dayOfWeek: 4,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '5',
+        userId: '2',
+        dayOfWeek: 5,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '6',
+        userId: '2',
+        dayOfWeek: 6,
+        startTime: '09:00',
+        endTime: '15:00',
+        isAvailable: true
+    },
+    {
+        id: '7',
+        userId: '2',
+        dayOfWeek: 0,
+        startTime: '10:00',
+        endTime: '14:00',
+        isAvailable: false
+    },
+    // Mike Wilson's availability
+    {
+        id: '8',
+        userId: '4',
+        dayOfWeek: 1,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '9',
+        userId: '4',
+        dayOfWeek: 2,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '10',
+        userId: '4',
+        dayOfWeek: 3,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '11',
+        userId: '4',
+        dayOfWeek: 4,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '12',
+        userId: '4',
+        dayOfWeek: 5,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '13',
+        userId: '4',
+        dayOfWeek: 6,
+        startTime: '12:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '14',
+        userId: '4',
+        dayOfWeek: 0,
+        startTime: '12:00',
+        endTime: '18:00',
+        isAvailable: true
+    },
+    // David Brown's availability
+    {
+        id: '15',
+        userId: '6',
+        dayOfWeek: 1,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '16',
+        userId: '6',
+        dayOfWeek: 2,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '17',
+        userId: '6',
+        dayOfWeek: 3,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '18',
+        userId: '6',
+        dayOfWeek: 4,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '19',
+        userId: '6',
+        dayOfWeek: 5,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '20',
+        userId: '6',
+        dayOfWeek: 6,
+        startTime: '08:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '21',
+        userId: '6',
+        dayOfWeek: 0,
+        startTime: '08:00',
+        endTime: '18:00',
+        isAvailable: true
     }
 ];
 const mockContracts = [
@@ -862,47 +1285,116 @@ const mockContracts = [
         providerName: 'John Doe',
         requesterId: '3',
         requesterName: 'Jane Smith',
-        contractType: 'Weekly',
-        startDate: '2024-01-15T00:00:00Z',
-        endDate: '2024-02-15T00:00:00Z',
-        totalAmount: 400,
+        contractType: 'Hourly',
+        startDate: '2024-01-20T09:00:00Z',
+        endDate: '2024-01-20T13:00:00Z',
+        totalAmount: 100,
         status: 'Active',
         paymentStatus: 'Paid',
-        createdAt: '2024-01-10T00:00:00Z',
-        updatedAt: '2024-01-15T00:00:00Z'
+        createdAt: '2024-01-15T10:30:00Z',
+        updatedAt: '2024-01-15T10:30:00Z'
     },
     {
         id: '2',
         serviceId: '2',
         serviceTitle: 'Private Chef Services',
-        providerId: '2',
-        providerName: 'John Doe',
-        requesterId: '3',
-        requesterName: 'Jane Smith',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
         contractType: 'FixedPrice',
-        startDate: '2024-01-20T00:00:00Z',
+        startDate: '2024-01-25T18:00:00Z',
+        endDate: '2024-01-25T22:00:00Z',
         totalAmount: 200,
         status: 'Pending',
         paymentStatus: 'Pending',
-        createdAt: '2024-01-18T00:00:00Z',
-        updatedAt: '2024-01-18T00:00:00Z'
+        createdAt: '2024-01-14T14:20:00Z',
+        updatedAt: '2024-01-15T09:15:00Z'
     },
     {
         id: '3',
         serviceId: '3',
         serviceTitle: 'Professional Driving Service',
-        providerId: '4',
-        providerName: 'Mike Wilson',
+        providerId: '6',
+        providerName: 'David Brown',
         requesterId: '3',
         requesterName: 'Jane Smith',
         contractType: 'Hourly',
-        startDate: '2024-01-12T00:00:00Z',
-        endDate: '2024-01-12T04:00:00Z',
-        totalAmount: 140,
+        startDate: '2024-01-22T07:00:00Z',
+        endDate: '2024-01-22T09:00:00Z',
+        totalAmount: 70,
+        status: 'Active',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-13T16:45:00Z',
+        updatedAt: '2024-01-15T11:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '4',
+        serviceTitle: 'Garden Maintenance',
+        providerId: '2',
+        providerName: 'John Doe',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Weekly',
+        startDate: '2024-01-23T08:00:00Z',
+        endDate: '2024-01-23T12:00:00Z',
+        totalAmount: 500,
         status: 'Completed',
         paymentStatus: 'Paid',
-        createdAt: '2024-01-10T00:00:00Z',
-        updatedAt: '2024-01-12T04:00:00Z'
+        createdAt: '2024-01-10T12:00:00Z',
+        updatedAt: '2024-01-15T14:20:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '1',
+        serviceTitle: 'Professional House Cleaning',
+        providerId: '2',
+        providerName: 'John Doe',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Weekly',
+        startDate: '2024-01-16T09:00:00Z',
+        endDate: '2024-01-16T13:00:00Z',
+        totalAmount: 100,
+        status: 'Completed',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-10T08:00:00Z',
+        updatedAt: '2024-01-16T13:00:00Z'
+    },
+    {
+        id: '6',
+        serviceId: '3',
+        serviceTitle: 'Professional Driving Service',
+        providerId: '6',
+        providerName: 'David Brown',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Hourly',
+        startDate: '2024-01-18T14:00:00Z',
+        endDate: '2024-01-18T16:00:00Z',
+        totalAmount: 60,
+        status: 'Completed',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-12T10:00:00Z',
+        updatedAt: '2024-01-18T16:00:00Z'
+    },
+    {
+        id: '7',
+        serviceId: '6',
+        serviceTitle: 'Laundry and Dry Cleaning',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Estimation',
+        startDate: '2024-01-30T09:00:00Z',
+        endDate: '2024-01-30T17:00:00Z',
+        totalAmount: 85,
+        status: 'Active',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-16T11:20:00Z',
+        updatedAt: '2024-01-16T14:30:00Z'
     }
 ];
 const mockRatings = [
@@ -913,26 +1405,66 @@ const mockRatings = [
         userId: '3',
         userName: 'Jane Smith',
         rating: 5,
-        comment: 'Excellent service! Very professional and thorough cleaning.',
-        createdAt: '2024-01-16T00:00:00Z'
+        comment: 'Excellent service! John was very professional and thorough. The house looks spotless.',
+        createdAt: '2024-01-16T14:30:00Z'
     },
     {
         id: '2',
         serviceId: '1',
-        contractId: '1',
+        contractId: '5',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 4,
+        comment: 'Good cleaning service. Very reliable and punctual.',
+        createdAt: '2024-01-17T10:15:00Z'
+    },
+    {
+        id: '3',
+        serviceId: '2',
+        contractId: '2',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 5,
+        comment: 'Amazing chef! The dinner party was a huge success. Everyone loved the food.',
+        createdAt: '2024-01-26T20:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '3',
+        contractId: '3',
         userId: '3',
         userName: 'Jane Smith',
         rating: 4,
-        comment: 'Good service, arrived on time and did a great job.',
-        createdAt: '2024-01-17T00:00:00Z'
+        comment: 'Professional driver, arrived on time and got me to the airport safely.',
+        createdAt: '2024-01-22T09:30:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '4',
+        contractId: '4',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 5,
+        comment: 'Beautiful garden work! The roses look amazing and everything is well maintained.',
+        createdAt: '2024-01-23T13:45:00Z'
+    },
+    {
+        id: '6',
+        serviceId: '6',
+        contractId: '7',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 4,
+        comment: 'Great laundry service! Provider inspected items first and gave accurate cost estimate. Very reliable pickup and delivery. Clothes come back clean and fresh.',
+        createdAt: '2024-01-31T10:20:00Z'
     }
 ];
 const mockNotifications = [
     {
         id: '1',
-        userId: '3',
-        title: 'New Contract Request',
-        message: 'You have a new contract request for "Professional House Cleaning"',
+        userId: '2',
+        title: 'New Service Request',
+        message: 'Jane Smith has requested your Professional House Cleaning service.',
         type: 'Info',
         isRead: false,
         createdAt: '2024-01-15T10:30:00Z'
@@ -940,80 +1472,153 @@ const mockNotifications = [
     {
         id: '2',
         userId: '3',
-        title: 'Payment Received',
-        message: 'Payment of $400 has been received for your weekly cleaning service',
+        title: 'Service Accepted',
+        message: 'John Doe has accepted your service request for Professional House Cleaning.',
         type: 'Success',
         isRead: true,
-        createdAt: '2024-01-15T09:15:00Z'
+        createdAt: '2024-01-15T11:00:00Z'
     },
     {
         id: '3',
-        userId: '2',
-        title: 'Service Verification',
-        message: 'Your "Professional House Cleaning" service has been verified',
+        userId: '4',
+        title: 'Payment Received',
+        message: 'Payment of $200 has been received for your Private Chef Services.',
         type: 'Success',
         isRead: false,
-        createdAt: '2024-01-14T16:20:00Z'
+        createdAt: '2024-01-15T09:15:00Z'
+    },
+    {
+        id: '4',
+        userId: '5',
+        title: 'Service Reminder',
+        message: 'Your scheduled Garden Maintenance service is tomorrow at 8:00 AM.',
+        type: 'Warning',
+        isRead: false,
+        createdAt: '2024-01-15T08:00:00Z'
+    },
+    {
+        id: '5',
+        userId: '6',
+        title: 'New Review',
+        message: 'Jane Smith left a 4-star review for your Professional Driving Service.',
+        type: 'Info',
+        isRead: true,
+        createdAt: '2024-01-22T09:30:00Z'
     }
 ];
-const mockDashboardStats = {
-    totalUsers: 1250,
-    totalServices: 89,
-    totalContracts: 234,
-    totalRevenue: 45600,
-    activeUsers: 890,
-    pendingVerifications: 12,
-    recentActivity: [
-        {
-            type: 'new_user',
-            message: 'New user registered',
-            time: '2 hours ago'
-        },
-        {
-            type: 'new_service',
-            message: 'New service added',
-            time: '4 hours ago'
-        },
-        {
-            type: 'contract_completed',
-            message: 'Contract completed',
-            time: '6 hours ago'
-        }
-    ]
-};
+const mockDashboardStats = [
+    // John Doe (Provider)
+    {
+        totalServices: 89,
+        totalContracts: 67,
+        totalEarnings: 12500,
+        averageRating: 4.8,
+        activeContracts: 2,
+        pendingRequests: 1,
+        completedServices: 65,
+        upcomingServices: 3,
+        totalHours: 320,
+        monthlyEarnings: 2800
+    },
+    // Jane Smith (Requester)
+    {
+        totalServices: 0,
+        totalContracts: 4,
+        totalEarnings: 0,
+        averageRating: 0,
+        activeContracts: 2,
+        pendingRequests: 0,
+        completedServices: 2,
+        upcomingServices: 0,
+        totalHours: 0,
+        monthlyEarnings: 0
+    },
+    // Mike Wilson (Provider)
+    {
+        totalServices: 34,
+        totalContracts: 28,
+        totalEarnings: 8900,
+        averageRating: 4.9,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 27,
+        upcomingServices: 1,
+        totalHours: 180,
+        monthlyEarnings: 1200
+    },
+    // Sarah Johnson (Requester)
+    {
+        totalServices: 0,
+        totalContracts: 3,
+        totalEarnings: 0,
+        averageRating: 0,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 2,
+        upcomingServices: 0,
+        totalHours: 0,
+        monthlyEarnings: 0
+    },
+    // David Brown (Provider)
+    {
+        totalServices: 124,
+        totalContracts: 98,
+        totalEarnings: 18200,
+        averageRating: 4.7,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 97,
+        upcomingServices: 2,
+        totalHours: 450,
+        monthlyEarnings: 3200
+    }
+];
 const mockSearchFilters = {
     categories: mockCategories,
-    priceRanges: [
-        {
-            label: 'Under $20',
-            value: '0-20'
-        },
-        {
-            label: '$20 - $50',
-            value: '20-50'
-        },
-        {
-            label: '$50 - $100',
-            value: '50-100'
-        },
-        {
-            label: 'Over $100',
-            value: '100+'
-        }
-    ],
     locations: [
         'New York, NY',
         'Los Angeles, CA',
         'Chicago, IL',
         'Miami, FL',
-        'Houston, TX'
+        'Seattle, WA',
+        'Boston, MA',
+        'San Francisco, CA',
+        'Denver, CO'
+    ],
+    priceRanges: [
+        {
+            label: 'Under $25',
+            min: 0,
+            max: 25
+        },
+        {
+            label: '$25 - $50',
+            min: 25,
+            max: 50
+        },
+        {
+            label: '$50 - $100',
+            min: 50,
+            max: 100
+        },
+        {
+            label: 'Over $100',
+            min: 100,
+            max: null
+        }
     ],
     ratings: [
-        5,
-        4,
-        3,
+        1,
         2,
-        1
+        3,
+        4,
+        5
+    ],
+    availability: [
+        'Available Now',
+        'Available Today',
+        'Available This Week',
+        'Available Next Week'
     ]
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -1161,8 +1766,26 @@ const mockApi = {
         const start = (page - 1) * limit;
         const end = start + limit;
         const paginatedServices = filteredServices.slice(start, end);
+        // Transform to expected structure
+        const transformedServices = paginatedServices.map((service)=>{
+            // Find provider user
+            const providerUser = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === service.providerId);
+            return {
+                ...service,
+                provider: {
+                    id: service.providerId,
+                    firstName: providerUser?.firstName || service.providerName.split(' ')[0] || '',
+                    lastName: providerUser?.lastName || service.providerName.split(' ')[1] || '',
+                    profilePictureUrl: providerUser?.profilePicture || service.providerAvatar || ''
+                },
+                category: {
+                    id: service.categoryId,
+                    name: service.categoryName
+                }
+            };
+        });
         return {
-            services: paginatedServices,
+            services: transformedServices,
             total: filteredServices.length,
             page,
             limit,
@@ -1197,11 +1820,52 @@ const mockApi = {
         if (filters.userId) {
             filteredContracts = filteredContracts.filter((c)=>c.providerId === filters.userId || c.requesterId === filters.userId);
         }
+        if (filters.contractType) {
+            filteredContracts = filteredContracts.filter((c)=>c.contractType === filters.contractType);
+        }
+        if (filters.search) {
+            const searchTerm = filters.search.toLowerCase();
+            filteredContracts = filteredContracts.filter((c)=>c.serviceTitle.toLowerCase().includes(searchTerm) || c.providerName.toLowerCase().includes(searchTerm) || c.requesterName.toLowerCase().includes(searchTerm));
+        }
         const start = (page - 1) * limit;
         const end = start + limit;
         const paginatedContracts = filteredContracts.slice(start, end);
+        // Transform contracts to match the expected interface
+        const transformedContracts = paginatedContracts.map((contract)=>{
+            // Find the corresponding service for base price
+            const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === contract.serviceId);
+            return {
+                id: contract.id,
+                contractNumber: `CON-${contract.id.padStart(4, '0')}`,
+                service: {
+                    id: contract.serviceId,
+                    title: contract.serviceTitle,
+                    basePrice: service?.hourlyRate || 0,
+                    currency: 'USD'
+                },
+                provider: {
+                    id: contract.providerId,
+                    firstName: contract.providerName.split(' ')[0] || '',
+                    lastName: contract.providerName.split(' ')[1] || '',
+                    profilePictureUrl: ''
+                },
+                requester: {
+                    id: contract.requesterId,
+                    firstName: contract.requesterName.split(' ')[0] || '',
+                    lastName: contract.requesterName.split(' ')[1] || '',
+                    profilePictureUrl: ''
+                },
+                contractType: contract.contractType,
+                status: contract.status,
+                totalAmount: contract.totalAmount,
+                startDate: contract.startDate,
+                endDate: contract.endDate,
+                createdAt: contract.createdAt,
+                paymentStatus: contract.paymentStatus
+            };
+        });
         return {
-            contracts: paginatedContracts,
+            contracts: transformedContracts,
             total: filteredContracts.length,
             page,
             limit,
@@ -1263,12 +1927,218 @@ const mockApi = {
     // Dashboard
     async getDashboardStats () {
         await delay(400);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"];
+        return {
+            totalUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].length,
+            totalServices: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].length,
+            totalContracts: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].length,
+            totalRevenue: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].reduce((sum, contract)=>sum + contract.totalAmount, 0),
+            activeUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>user.isActive).length,
+            pendingVerifications: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>!user.isVerified).length,
+            recentActivity: [
+                {
+                    type: 'user_registration',
+                    message: 'New user registered: Sarah Johnson',
+                    time: '2 hours ago'
+                },
+                {
+                    type: 'service_created',
+                    message: 'New service created: Professional House Cleaning',
+                    time: '4 hours ago'
+                },
+                {
+                    type: 'contract_completed',
+                    message: 'Contract completed: Private Chef Services',
+                    time: '6 hours ago'
+                },
+                {
+                    type: 'payment_received',
+                    message: 'Payment received: $200 for Garden Maintenance',
+                    time: '8 hours ago'
+                },
+                {
+                    type: 'user_verification',
+                    message: 'User verified: Mike Wilson',
+                    time: '1 day ago'
+                }
+            ]
+        };
     },
     // Search and Filters
     async getSearchFilters () {
         await delay(200);
         return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockSearchFilters"];
+    },
+    // Enhanced Dashboard
+    async getDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            if (user.userType === 'Provider') {
+                return user.id === '2' || user.id === '4' || user.id === '6';
+            } else {
+                return user.id === '3' || user.id === '5';
+            }
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
+        // Get user-specific data
+        let userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
+        let userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
+        let userServiceRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
+        let userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            user,
+            stats: userStats,
+            recentContracts: userContracts.slice(0, 5),
+            recentServices: userServices.slice(0, 5),
+            serviceRequests: userServiceRequests,
+            availability: userAvailability
+        };
+    },
+    // Service Requests
+    async getServiceRequests (userId, filters = {}) {
+        await delay(500);
+        let filteredRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
+        if (filters.status) {
+            filteredRequests = filteredRequests.filter((sr)=>sr.status === filters.status);
+        }
+        if (filters.type) {
+            filteredRequests = filteredRequests.filter((sr)=>sr.requestType === filters.type);
+        }
+        return {
+            requests: filteredRequests,
+            total: filteredRequests.length
+        };
+    },
+    async getServiceRequestById (id) {
+        await delay(300);
+        const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
+        if (!request) {
+            throw new Error('Service request not found');
+        }
+        return request;
+    },
+    async updateServiceRequestStatus (id, status) {
+        await delay(300);
+        const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
+        if (request) {
+            request.status = status;
+            request.updatedAt = new Date().toISOString();
+        }
+        return {
+            message: 'Service request status updated successfully'
+        };
+    },
+    async createServiceRequest (requestData) {
+        await delay(500);
+        const newRequest = {
+            id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].length + 1).toString(),
+            ...requestData,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
+        return newRequest;
+    },
+    // Availability Management
+    async getAvailability (userId) {
+        await delay(300);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+    },
+    async updateAvailability (userId, availabilityData) {
+        await delay(500);
+        // Remove existing availability for user
+        const existingIndexes = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].map((a, index)=>a.userId === userId ? index : -1).filter((index)=>index !== -1);
+        existingIndexes.reverse().forEach((index)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].splice(index, 1);
+        });
+        // Add new availability
+        availabilityData.forEach((data)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].push({
+                id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].length + 1).toString(),
+                userId,
+                ...data
+            });
+        });
+        return {
+            message: 'Availability updated successfully'
+        };
+    },
+    // Enhanced User Profile
+    async getUserProfile (userId) {
+        await delay(300);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        // Get user's services, contracts, and ratings
+        const userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
+        const userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
+        const userRatings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>{
+            const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === r.serviceId);
+            return service?.providerId === userId;
+        });
+        return {
+            user,
+            services: userServices,
+            contracts: userContracts,
+            ratings: userRatings
+        };
+    },
+    async updateUserProfile (userId, profileData) {
+        await delay(500);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (user) {
+            Object.assign(user, profileData);
+        }
+        return {
+            message: 'Profile updated successfully'
+        };
+    },
+    // Provider-specific endpoints
+    async getProviderDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Provider');
+        if (!user) {
+            throw new Error('Provider not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            return user.id === '2' || user.id === '4' || user.id === '6';
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
+        const pendingRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Pending');
+        const upcomingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress'));
+        const completedServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Completed');
+        const userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            user,
+            stats: userStats,
+            pendingRequests,
+            upcomingServices,
+            completedServices,
+            availability: userAvailability
+        };
+    },
+    // Requester-specific endpoints
+    async getRequesterDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Requester');
+        if (!user) {
+            throw new Error('Requester not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            return user.id === '3' || user.id === '5';
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][1];
+        const activeServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress'));
+        const pastServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Completed');
+        const pendingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Pending');
+        return {
+            user,
+            stats: userStats,
+            activeServices,
+            pastServices,
+            pendingServices
+        };
     }
 };
 const handleApiError = (error)=>{
@@ -1555,6 +2425,96 @@ class ApiService {
             return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getSearchFilters();
         }
         return apiRequest('/services/filters');
+    }
+    // Enhanced Dashboard
+    async getDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getDashboard(userId);
+        }
+        return apiRequest(`/dashboard/${userId}`);
+    }
+    async getProviderDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getProviderDashboard(userId);
+        }
+        return apiRequest(`/dashboard/provider/${userId}`);
+    }
+    async getRequesterDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getRequesterDashboard(userId);
+        }
+        return apiRequest(`/dashboard/requester/${userId}`);
+    }
+    // Service Requests
+    async getServiceRequests(userId, filters = {}) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequests(userId, filters);
+        }
+        const params = new URLSearchParams({
+            userId,
+            ...filters
+        });
+        return apiRequest(`/service-requests?${params}`);
+    }
+    async getServiceRequestById(id) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequestById(id);
+        }
+        return apiRequest(`/service-requests/${id}`);
+    }
+    async updateServiceRequestStatus(id, status) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateServiceRequestStatus(id, status);
+        }
+        return apiRequest(`/service-requests/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                status
+            })
+        });
+    }
+    async createServiceRequest(requestData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
+        }
+        return apiRequest('/service-requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData)
+        });
+    }
+    // Availability Management
+    async getAvailability(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getAvailability(userId);
+        }
+        return apiRequest(`/availability/${userId}`);
+    }
+    async updateAvailability(userId, availabilityData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateAvailability(userId, availabilityData);
+        }
+        return apiRequest(`/availability/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                availability: availabilityData
+            })
+        });
+    }
+    // User Profile
+    async getUserProfile(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getUserProfile(userId);
+        }
+        return apiRequest(`/users/${userId}/profile`);
+    }
+    async updateUserProfile(userId, profileData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateUserProfile(userId, profileData);
+        }
+        return apiRequest(`/users/${userId}/profile`, {
+            method: 'PUT',
+            body: JSON.stringify(profileData)
+        });
     }
 }
 const api = new ApiService();
@@ -1876,7 +2836,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/log-out.js [app-client] (ecmascript) <export default as LogOut>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/settings.js [app-client] (ecmascript) <export default as Settings>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$briefcase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Briefcase$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/briefcase.js [app-client] (ecmascript) <export default as Briefcase>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -1886,379 +2848,473 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+;
 function Navbar() {
     _s();
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    // Check if user is logged in
-    const isLoggedIn = "object" !== 'undefined' && localStorage.getItem('authToken');
-    const user = "object" !== 'undefined' && localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-    const handleLogout = ()=>{
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-        router.push('/auth/login');
-    };
+    const { user, isAuthenticated, logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
+    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Show loading indicator on route changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Navbar.useEffect": ()=>{
+            setIsLoading(true);
+            const timer = setTimeout({
+                "Navbar.useEffect.timer": ()=>{
+                    setIsLoading(false);
+                }
+            }["Navbar.useEffect.timer"], 500); // Minimum loading time for better UX
+            return ({
+                "Navbar.useEffect": ()=>clearTimeout(timer)
+            })["Navbar.useEffect"];
+        }
+    }["Navbar.useEffect"], [
+        pathname
+    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
-        className: "bg-white shadow-sm border-b",
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "container mx-auto px-4",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex items-center justify-between h-16",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                        href: "/",
-                        className: "flex items-center space-x-2",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$briefcase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Briefcase$3e$__["Briefcase"], {
-                                className: "h-8 w-8 text-blue-600"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/Navbar.tsx",
-                                lineNumber: 31,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-xl font-bold text-gray-900",
-                                children: "Service Platform"
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/Navbar.tsx",
-                                lineNumber: 32,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/Navbar.tsx",
-                        lineNumber: 30,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "hidden md:flex items-center space-x-8",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/",
-                                className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"], {
-                                        className: "h-4 w-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 38,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: "Home"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 39,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/Navbar.tsx",
-                                lineNumber: 37,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/services",
-                                className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$briefcase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Briefcase$3e$__["Briefcase"], {
-                                        className: "h-4 w-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 42,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: "Services"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 43,
-                                        columnNumber: 15
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/Navbar.tsx",
-                                lineNumber: 41,
-                                columnNumber: 13
-                            }, this),
-                            isLoggedIn && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                href: "/dashboard",
-                                className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
-                                        className: "h-4 w-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 47,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: "Dashboard"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 48,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/Navbar.tsx",
-                                lineNumber: 46,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/components/Navbar.tsx",
-                        lineNumber: 36,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center space-x-4",
-                        children: isLoggedIn ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenu"], {
+        className: "bg-white shadow-sm border-b relative",
+        children: [
+            isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute top-0 left-0 right-0 h-1 bg-blue-600 z-50",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "h-full bg-blue-400 animate-pulse",
+                    style: {
+                        animation: 'loading-bar 1s ease-in-out infinite'
+                    }
+                }, void 0, false, {
+                    fileName: "[project]/src/components/Navbar.tsx",
+                    lineNumber: 32,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/components/Navbar.tsx",
+                lineNumber: 31,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "container mx-auto px-4",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center justify-between h-16",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                            href: "/",
+                            className: "flex items-center space-x-2",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
-                                    asChild: true,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                        variant: "ghost",
-                                        className: "relative h-8 w-8 rounded-full",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
-                                            className: "h-8 w-8",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
-                                                    src: user?.profilePicture,
-                                                    alt: user?.firstName
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/Navbar.tsx",
-                                                    lineNumber: 60,
-                                                    columnNumber: 23
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
-                                                    children: [
-                                                        user?.firstName?.[0],
-                                                        user?.lastName?.[0]
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/components/Navbar.tsx",
-                                                    lineNumber: 61,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/Navbar.tsx",
-                                            lineNumber: 59,
-                                            columnNumber: 21
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 58,
-                                        columnNumber: 19
-                                    }, this)
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$briefcase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Briefcase$3e$__["Briefcase"], {
+                                    className: "h-8 w-8 text-blue-600"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Navbar.tsx",
-                                    lineNumber: 57,
-                                    columnNumber: 17
+                                    lineNumber: 42,
+                                    columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
-                                    className: "w-56",
-                                    align: "end",
-                                    forceMount: true,
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-xl font-bold text-gray-900",
+                                    children: "Service Platform"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/Navbar.tsx",
+                                    lineNumber: 43,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/Navbar.tsx",
+                            lineNumber: 41,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "hidden md:flex items-center space-x-8",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/",
+                                    className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1 transition-colors duration-200 hover:scale-105",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex items-center justify-start gap-2 p-2",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex flex-col space-y-1 leading-none",
-                                                children: user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "font-medium",
-                                                            children: [
-                                                                user.firstName,
-                                                                " ",
-                                                                user.lastName
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/src/components/Navbar.tsx",
-                                                            lineNumber: 72,
-                                                            columnNumber: 27
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "w-[200px] truncate text-sm text-muted-foreground",
-                                                            children: user.email
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/components/Navbar.tsx",
-                                                            lineNumber: 73,
-                                                            columnNumber: 27
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/components/Navbar.tsx",
-                                                lineNumber: 69,
-                                                columnNumber: 21
-                                            }, this)
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"], {
+                                            className: "h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Navbar.tsx",
-                                            lineNumber: 68,
-                                            columnNumber: 19
+                                            lineNumber: 49,
+                                            columnNumber: 15
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
-                                            asChild: true,
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                href: "/dashboard",
-                                                className: "cursor-pointer",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
-                                                        className: "mr-2 h-4 w-4"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/components/Navbar.tsx",
-                                                        lineNumber: 82,
-                                                        columnNumber: 23
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        children: "Dashboard"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/components/Navbar.tsx",
-                                                        lineNumber: 83,
-                                                        columnNumber: 23
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/components/Navbar.tsx",
-                                                lineNumber: 81,
-                                                columnNumber: 21
-                                            }, this)
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "Home"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Navbar.tsx",
-                                            lineNumber: 80,
-                                            columnNumber: 19
-                                        }, this),
-                                        user?.userType === 'Admin' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
-                                            asChild: true,
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                href: "/admin/dashboard",
-                                                className: "cursor-pointer",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
-                                                        className: "mr-2 h-4 w-4"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/components/Navbar.tsx",
-                                                        lineNumber: 89,
-                                                        columnNumber: 25
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        children: "Admin Panel"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/components/Navbar.tsx",
-                                                        lineNumber: 90,
-                                                        columnNumber: 25
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/components/Navbar.tsx",
-                                                lineNumber: 88,
-                                                columnNumber: 23
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/components/Navbar.tsx",
-                                            lineNumber: 87,
-                                            columnNumber: 21
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
-                                            onClick: handleLogout,
-                                            className: "cursor-pointer",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__["LogOut"], {
-                                                    className: "mr-2 h-4 w-4"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/Navbar.tsx",
-                                                    lineNumber: 95,
-                                                    columnNumber: 21
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    children: "Log out"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/Navbar.tsx",
-                                                    lineNumber: 96,
-                                                    columnNumber: 21
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/components/Navbar.tsx",
-                                            lineNumber: 94,
-                                            columnNumber: 19
+                                            lineNumber: 50,
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/Navbar.tsx",
-                                    lineNumber: 67,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/components/Navbar.tsx",
-                            lineNumber: 56,
-                            columnNumber: 15
-                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center space-x-2",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/auth/login",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                        variant: "ghost",
-                                        children: "Sign In"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 103,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/Navbar.tsx",
-                                    lineNumber: 102,
-                                    columnNumber: 17
+                                    lineNumber: 48,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/auth/register",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                        children: "Sign Up"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/Navbar.tsx",
-                                        lineNumber: 106,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
+                                    href: "/services",
+                                    className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1 transition-colors duration-200 hover:scale-105",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$briefcase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Briefcase$3e$__["Briefcase"], {
+                                            className: "h-4 w-4"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 53,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "Services"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 54,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/src/components/Navbar.tsx",
-                                    lineNumber: 105,
-                                    columnNumber: 17
+                                    lineNumber: 52,
+                                    columnNumber: 13
+                                }, this),
+                                isAuthenticated && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/dashboard",
+                                    className: "text-gray-600 hover:text-gray-900 flex items-center space-x-1 transition-colors duration-200 hover:scale-105",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                            className: "h-4 w-4"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 58,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "Dashboard"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 59,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/Navbar.tsx",
+                                    lineNumber: 57,
+                                    columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Navbar.tsx",
-                            lineNumber: 101,
-                            columnNumber: 15
+                            lineNumber: 47,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-4",
+                            children: isAuthenticated ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenu"], {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
+                                        asChild: true,
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                            variant: "ghost",
+                                            className: "relative h-8 w-8 rounded-full",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
+                                                className: "h-8 w-8",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
+                                                        src: user?.profilePicture,
+                                                        alt: user?.firstName
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/Navbar.tsx",
+                                                        lineNumber: 71,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
+                                                        children: [
+                                                            user?.firstName?.[0],
+                                                            user?.lastName?.[0]
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/components/Navbar.tsx",
+                                                        lineNumber: 72,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 70,
+                                                columnNumber: 21
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 69,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/Navbar.tsx",
+                                        lineNumber: 68,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
+                                        className: "w-56",
+                                        align: "end",
+                                        forceMount: true,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex items-center justify-start gap-2 p-2",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex flex-col space-y-1 leading-none",
+                                                    children: user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "font-medium",
+                                                                children: [
+                                                                    user.firstName,
+                                                                    " ",
+                                                                    user.lastName
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                                lineNumber: 83,
+                                                                columnNumber: 27
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "w-[200px] truncate text-sm text-muted-foreground",
+                                                                children: user.email
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                                lineNumber: 84,
+                                                                columnNumber: 27
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/Navbar.tsx",
+                                                    lineNumber: 80,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 79,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                asChild: true,
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    href: "/dashboard",
+                                                    className: "cursor-pointer",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                                            className: "mr-2 h-4 w-4"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 93,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Dashboard"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 94,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/Navbar.tsx",
+                                                    lineNumber: 92,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 91,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                asChild: true,
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    href: "/profile",
+                                                    className: "cursor-pointer",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                                            className: "mr-2 h-4 w-4"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 99,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Profile"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 100,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/Navbar.tsx",
+                                                    lineNumber: 98,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 97,
+                                                columnNumber: 19
+                                            }, this),
+                                            user?.userType === 'Provider' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                asChild: true,
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    href: "/availability",
+                                                    className: "cursor-pointer",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
+                                                            className: "mr-2 h-4 w-4"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 106,
+                                                            columnNumber: 25
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Availability"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 107,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/Navbar.tsx",
+                                                    lineNumber: 105,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 104,
+                                                columnNumber: 21
+                                            }, this),
+                                            user?.userType === 'Admin' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                asChild: true,
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    href: "/admin/dashboard",
+                                                    className: "cursor-pointer",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
+                                                            className: "mr-2 h-4 w-4"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 114,
+                                                            columnNumber: 25
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            children: "Admin Panel"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/Navbar.tsx",
+                                                            lineNumber: 115,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/components/Navbar.tsx",
+                                                    lineNumber: 113,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 112,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+                                                onClick: logout,
+                                                className: "cursor-pointer",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__["LogOut"], {
+                                                        className: "mr-2 h-4 w-4"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/Navbar.tsx",
+                                                        lineNumber: 120,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        children: "Log out"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/components/Navbar.tsx",
+                                                        lineNumber: 121,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/Navbar.tsx",
+                                                lineNumber: 119,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/Navbar.tsx",
+                                        lineNumber: 78,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/Navbar.tsx",
+                                lineNumber: 67,
+                                columnNumber: 15
+                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center space-x-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/auth/login",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                            variant: "ghost",
+                                            children: "Sign In"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 128,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/Navbar.tsx",
+                                        lineNumber: 127,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        href: "/auth/register",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                            children: "Sign Up"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Navbar.tsx",
+                                            lineNumber: 131,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/Navbar.tsx",
+                                        lineNumber: 130,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/Navbar.tsx",
+                                lineNumber: 126,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/Navbar.tsx",
+                            lineNumber: 65,
+                            columnNumber: 11
                         }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/Navbar.tsx",
-                        lineNumber: 54,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/Navbar.tsx",
+                    lineNumber: 39,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/src/components/Navbar.tsx",
-                lineNumber: 28,
-                columnNumber: 9
+                lineNumber: 38,
+                columnNumber: 7
             }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/components/Navbar.tsx",
-            lineNumber: 27,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
+        ]
+    }, void 0, true, {
         fileName: "[project]/src/components/Navbar.tsx",
-        lineNumber: 26,
+        lineNumber: 28,
         columnNumber: 5
     }, this);
 }
-_s(Navbar, "fN7XvhJ+p5oE6+Xlo0NJmXpxjC8=", false, function() {
+_s(Navbar, "Y/WgGAL3JZzkYP2N/+zDV5PJLJs=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"]
     ];
 });
 _c = Navbar;
@@ -2557,6 +3613,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Navbar$
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/dialog.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/label.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/textarea.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -2574,8 +3631,10 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
 function ServicesPage() {
     _s();
+    const { isAuthenticated } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const [services, setServices] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [categories, setCategories] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
@@ -2590,6 +3649,7 @@ function ServicesPage() {
         startDate: '',
         startTime: '',
         duration: 1,
+        endDate: '',
         specialRequirements: ''
     });
     const [isBookingDialogOpen, setIsBookingDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -2644,23 +3704,28 @@ function ServicesPage() {
                 className: `h-4 w-4 ${i < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`
             }, i, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 129,
+                lineNumber: 132,
                 columnNumber: 7
             }, this));
     };
     const getDisplayPrice = (service)=>{
         if (service.fixedPrice) {
-            return `$${service.fixedPrice}`;
+            return `${service.fixedPrice}`;
         }
-        return `$${service.hourlyRate}/hr`;
+        return `${service.hourlyRate}/hr`;
     };
     const handleBookService = (service)=>{
+        let defaultContractType = service.fixedPrice ? 'FixedPrice' : 'Hourly';
+        if (service.title === 'Laundry and Dry Cleaning') {
+            defaultContractType = 'Estimation';
+        }
         setSelectedService(service);
         setBookingForm({
-            contractType: service.fixedPrice ? 'FixedPrice' : 'Hourly',
+            contractType: defaultContractType,
             startDate: '',
             startTime: '',
             duration: 1,
+            endDate: '',
             specialRequirements: ''
         });
         setIsBookingDialogOpen(true);
@@ -2669,8 +3734,7 @@ function ServicesPage() {
         if (!selectedService) return;
         try {
             // Check if user is logged in
-            const isLoggedIn = localStorage.getItem('authToken');
-            if (!isLoggedIn) {
+            if (!isAuthenticated) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error("Please log in to book a service");
                 return;
             }
@@ -2715,6 +3779,14 @@ function ServicesPage() {
     };
     const getContractTypeOptions = (service)=>{
         const options = [];
+        // Special case for Laundry and Dry Cleaning service
+        if (service.title === 'Laundry and Dry Cleaning') {
+            options.push({
+                value: 'Estimation',
+                label: 'Estimation - Price determined after inspection'
+            });
+            return options;
+        }
         if (service.hourlyRate > 0) {
             options.push({
                 value: 'Hourly',
@@ -2746,7 +3818,7 @@ function ServicesPage() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 232,
+                lineNumber: 245,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2760,7 +3832,7 @@ function ServicesPage() {
                                 children: "Find Services"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 236,
+                                lineNumber: 249,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2768,13 +3840,13 @@ function ServicesPage() {
                                 children: "Discover and book professional services"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 237,
+                                lineNumber: 250,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 235,
+                        lineNumber: 248,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -2788,19 +3860,19 @@ function ServicesPage() {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 244,
+                                            lineNumber: 257,
                                             columnNumber: 15
                                         }, this),
                                         "Search & Filters"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 243,
+                                    lineNumber: 256,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 242,
+                                lineNumber: 255,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -2815,7 +3887,7 @@ function ServicesPage() {
                                                         className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 251,
+                                                        lineNumber: 264,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2825,13 +3897,13 @@ function ServicesPage() {
                                                         className: "pl-10"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 252,
+                                                        lineNumber: 265,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 250,
+                                                lineNumber: 263,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -2843,12 +3915,12 @@ function ServicesPage() {
                                                             placeholder: "All Categories"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 262,
+                                                            lineNumber: 275,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 261,
+                                                        lineNumber: 274,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -2858,7 +3930,7 @@ function ServicesPage() {
                                                                 children: "All Categories"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                                lineNumber: 265,
+                                                                lineNumber: 278,
                                                                 columnNumber: 19
                                                             }, this),
                                                             categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2866,19 +3938,19 @@ function ServicesPage() {
                                                                     children: category.name
                                                                 }, category.id, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 267,
+                                                                    lineNumber: 280,
                                                                     columnNumber: 21
                                                                 }, this))
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 264,
+                                                        lineNumber: 277,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 260,
+                                                lineNumber: 273,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2887,7 +3959,7 @@ function ServicesPage() {
                                                 onChange: (e)=>setSelectedLocation(e.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 274,
+                                                lineNumber: 287,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2900,7 +3972,7 @@ function ServicesPage() {
                                                         onChange: (e)=>setMinPrice(e.target.value)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 281,
+                                                        lineNumber: 294,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2910,19 +3982,19 @@ function ServicesPage() {
                                                         onChange: (e)=>setMaxPrice(e.target.value)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 287,
+                                                        lineNumber: 300,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 280,
+                                                lineNumber: 293,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 249,
+                                        lineNumber: 262,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2936,14 +4008,14 @@ function ServicesPage() {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 298,
+                                                        lineNumber: 311,
                                                         columnNumber: 17
                                                     }, this),
                                                     "Search"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 297,
+                                                lineNumber: 310,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2952,25 +4024,25 @@ function ServicesPage() {
                                                 children: "Clear Filters"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 301,
+                                                lineNumber: 314,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 296,
+                                        lineNumber: 309,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 248,
+                                lineNumber: 261,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 241,
+                        lineNumber: 254,
                         columnNumber: 9
                     }, this),
                     loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2980,7 +4052,7 @@ function ServicesPage() {
                                 className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 311,
+                                lineNumber: 324,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2988,13 +4060,13 @@ function ServicesPage() {
                                 children: "Loading services..."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 312,
+                                lineNumber: 325,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 310,
+                        lineNumber: 323,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6",
@@ -3012,19 +4084,19 @@ function ServicesPage() {
                                                     className: "w-full h-full object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 321,
+                                                    lineNumber: 334,
                                                     columnNumber: 23
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "w-full h-full flex items-center justify-center text-gray-400",
                                                     children: "No Image"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 327,
+                                                    lineNumber: 340,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 319,
+                                                lineNumber: 332,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3037,7 +4109,7 @@ function ServicesPage() {
                                                             children: service.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 334,
+                                                            lineNumber: 347,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -3045,24 +4117,24 @@ function ServicesPage() {
                                                             children: service.description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 335,
+                                                            lineNumber: 348,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 333,
+                                                    lineNumber: 346,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 332,
+                                                lineNumber: 345,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 318,
+                                        lineNumber: 331,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -3080,20 +4152,20 @@ function ServicesPage() {
                                                                     src: service.providerAvatar
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 346,
+                                                                    lineNumber: 359,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
                                                                     children: service.providerName.split(' ').map((n)=>n[0]).join('')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 347,
+                                                                    lineNumber: 360,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 345,
+                                                            lineNumber: 358,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3104,7 +4176,7 @@ function ServicesPage() {
                                                                     children: service.providerName
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 352,
+                                                                    lineNumber: 365,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3120,19 +4192,19 @@ function ServicesPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                                            lineNumber: 357,
+                                                                            lineNumber: 370,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 355,
+                                                                    lineNumber: 368,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 351,
+                                                            lineNumber: 364,
                                                             columnNumber: 23
                                                         }, this),
                                                         service.isVerified && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3141,13 +4213,13 @@ function ServicesPage() {
                                                             children: "Verified"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 363,
+                                                            lineNumber: 376,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 344,
+                                                    lineNumber: 357,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3160,14 +4232,14 @@ function ServicesPage() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 372,
+                                                                    lineNumber: 385,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 service.location
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 371,
+                                                            lineNumber: 384,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3177,20 +4249,20 @@ function ServicesPage() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 376,
+                                                                    lineNumber: 389,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 getDisplayPrice(service)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 375,
+                                                            lineNumber: 388,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 370,
+                                                    lineNumber: 383,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3201,7 +4273,7 @@ function ServicesPage() {
                                                             children: service.categoryName
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 383,
+                                                            lineNumber: 396,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3211,35 +4283,35 @@ function ServicesPage() {
                                                             children: "Book Now"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 384,
+                                                            lineNumber: 397,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 395,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 342,
+                                            lineNumber: 355,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 341,
+                                        lineNumber: 354,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, service.id, true, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 317,
+                                lineNumber: 330,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 315,
+                        lineNumber: 328,
                         columnNumber: 11
                     }, this),
                     !loading && services.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3250,7 +4322,7 @@ function ServicesPage() {
                                 children: "No services found matching your criteria."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 401,
+                                lineNumber: 414,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3260,19 +4332,19 @@ function ServicesPage() {
                                 children: "Clear Filters"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 402,
+                                lineNumber: 415,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 400,
+                        lineNumber: 413,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 234,
+                lineNumber: 247,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -3287,20 +4359,20 @@ function ServicesPage() {
                                     children: "Book Service"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 413,
+                                    lineNumber: 426,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
                                     children: selectedService?.title
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 414,
+                                    lineNumber: 427,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/services/page.tsx",
-                            lineNumber: 412,
+                            lineNumber: 425,
                             columnNumber: 11
                         }, this),
                         selectedService && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3313,7 +4385,7 @@ function ServicesPage() {
                                             children: "Contract Type"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 423,
+                                            lineNumber: 436,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -3326,12 +4398,12 @@ function ServicesPage() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 429,
+                                                        lineNumber: 442,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 428,
+                                                    lineNumber: 441,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -3340,24 +4412,24 @@ function ServicesPage() {
                                                             children: option.label
                                                         }, option.value, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 433,
+                                                            lineNumber: 446,
                                                             columnNumber: 23
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 431,
+                                                    lineNumber: 444,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 424,
+                                            lineNumber: 437,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 422,
+                                    lineNumber: 435,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3370,7 +4442,7 @@ function ServicesPage() {
                                                     children: "Start Date"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 444,
+                                                    lineNumber: 457,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -3383,13 +4455,13 @@ function ServicesPage() {
                                                     min: new Date().toISOString().split('T')[0]
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 445,
+                                                    lineNumber: 458,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 443,
+                                            lineNumber: 456,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3399,7 +4471,7 @@ function ServicesPage() {
                                                     children: "Start Time"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 453,
+                                                    lineNumber: 466,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -3411,19 +4483,19 @@ function ServicesPage() {
                                                             }))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 454,
+                                                    lineNumber: 467,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 452,
+                                            lineNumber: 465,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 442,
+                                    lineNumber: 455,
                                     columnNumber: 15
                                 }, this),
                                 bookingForm.contractType === 'Hourly' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3433,7 +4505,7 @@ function ServicesPage() {
                                             children: "Duration (hours)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 465,
+                                            lineNumber: 478,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -3446,13 +4518,13 @@ function ServicesPage() {
                                                     }))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 466,
+                                            lineNumber: 479,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 464,
+                                    lineNumber: 477,
                                     columnNumber: 17
                                 }, this),
                                 (bookingForm.contractType === 'Weekly' || bookingForm.contractType === 'Monthly') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3462,7 +4534,7 @@ function ServicesPage() {
                                             children: "End Date"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 478,
+                                            lineNumber: 491,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -3475,13 +4547,13 @@ function ServicesPage() {
                                             min: bookingForm.startDate
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 479,
+                                            lineNumber: 492,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 477,
+                                    lineNumber: 490,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3491,7 +4563,7 @@ function ServicesPage() {
                                             children: "Special Requirements (Optional)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 490,
+                                            lineNumber: 503,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -3504,13 +4576,13 @@ function ServicesPage() {
                                             rows: 3
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 491,
+                                            lineNumber: 504,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 489,
+                                    lineNumber: 502,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3523,7 +4595,7 @@ function ServicesPage() {
                                                 children: "Total Amount:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 502,
+                                                lineNumber: 515,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3545,18 +4617,18 @@ function ServicesPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 503,
+                                                lineNumber: 516,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 501,
+                                        lineNumber: 514,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 500,
+                                    lineNumber: 513,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3569,7 +4641,7 @@ function ServicesPage() {
                                             children: "Cancel"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 522,
+                                            lineNumber: 535,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3579,40 +4651,44 @@ function ServicesPage() {
                                             children: "Proceed to Payment"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 529,
+                                            lineNumber: 542,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 521,
+                                    lineNumber: 534,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/services/page.tsx",
-                            lineNumber: 420,
+                            lineNumber: 433,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/services/page.tsx",
-                    lineNumber: 411,
+                    lineNumber: 424,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 410,
+                lineNumber: 423,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/services/page.tsx",
-        lineNumber: 231,
+        lineNumber: 244,
         columnNumber: 5
     }, this);
 }
-_s(ServicesPage, "lj3P1kkPX459so9nBLXF+mCOgHk=");
+_s(ServicesPage, "rCTxrmYn7xDHsegkb+GDUJxOFEE=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
+    ];
+});
 _c = ServicesPage;
 var _c;
 __turbopack_context__.k.register(_c, "ServicesPage");

@@ -22,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/lib/api";
 
 interface Category {
   id: string;
@@ -42,12 +44,19 @@ const categorySchema = z.object({
 type CategoryForm = z.infer<typeof categorySchema>;
 
 export default function AdminCategoriesPage() {
+  const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    description: "",
+    icon: "",
+    isActive: true
+  });
 
   const form = useForm<CategoryForm>({
     resolver: zodResolver(categorySchema),
@@ -61,29 +70,14 @@ export default function AdminCategoriesPage() {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const params = new URLSearchParams({
-        page: "1",
-        pageSize: "100",
-      });
-
-      if (searchTerm) params.append("search", searchTerm);
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/categories?${params}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      if (result.success) {
-        setCategories(result.data);
-      }
+      const result = await api.getCategories();
+      setCategories(result || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
     } finally {
       setLoading(false);
     }
-  }, [searchTerm]);
+  }, []);
 
   useEffect(() => {
     fetchCategories();
@@ -99,67 +93,44 @@ export default function AdminCategoriesPage() {
   };
 
   const openCreateDialog = () => {
-    setEditingCategory(null);
+    setSelectedCategory(null);
     form.reset({
       name: "",
       description: "",
       icon: "",
     });
-    setIsDialogOpen(true);
+    setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (category: Category) => {
-    setEditingCategory(category);
+    setSelectedCategory(category);
     form.reset({
       name: category.name,
       description: category.description,
       icon: category.icon,
     });
-    setIsDialogOpen(true);
+    setIsCreateDialogOpen(true);
   };
 
   const onSubmit = async (data: CategoryForm) => {
-    setIsSubmitting(true);
     try {
-      const token = localStorage.getItem("token");
-      const url = editingCategory
-        ? `${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${editingCategory.id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/admin/categories`;
-      
-      const response = await fetch(url, {
-        method: editingCategory ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        setIsDialogOpen(false);
-        fetchCategories();
-        form.reset();
+      if (selectedCategory) {
+        await api.updateCategory(selectedCategory.id, data);
+      } else {
+        await api.createCategory(data);
       }
+      setIsCreateDialogOpen(false);
+      fetchCategories();
+      form.reset();
     } catch (error) {
       console.error("Error saving category:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   const deleteCategory = async (categoryId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        fetchCategories();
-      }
+      await api.deleteCategory(categoryId);
+      fetchCategories();
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -167,7 +138,7 @@ export default function AdminCategoriesPage() {
 
   const updateCategoryStatus = async (categoryId: string, isActive: boolean) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/categories/${categoryId}/status`, {
         method: "PUT",
         headers: {
@@ -191,6 +162,28 @@ export default function AdminCategoriesPage() {
     ) : (
       <Badge variant="secondary">Inactive</Badge>
     );
+  };
+
+  const createCategory = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newCategory),
+      });
+      
+      if (response.ok) {
+        setIsCreateDialogOpen(false);
+        setNewCategory({ name: "", description: "", icon: "", isActive: true });
+        fetchCategories(); // Refresh the list
+      }
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
   };
 
   return (
@@ -357,14 +350,14 @@ export default function AdminCategoriesPage() {
         </Card>
 
         {/* Create/Edit Dialog */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {editingCategory ? "Edit Category" : "Create Category"}
+                {selectedCategory ? "Edit Category" : "Create Category"}
               </DialogTitle>
               <DialogDescription>
-                {editingCategory 
+                {selectedCategory 
                   ? "Update the category information below."
                   : "Add a new service category to the platform."
                 }
@@ -421,18 +414,18 @@ export default function AdminCategoriesPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsDialogOpen(false)}
+                    onClick={() => setIsCreateDialogOpen(false)}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? (
+                  <Button type="submit" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Saving...
                       </>
                     ) : (
-                      editingCategory ? "Update Category" : "Create Category"
+                      selectedCategory ? "Update Category" : "Create Category"
                     )}
                   </Button>
                 </div>

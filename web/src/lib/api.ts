@@ -289,6 +289,115 @@ class ApiService {
 
     return apiRequest('/services/filters');
   }
+
+  // Enhanced Dashboard
+  async getDashboard(userId: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getDashboard(userId);
+    }
+
+    return apiRequest(`/dashboard/${userId}`);
+  }
+
+  async getProviderDashboard(userId: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getProviderDashboard(userId);
+    }
+
+    return apiRequest(`/dashboard/provider/${userId}`);
+  }
+
+  async getRequesterDashboard(userId: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getRequesterDashboard(userId);
+    }
+
+    return apiRequest(`/dashboard/requester/${userId}`);
+  }
+
+  // Service Requests
+  async getServiceRequests(userId: string, filters: any = {}) {
+    if (USE_MOCK_API) {
+      return mockApi.getServiceRequests(userId, filters);
+    }
+
+    const params = new URLSearchParams({
+      userId,
+      ...filters,
+    });
+
+    return apiRequest(`/service-requests?${params}`);
+  }
+
+  async getServiceRequestById(id: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getServiceRequestById(id);
+    }
+
+    return apiRequest(`/service-requests/${id}`);
+  }
+
+  async updateServiceRequestStatus(id: string, status: string) {
+    if (USE_MOCK_API) {
+      return mockApi.updateServiceRequestStatus(id, status);
+    }
+
+    return apiRequest(`/service-requests/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  async createServiceRequest(requestData: any) {
+    if (USE_MOCK_API) {
+      return mockApi.createServiceRequest(requestData);
+    }
+
+    return apiRequest('/service-requests', {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+    });
+  }
+
+  // Availability Management
+  async getAvailability(userId: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getAvailability(userId);
+    }
+
+    return apiRequest(`/availability/${userId}`);
+  }
+
+  async updateAvailability(userId: string, availabilityData: any[]) {
+    if (USE_MOCK_API) {
+      return mockApi.updateAvailability(userId, availabilityData);
+    }
+
+    return apiRequest(`/availability/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ availability: availabilityData }),
+    });
+  }
+
+  // User Profile
+  async getUserProfile(userId: string) {
+    if (USE_MOCK_API) {
+      return mockApi.getUserProfile(userId);
+    }
+
+    return apiRequest(`/users/${userId}/profile`);
+  }
+
+  async updateUserProfile(userId: string, profileData: any) {
+    if (USE_MOCK_API) {
+      return mockApi.updateUserProfile(userId, profileData);
+    }
+
+    return apiRequest(`/users/${userId}/profile`, {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+  }
 }
 
 // Export singleton instance

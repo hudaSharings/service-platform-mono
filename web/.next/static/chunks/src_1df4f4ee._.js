@@ -547,12 +547,14 @@ var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_
 {
 // Mock data for standalone UI development
 __turbopack_context__.s({
+    "mockAvailability": (()=>mockAvailability),
     "mockCategories": (()=>mockCategories),
     "mockContracts": (()=>mockContracts),
     "mockDashboardStats": (()=>mockDashboardStats),
     "mockNotifications": (()=>mockNotifications),
     "mockRatings": (()=>mockRatings),
     "mockSearchFilters": (()=>mockSearchFilters),
+    "mockServiceRequests": (()=>mockServiceRequests),
     "mockServices": (()=>mockServices),
     "mockUsers": (()=>mockUsers)
 });
@@ -579,6 +581,23 @@ const mockUsers = [
         isVerified: true,
         isActive: true,
         profilePicture: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        bio: 'Professional housekeeper with 5+ years of experience. Specializing in deep cleaning and organization.',
+        address: '123 Main Street',
+        city: 'New York',
+        state: 'NY',
+        zipCode: '10001',
+        country: 'USA',
+        skills: [
+            'Deep Cleaning',
+            'Organization',
+            'Laundry',
+            'Pet Care'
+        ],
+        hourlyRate: 25,
+        rating: 4.8,
+        reviewCount: 47,
+        totalEarnings: 12500,
+        totalServices: 89,
         createdAt: '2024-01-02T00:00:00Z',
         lastLoginAt: '2024-01-15T09:15:00Z'
     },
@@ -592,6 +611,11 @@ const mockUsers = [
         isVerified: true,
         isActive: true,
         profilePicture: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        address: '456 Oak Avenue',
+        city: 'Los Angeles',
+        state: 'CA',
+        zipCode: '90210',
+        country: 'USA',
         createdAt: '2024-01-03T00:00:00Z',
         lastLoginAt: '2024-01-15T11:45:00Z'
     },
@@ -604,8 +628,73 @@ const mockUsers = [
         userType: 'Provider',
         isVerified: false,
         isActive: true,
+        bio: 'Experienced chef specializing in Italian and Mediterranean cuisine. Available for private events and meal prep.',
+        address: '789 Pine Street',
+        city: 'Chicago',
+        state: 'IL',
+        zipCode: '60601',
+        country: 'USA',
+        skills: [
+            'Italian Cuisine',
+            'Mediterranean Cuisine',
+            'Meal Prep',
+            'Event Catering'
+        ],
+        hourlyRate: 35,
+        rating: 4.9,
+        reviewCount: 23,
+        totalEarnings: 8900,
+        totalServices: 34,
         createdAt: '2024-01-04T00:00:00Z',
         lastLoginAt: '2024-01-14T16:20:00Z'
+    },
+    {
+        id: '5',
+        email: 'sarah.johnson@example.com',
+        firstName: 'Sarah',
+        lastName: 'Johnson',
+        phoneNumber: '+1234567894',
+        userType: 'Requester',
+        isVerified: true,
+        isActive: true,
+        profilePicture: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        address: '321 Elm Street',
+        city: 'Miami',
+        state: 'FL',
+        zipCode: '33101',
+        country: 'USA',
+        createdAt: '2024-01-05T00:00:00Z',
+        lastLoginAt: '2024-01-15T08:30:00Z'
+    },
+    {
+        id: '6',
+        email: 'david.brown@example.com',
+        firstName: 'David',
+        lastName: 'Brown',
+        phoneNumber: '+1234567895',
+        userType: 'Provider',
+        isVerified: true,
+        isActive: true,
+        profilePicture: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        bio: 'Professional driver with clean record. Specializing in airport transfers and business travel.',
+        address: '654 Maple Drive',
+        city: 'Seattle',
+        state: 'WA',
+        zipCode: '98101',
+        country: 'USA',
+        skills: [
+            'Airport Transfers',
+            'Business Travel',
+            'Luxury Vehicles',
+            'Long Distance'
+        ],
+        hourlyRate: 30,
+        rating: 4.7,
+        reviewCount: 56,
+        totalEarnings: 18200,
+        totalServices: 124,
+        createdAt: '2024-01-06T00:00:00Z',
+        lastLoginAt: '2024-01-15T12:15:00Z'
     }
 ];
 const mockCategories = [
@@ -801,6 +890,286 @@ const mockServices = [
         createdAt: '2024-01-09T00:00:00Z'
     }
 ];
+const mockServiceRequests = [
+    {
+        id: '1',
+        serviceId: '1',
+        serviceTitle: 'Professional House Cleaning',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Hourly',
+        startDate: '2024-01-20T09:00:00Z',
+        endDate: '2024-01-20T13:00:00Z',
+        totalAmount: 100,
+        status: 'Pending',
+        description: 'Need weekly house cleaning service for my 2-bedroom apartment. Prefer morning hours.',
+        specialRequirements: 'Please bring eco-friendly cleaning products',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-15T10:30:00Z',
+        updatedAt: '2024-01-15T10:30:00Z'
+    },
+    {
+        id: '2',
+        serviceId: '2',
+        serviceTitle: 'Private Chef Services',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        requestType: 'FixedPrice',
+        startDate: '2024-01-25T18:00:00Z',
+        endDate: '2024-01-25T22:00:00Z',
+        totalAmount: 200,
+        status: 'Accepted',
+        description: 'Dinner party for 8 people. Italian cuisine preferred.',
+        specialRequirements: 'Vegetarian options needed for 2 guests',
+        location: 'Miami, FL',
+        createdAt: '2024-01-14T14:20:00Z',
+        updatedAt: '2024-01-15T09:15:00Z'
+    },
+    {
+        id: '3',
+        serviceId: '3',
+        serviceTitle: 'Professional Driving Service',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '6',
+        providerName: 'David Brown',
+        providerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Hourly',
+        startDate: '2024-01-22T07:00:00Z',
+        endDate: '2024-01-22T09:00:00Z',
+        totalAmount: 70,
+        status: 'InProgress',
+        description: 'Airport pickup from LAX to downtown LA.',
+        specialRequirements: 'Flight arrives at 6:30 AM, please arrive 15 minutes early',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-13T16:45:00Z',
+        updatedAt: '2024-01-15T11:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '4',
+        serviceTitle: 'Garden Maintenance',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        requesterAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'Weekly',
+        startDate: '2024-01-23T08:00:00Z',
+        endDate: '2024-01-23T12:00:00Z',
+        totalAmount: 500,
+        status: 'Completed',
+        description: 'Weekly garden maintenance including mowing, trimming, and watering.',
+        specialRequirements: 'Please focus on the rose garden area',
+        location: 'Miami, FL',
+        createdAt: '2024-01-10T12:00:00Z',
+        updatedAt: '2024-01-15T14:20:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '5',
+        serviceTitle: 'One-Time Deep Cleaning',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        requesterAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+        providerId: '2',
+        providerName: 'John Doe',
+        providerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        requestType: 'FixedPrice',
+        startDate: '2024-01-28T10:00:00Z',
+        endDate: '2024-01-28T16:00:00Z',
+        totalAmount: 150,
+        status: 'Pending',
+        description: 'Deep cleaning needed for move-out. 3-bedroom house.',
+        specialRequirements: 'Include carpet cleaning and window washing',
+        location: 'Los Angeles, CA',
+        createdAt: '2024-01-15T13:45:00Z',
+        updatedAt: '2024-01-15T13:45:00Z'
+    }
+];
+const mockAvailability = [
+    // John Doe's availability
+    {
+        id: '1',
+        userId: '2',
+        dayOfWeek: 1,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '2',
+        userId: '2',
+        dayOfWeek: 2,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '3',
+        userId: '2',
+        dayOfWeek: 3,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '4',
+        userId: '2',
+        dayOfWeek: 4,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '5',
+        userId: '2',
+        dayOfWeek: 5,
+        startTime: '08:00',
+        endTime: '17:00',
+        isAvailable: true
+    },
+    {
+        id: '6',
+        userId: '2',
+        dayOfWeek: 6,
+        startTime: '09:00',
+        endTime: '15:00',
+        isAvailable: true
+    },
+    {
+        id: '7',
+        userId: '2',
+        dayOfWeek: 0,
+        startTime: '10:00',
+        endTime: '14:00',
+        isAvailable: false
+    },
+    // Mike Wilson's availability
+    {
+        id: '8',
+        userId: '4',
+        dayOfWeek: 1,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '9',
+        userId: '4',
+        dayOfWeek: 2,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '10',
+        userId: '4',
+        dayOfWeek: 3,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '11',
+        userId: '4',
+        dayOfWeek: 4,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '12',
+        userId: '4',
+        dayOfWeek: 5,
+        startTime: '10:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '13',
+        userId: '4',
+        dayOfWeek: 6,
+        startTime: '12:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '14',
+        userId: '4',
+        dayOfWeek: 0,
+        startTime: '12:00',
+        endTime: '18:00',
+        isAvailable: true
+    },
+    // David Brown's availability
+    {
+        id: '15',
+        userId: '6',
+        dayOfWeek: 1,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '16',
+        userId: '6',
+        dayOfWeek: 2,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '17',
+        userId: '6',
+        dayOfWeek: 3,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '18',
+        userId: '6',
+        dayOfWeek: 4,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '19',
+        userId: '6',
+        dayOfWeek: 5,
+        startTime: '06:00',
+        endTime: '22:00',
+        isAvailable: true
+    },
+    {
+        id: '20',
+        userId: '6',
+        dayOfWeek: 6,
+        startTime: '08:00',
+        endTime: '20:00',
+        isAvailable: true
+    },
+    {
+        id: '21',
+        userId: '6',
+        dayOfWeek: 0,
+        startTime: '08:00',
+        endTime: '18:00',
+        isAvailable: true
+    }
+];
 const mockContracts = [
     {
         id: '1',
@@ -810,47 +1179,99 @@ const mockContracts = [
         providerName: 'John Doe',
         requesterId: '3',
         requesterName: 'Jane Smith',
-        contractType: 'Weekly',
-        startDate: '2024-01-15T00:00:00Z',
-        endDate: '2024-02-15T00:00:00Z',
-        totalAmount: 400,
+        contractType: 'Hourly',
+        startDate: '2024-01-20T09:00:00Z',
+        endDate: '2024-01-20T13:00:00Z',
+        totalAmount: 100,
         status: 'Active',
         paymentStatus: 'Paid',
-        createdAt: '2024-01-10T00:00:00Z',
-        updatedAt: '2024-01-15T00:00:00Z'
+        createdAt: '2024-01-15T10:30:00Z',
+        updatedAt: '2024-01-15T10:30:00Z'
     },
     {
         id: '2',
         serviceId: '2',
         serviceTitle: 'Private Chef Services',
-        providerId: '2',
-        providerName: 'John Doe',
-        requesterId: '3',
-        requesterName: 'Jane Smith',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
         contractType: 'FixedPrice',
-        startDate: '2024-01-20T00:00:00Z',
+        startDate: '2024-01-25T18:00:00Z',
+        endDate: '2024-01-25T22:00:00Z',
         totalAmount: 200,
         status: 'Pending',
         paymentStatus: 'Pending',
-        createdAt: '2024-01-18T00:00:00Z',
-        updatedAt: '2024-01-18T00:00:00Z'
+        createdAt: '2024-01-14T14:20:00Z',
+        updatedAt: '2024-01-15T09:15:00Z'
     },
     {
         id: '3',
         serviceId: '3',
         serviceTitle: 'Professional Driving Service',
-        providerId: '4',
-        providerName: 'Mike Wilson',
+        providerId: '6',
+        providerName: 'David Brown',
         requesterId: '3',
         requesterName: 'Jane Smith',
         contractType: 'Hourly',
-        startDate: '2024-01-12T00:00:00Z',
-        endDate: '2024-01-12T04:00:00Z',
-        totalAmount: 140,
+        startDate: '2024-01-22T07:00:00Z',
+        endDate: '2024-01-22T09:00:00Z',
+        totalAmount: 70,
+        status: 'Active',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-13T16:45:00Z',
+        updatedAt: '2024-01-15T11:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '4',
+        serviceTitle: 'Garden Maintenance',
+        providerId: '2',
+        providerName: 'John Doe',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Weekly',
+        startDate: '2024-01-23T08:00:00Z',
+        endDate: '2024-01-23T12:00:00Z',
+        totalAmount: 500,
         status: 'Completed',
         paymentStatus: 'Paid',
-        createdAt: '2024-01-10T00:00:00Z',
-        updatedAt: '2024-01-12T04:00:00Z'
+        createdAt: '2024-01-10T12:00:00Z',
+        updatedAt: '2024-01-15T14:20:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '1',
+        serviceTitle: 'Professional House Cleaning',
+        providerId: '2',
+        providerName: 'John Doe',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Weekly',
+        startDate: '2024-01-16T09:00:00Z',
+        endDate: '2024-01-16T13:00:00Z',
+        totalAmount: 100,
+        status: 'Completed',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-10T08:00:00Z',
+        updatedAt: '2024-01-16T13:00:00Z'
+    },
+    {
+        id: '6',
+        serviceId: '3',
+        serviceTitle: 'Professional Driving Service',
+        providerId: '6',
+        providerName: 'David Brown',
+        requesterId: '5',
+        requesterName: 'Sarah Johnson',
+        contractType: 'Hourly',
+        startDate: '2024-01-18T14:00:00Z',
+        endDate: '2024-01-18T16:00:00Z',
+        totalAmount: 60,
+        status: 'Completed',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-12T10:00:00Z',
+        updatedAt: '2024-01-18T16:00:00Z'
     }
 ];
 const mockRatings = [
@@ -861,26 +1282,56 @@ const mockRatings = [
         userId: '3',
         userName: 'Jane Smith',
         rating: 5,
-        comment: 'Excellent service! Very professional and thorough cleaning.',
-        createdAt: '2024-01-16T00:00:00Z'
+        comment: 'Excellent service! John was very professional and thorough. The house looks spotless.',
+        createdAt: '2024-01-16T14:30:00Z'
     },
     {
         id: '2',
         serviceId: '1',
-        contractId: '1',
+        contractId: '5',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 4,
+        comment: 'Good cleaning service. Very reliable and punctual.',
+        createdAt: '2024-01-17T10:15:00Z'
+    },
+    {
+        id: '3',
+        serviceId: '2',
+        contractId: '2',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 5,
+        comment: 'Amazing chef! The dinner party was a huge success. Everyone loved the food.',
+        createdAt: '2024-01-26T20:30:00Z'
+    },
+    {
+        id: '4',
+        serviceId: '3',
+        contractId: '3',
         userId: '3',
         userName: 'Jane Smith',
         rating: 4,
-        comment: 'Good service, arrived on time and did a great job.',
-        createdAt: '2024-01-17T00:00:00Z'
+        comment: 'Professional driver, arrived on time and got me to the airport safely.',
+        createdAt: '2024-01-22T09:30:00Z'
+    },
+    {
+        id: '5',
+        serviceId: '4',
+        contractId: '4',
+        userId: '5',
+        userName: 'Sarah Johnson',
+        rating: 5,
+        comment: 'Beautiful garden work! The roses look amazing and everything is well maintained.',
+        createdAt: '2024-01-23T13:45:00Z'
     }
 ];
 const mockNotifications = [
     {
         id: '1',
-        userId: '3',
-        title: 'New Contract Request',
-        message: 'You have a new contract request for "Professional House Cleaning"',
+        userId: '2',
+        title: 'New Service Request',
+        message: 'Jane Smith has requested your Professional House Cleaning service.',
         type: 'Info',
         isRead: false,
         createdAt: '2024-01-15T10:30:00Z'
@@ -888,80 +1339,153 @@ const mockNotifications = [
     {
         id: '2',
         userId: '3',
-        title: 'Payment Received',
-        message: 'Payment of $400 has been received for your weekly cleaning service',
+        title: 'Service Accepted',
+        message: 'John Doe has accepted your service request for Professional House Cleaning.',
         type: 'Success',
         isRead: true,
-        createdAt: '2024-01-15T09:15:00Z'
+        createdAt: '2024-01-15T11:00:00Z'
     },
     {
         id: '3',
-        userId: '2',
-        title: 'Service Verification',
-        message: 'Your "Professional House Cleaning" service has been verified',
+        userId: '4',
+        title: 'Payment Received',
+        message: 'Payment of $200 has been received for your Private Chef Services.',
         type: 'Success',
         isRead: false,
-        createdAt: '2024-01-14T16:20:00Z'
+        createdAt: '2024-01-15T09:15:00Z'
+    },
+    {
+        id: '4',
+        userId: '5',
+        title: 'Service Reminder',
+        message: 'Your scheduled Garden Maintenance service is tomorrow at 8:00 AM.',
+        type: 'Warning',
+        isRead: false,
+        createdAt: '2024-01-15T08:00:00Z'
+    },
+    {
+        id: '5',
+        userId: '6',
+        title: 'New Review',
+        message: 'Jane Smith left a 4-star review for your Professional Driving Service.',
+        type: 'Info',
+        isRead: true,
+        createdAt: '2024-01-22T09:30:00Z'
     }
 ];
-const mockDashboardStats = {
-    totalUsers: 1250,
-    totalServices: 89,
-    totalContracts: 234,
-    totalRevenue: 45600,
-    activeUsers: 890,
-    pendingVerifications: 12,
-    recentActivity: [
-        {
-            type: 'new_user',
-            message: 'New user registered',
-            time: '2 hours ago'
-        },
-        {
-            type: 'new_service',
-            message: 'New service added',
-            time: '4 hours ago'
-        },
-        {
-            type: 'contract_completed',
-            message: 'Contract completed',
-            time: '6 hours ago'
-        }
-    ]
-};
+const mockDashboardStats = [
+    // John Doe (Provider)
+    {
+        totalServices: 89,
+        totalContracts: 67,
+        totalEarnings: 12500,
+        averageRating: 4.8,
+        activeContracts: 2,
+        pendingRequests: 1,
+        completedServices: 65,
+        upcomingServices: 3,
+        totalHours: 320,
+        monthlyEarnings: 2800
+    },
+    // Jane Smith (Requester)
+    {
+        totalServices: 0,
+        totalContracts: 4,
+        totalEarnings: 0,
+        averageRating: 0,
+        activeContracts: 2,
+        pendingRequests: 0,
+        completedServices: 2,
+        upcomingServices: 0,
+        totalHours: 0,
+        monthlyEarnings: 0
+    },
+    // Mike Wilson (Provider)
+    {
+        totalServices: 34,
+        totalContracts: 28,
+        totalEarnings: 8900,
+        averageRating: 4.9,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 27,
+        upcomingServices: 1,
+        totalHours: 180,
+        monthlyEarnings: 1200
+    },
+    // Sarah Johnson (Requester)
+    {
+        totalServices: 0,
+        totalContracts: 3,
+        totalEarnings: 0,
+        averageRating: 0,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 2,
+        upcomingServices: 0,
+        totalHours: 0,
+        monthlyEarnings: 0
+    },
+    // David Brown (Provider)
+    {
+        totalServices: 124,
+        totalContracts: 98,
+        totalEarnings: 18200,
+        averageRating: 4.7,
+        activeContracts: 1,
+        pendingRequests: 0,
+        completedServices: 97,
+        upcomingServices: 2,
+        totalHours: 450,
+        monthlyEarnings: 3200
+    }
+];
 const mockSearchFilters = {
     categories: mockCategories,
-    priceRanges: [
-        {
-            label: 'Under $20',
-            value: '0-20'
-        },
-        {
-            label: '$20 - $50',
-            value: '20-50'
-        },
-        {
-            label: '$50 - $100',
-            value: '50-100'
-        },
-        {
-            label: 'Over $100',
-            value: '100+'
-        }
-    ],
     locations: [
         'New York, NY',
         'Los Angeles, CA',
         'Chicago, IL',
         'Miami, FL',
-        'Houston, TX'
+        'Seattle, WA',
+        'Boston, MA',
+        'San Francisco, CA',
+        'Denver, CO'
+    ],
+    priceRanges: [
+        {
+            label: 'Under $25',
+            min: 0,
+            max: 25
+        },
+        {
+            label: '$25 - $50',
+            min: 25,
+            max: 50
+        },
+        {
+            label: '$50 - $100',
+            min: 50,
+            max: 100
+        },
+        {
+            label: 'Over $100',
+            min: 100,
+            max: null
+        }
     ],
     ratings: [
-        5,
-        4,
-        3,
+        1,
         2,
-        1
+        3,
+        4,
+        5
+    ],
+    availability: [
+        'Available Now',
+        'Available Today',
+        'Available This Week',
+        'Available Next Week'
     ]
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -1217,6 +1741,178 @@ const mockApi = {
     async getSearchFilters () {
         await delay(200);
         return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockSearchFilters"];
+    },
+    // Enhanced Dashboard
+    async getDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            if (user.userType === 'Provider') {
+                return user.id === '2' || user.id === '4' || user.id === '6';
+            } else {
+                return user.id === '3' || user.id === '5';
+            }
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
+        // Get user-specific data
+        let userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
+        let userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
+        let userServiceRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
+        let userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            user,
+            stats: userStats,
+            recentContracts: userContracts.slice(0, 5),
+            recentServices: userServices.slice(0, 5),
+            serviceRequests: userServiceRequests,
+            availability: userAvailability
+        };
+    },
+    // Service Requests
+    async getServiceRequests (userId, filters = {}) {
+        await delay(500);
+        let filteredRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
+        if (filters.status) {
+            filteredRequests = filteredRequests.filter((sr)=>sr.status === filters.status);
+        }
+        if (filters.type) {
+            filteredRequests = filteredRequests.filter((sr)=>sr.requestType === filters.type);
+        }
+        return {
+            requests: filteredRequests,
+            total: filteredRequests.length
+        };
+    },
+    async getServiceRequestById (id) {
+        await delay(300);
+        const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
+        if (!request) {
+            throw new Error('Service request not found');
+        }
+        return request;
+    },
+    async updateServiceRequestStatus (id, status) {
+        await delay(300);
+        const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
+        if (request) {
+            request.status = status;
+            request.updatedAt = new Date().toISOString();
+        }
+        return {
+            message: 'Service request status updated successfully'
+        };
+    },
+    async createServiceRequest (requestData) {
+        await delay(500);
+        const newRequest = {
+            id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].length + 1).toString(),
+            ...requestData,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
+        return newRequest;
+    },
+    // Availability Management
+    async getAvailability (userId) {
+        await delay(300);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+    },
+    async updateAvailability (userId, availabilityData) {
+        await delay(500);
+        // Remove existing availability for user
+        const existingIndexes = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].map((a, index)=>a.userId === userId ? index : -1).filter((index)=>index !== -1);
+        existingIndexes.reverse().forEach((index)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].splice(index, 1);
+        });
+        // Add new availability
+        availabilityData.forEach((data)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].push({
+                id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].length + 1).toString(),
+                userId,
+                ...data
+            });
+        });
+        return {
+            message: 'Availability updated successfully'
+        };
+    },
+    // Enhanced User Profile
+    async getUserProfile (userId) {
+        await delay(300);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        // Get user's services, contracts, and ratings
+        const userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
+        const userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
+        const userRatings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>{
+            const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === r.serviceId);
+            return service?.providerId === userId;
+        });
+        return {
+            user,
+            services: userServices,
+            contracts: userContracts,
+            ratings: userRatings
+        };
+    },
+    async updateUserProfile (userId, profileData) {
+        await delay(500);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
+        if (user) {
+            Object.assign(user, profileData);
+        }
+        return {
+            message: 'Profile updated successfully'
+        };
+    },
+    // Provider-specific endpoints
+    async getProviderDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Provider');
+        if (!user) {
+            throw new Error('Provider not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            return user.id === '2' || user.id === '4' || user.id === '6';
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
+        const pendingRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Pending');
+        const upcomingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress'));
+        const completedServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Completed');
+        const userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            user,
+            stats: userStats,
+            pendingRequests,
+            upcomingServices,
+            completedServices,
+            availability: userAvailability
+        };
+    },
+    // Requester-specific endpoints
+    async getRequesterDashboard (userId) {
+        await delay(800);
+        const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Requester');
+        if (!user) {
+            throw new Error('Requester not found');
+        }
+        const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
+            return user.id === '3' || user.id === '5';
+        }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockDashboardStats"][1];
+        const activeServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress'));
+        const pastServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Completed');
+        const pendingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Pending');
+        return {
+            user,
+            stats: userStats,
+            activeServices,
+            pastServices,
+            pendingServices
+        };
     }
 };
 const handleApiError = (error)=>{
@@ -1504,6 +2200,96 @@ class ApiService {
         }
         return apiRequest('/services/filters');
     }
+    // Enhanced Dashboard
+    async getDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getDashboard(userId);
+        }
+        return apiRequest(`/dashboard/${userId}`);
+    }
+    async getProviderDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getProviderDashboard(userId);
+        }
+        return apiRequest(`/dashboard/provider/${userId}`);
+    }
+    async getRequesterDashboard(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getRequesterDashboard(userId);
+        }
+        return apiRequest(`/dashboard/requester/${userId}`);
+    }
+    // Service Requests
+    async getServiceRequests(userId, filters = {}) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequests(userId, filters);
+        }
+        const params = new URLSearchParams({
+            userId,
+            ...filters
+        });
+        return apiRequest(`/service-requests?${params}`);
+    }
+    async getServiceRequestById(id) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequestById(id);
+        }
+        return apiRequest(`/service-requests/${id}`);
+    }
+    async updateServiceRequestStatus(id, status) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateServiceRequestStatus(id, status);
+        }
+        return apiRequest(`/service-requests/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                status
+            })
+        });
+    }
+    async createServiceRequest(requestData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
+        }
+        return apiRequest('/service-requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData)
+        });
+    }
+    // Availability Management
+    async getAvailability(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getAvailability(userId);
+        }
+        return apiRequest(`/availability/${userId}`);
+    }
+    async updateAvailability(userId, availabilityData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateAvailability(userId, availabilityData);
+        }
+        return apiRequest(`/availability/${userId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                availability: availabilityData
+            })
+        });
+    }
+    // User Profile
+    async getUserProfile(userId) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].getUserProfile(userId);
+        }
+        return apiRequest(`/users/${userId}/profile`);
+    }
+    async updateUserProfile(userId, profileData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mockApi"].updateUserProfile(userId, profileData);
+        }
+        return apiRequest(`/users/${userId}/profile`, {
+            method: 'PUT',
+            body: JSON.stringify(profileData)
+        });
+    }
 }
 const api = new ApiService();
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -1538,9 +2324,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-client] (ecmascript) <export default as Loader2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/api.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -1565,6 +2353,7 @@ function LoginPage() {
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    const { login } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const form = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"])({
         resolver: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$hookform$2f$resolvers$2f$zod$2f$dist$2f$zod$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["zodResolver"])(loginSchema),
         defaultValues: {
@@ -1577,9 +2366,8 @@ function LoginPage() {
         setError("");
         try {
             const result = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].login(data.email, data.password);
-            // Store token and user data
-            localStorage.setItem("authToken", result.token);
-            localStorage.setItem("user", JSON.stringify(result.user));
+            // Use Auth Context to login
+            login(result.token, result.user);
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success("Login successful!");
             // Redirect based on user type
             if (result.user.userType === "Admin") {
@@ -1608,7 +2396,7 @@ function LoginPage() {
                             children: "Service Platform"
                         }, void 0, false, {
                             fileName: "[project]/src/app/auth/login/page.tsx",
-                            lineNumber: 71,
+                            lineNumber: 73,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1616,13 +2404,13 @@ function LoginPage() {
                             children: "Sign in to your account"
                         }, void 0, false, {
                             fileName: "[project]/src/app/auth/login/page.tsx",
-                            lineNumber: 72,
+                            lineNumber: 74,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/auth/login/page.tsx",
-                    lineNumber: 70,
+                    lineNumber: 72,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1633,20 +2421,20 @@ function LoginPage() {
                                     children: "Login"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                    lineNumber: 77,
+                                    lineNumber: 79,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                     children: "Enter your credentials to access your account"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                    lineNumber: 78,
+                                    lineNumber: 80,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/auth/login/page.tsx",
-                            lineNumber: 76,
+                            lineNumber: 78,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1663,12 +2451,12 @@ function LoginPage() {
                                                     children: error
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                                    lineNumber: 87,
+                                                    lineNumber: 89,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                lineNumber: 86,
+                                                lineNumber: 88,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormField"], {
@@ -1680,7 +2468,7 @@ function LoginPage() {
                                                                 children: "Email"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 96,
+                                                                lineNumber: 98,
                                                                 columnNumber: 23
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormControl"], {
@@ -1691,7 +2479,7 @@ function LoginPage() {
                                                                             className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                            lineNumber: 99,
+                                                                            lineNumber: 101,
                                                                             columnNumber: 27
                                                                         }, void 0),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1701,34 +2489,34 @@ function LoginPage() {
                                                                             className: "pl-10"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                            lineNumber: 100,
+                                                                            lineNumber: 102,
                                                                             columnNumber: 27
                                                                         }, void 0)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                    lineNumber: 98,
+                                                                    lineNumber: 100,
                                                                     columnNumber: 25
                                                                 }, void 0)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 97,
+                                                                lineNumber: 99,
                                                                 columnNumber: 23
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 108,
+                                                                lineNumber: 110,
                                                                 columnNumber: 23
                                                             }, void 0)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/auth/login/page.tsx",
-                                                        lineNumber: 95,
+                                                        lineNumber: 97,
                                                         columnNumber: 21
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                lineNumber: 91,
+                                                lineNumber: 93,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormField"], {
@@ -1740,7 +2528,7 @@ function LoginPage() {
                                                                 children: "Password"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 118,
+                                                                lineNumber: 120,
                                                                 columnNumber: 23
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormControl"], {
@@ -1751,7 +2539,7 @@ function LoginPage() {
                                                                             className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                            lineNumber: 121,
+                                                                            lineNumber: 123,
                                                                             columnNumber: 27
                                                                         }, void 0),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1761,7 +2549,7 @@ function LoginPage() {
                                                                             className: "pl-10 pr-10"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                            lineNumber: 122,
+                                                                            lineNumber: 124,
                                                                             columnNumber: 27
                                                                         }, void 0),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1774,45 +2562,45 @@ function LoginPage() {
                                                                                 className: "h-4 w-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                                lineNumber: 136,
+                                                                                lineNumber: 138,
                                                                                 columnNumber: 31
                                                                             }, void 0) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                                                 className: "h-4 w-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                                lineNumber: 138,
+                                                                                lineNumber: 140,
                                                                                 columnNumber: 31
                                                                             }, void 0)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                            lineNumber: 128,
+                                                                            lineNumber: 130,
                                                                             columnNumber: 27
                                                                         }, void 0)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                    lineNumber: 120,
+                                                                    lineNumber: 122,
                                                                     columnNumber: 25
                                                                 }, void 0)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 119,
+                                                                lineNumber: 121,
                                                                 columnNumber: 23
                                                             }, void 0),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                                lineNumber: 143,
+                                                                lineNumber: 145,
                                                                 columnNumber: 23
                                                             }, void 0)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/auth/login/page.tsx",
-                                                        lineNumber: 117,
+                                                        lineNumber: 119,
                                                         columnNumber: 21
                                                     }, void 0)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                lineNumber: 113,
+                                                lineNumber: 115,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1825,7 +2613,7 @@ function LoginPage() {
                                                             className: "mr-2 h-4 w-4 animate-spin"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                                            lineNumber: 151,
+                                                            lineNumber: 153,
                                                             columnNumber: 23
                                                         }, this),
                                                         "Signing in..."
@@ -1833,34 +2621,34 @@ function LoginPage() {
                                                 }, void 0, true) : "Sign in"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/auth/login/page.tsx",
-                                                lineNumber: 148,
+                                                lineNumber: 150,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/auth/login/page.tsx",
-                                        lineNumber: 84,
+                                        lineNumber: 86,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                    lineNumber: 83,
+                                    lineNumber: 85,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "mt-6 text-center",
+                                    className: "mt-4 text-center",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                         href: "/auth/forgot-password",
                                         className: "text-sm text-blue-600 hover:text-blue-500",
                                         children: "Forgot your password?"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/auth/login/page.tsx",
-                                        lineNumber: 162,
+                                        lineNumber: 164,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                    lineNumber: 161,
+                                    lineNumber: 163,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1871,7 +2659,7 @@ function LoginPage() {
                                             children: "Don't have an account? "
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 173,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1880,42 +2668,43 @@ function LoginPage() {
                                             children: "Sign up"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/auth/login/page.tsx",
-                                            lineNumber: 172,
+                                            lineNumber: 174,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/auth/login/page.tsx",
-                                    lineNumber: 170,
+                                    lineNumber: 172,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/auth/login/page.tsx",
-                            lineNumber: 82,
+                            lineNumber: 84,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/auth/login/page.tsx",
-                    lineNumber: 75,
+                    lineNumber: 77,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/auth/login/page.tsx",
-            lineNumber: 69,
+            lineNumber: 71,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/auth/login/page.tsx",
-        lineNumber: 68,
+        lineNumber: 70,
         columnNumber: 5
     }, this);
 }
-_s(LoginPage, "5TxwJUGjWzJYpjVDFWf/8JLVT8o=", false, function() {
+_s(LoginPage, "spajAVzWdweRz7XFCbAPEMEK0Kc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useForm"]
     ];
 });

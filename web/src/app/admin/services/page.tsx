@@ -9,14 +9,29 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { 
   Briefcase, 
   Search, 
-  Eye, 
+  Filter, 
+  MoreHorizontal, 
+  Edit, 
+  Trash2, 
+  CheckCircle, 
+  XCircle,
+  Eye,
   Star,
   MapPin,
   DollarSign
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/lib/api";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Service {
   id: string;
@@ -48,6 +63,7 @@ interface Category {
 }
 
 export default function AdminServicesPage() {
+  const { user } = useAuth();
   const [services, setServices] = useState<Service[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,25 +75,13 @@ export default function AdminServicesPage() {
   const fetchServices = useCallback(async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const params = new URLSearchParams({
-        page: "1",
-        pageSize: "50",
-      });
+      const filters: any = {};
+      if (searchTerm) filters.search = searchTerm;
+      if (selectedCategory) filters.categoryId = selectedCategory;
+      if (selectedStatus) filters.status = selectedStatus;
 
-      if (searchTerm) params.append("search", searchTerm);
-      if (selectedCategory) params.append("categoryId", selectedCategory);
-      if (selectedStatus) params.append("status", selectedStatus);
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/services?${params}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      if (result.success) {
-        setServices(result.data);
-      }
+      const result = await api.getServices(1, 50, filters);
+      setServices(result.services || []);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -92,11 +96,8 @@ export default function AdminServicesPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
-      const result = await response.json();
-      if (result.success) {
-        setCategories(result.data);
-      }
+      const result = await api.getCategories();
+      setCategories(result || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -113,43 +114,21 @@ export default function AdminServicesPage() {
     fetchServices();
   };
 
-  const updateServiceStatus = async (serviceId: string, isActive: boolean) => {
+  const updateServiceStatus = async (serviceId: string, status: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/services/${serviceId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ isActive }),
-      });
-      
-      if (response.ok) {
-        fetchServices(); // Refresh the list
-      }
+      await api.updateServiceStatus(serviceId, status === 'Active');
+      fetchServices(); // Refresh the list
     } catch (error) {
       console.error("Error updating service status:", error);
     }
   };
 
-  const updateServiceVerification = async (serviceId: string, isVerified: boolean) => {
+  const updateVerificationStatus = async (serviceId: string, verificationStatus: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/services/${serviceId}/verification`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ isVerified }),
-      });
-      
-      if (response.ok) {
-        fetchServices(); // Refresh the list
-      }
+      await api.updateServiceStatus(serviceId, verificationStatus === 'Verified');
+      fetchServices(); // Refresh the list
     } catch (error) {
-      console.error("Error updating service verification:", error);
+      console.error("Error updating verification status:", error);
     }
   };
 
@@ -262,26 +241,43 @@ export default function AdminServicesPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Service</TableHead>
-                    <TableHead>Provider</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Verification</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead className="w-64">Service</TableHead>
+                    <TableHead className="w-40">Provider</TableHead>
+                    <TableHead className="w-32">Category</TableHead>
+                    <TableHead className="w-24">Price</TableHead>
+                    <TableHead className="w-32">Location</TableHead>
+                    <TableHead className="w-24">Rating</TableHead>
+                    <TableHead className="w-24">Status</TableHead>
+                    <TableHead className="w-24">Verification</TableHead>
+                    <TableHead className="w-32">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {services.map((service) => (
                     <TableRow key={service.id}>
-                      <TableCell>
+                      <TableCell className="max-w-64">
                         <div>
-                          <p className="font-medium">{service.title}</p>
-                          <p className="text-sm text-gray-500 line-clamp-2">
-                            {service.description}
-                          </p>
+                          <p className="font-medium truncate">{service.title}</p>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <p className="text-sm text-gray-500 cursor-help truncate max-w-56">
+                                  {service.description}
+                                </p>
+                              </TooltipTrigger>
+                              <TooltipContent 
+                                side="top" 
+                                className="max-w-md p-3 bg-gray-900 text-white border-gray-700"
+                              >
+                                <div className="space-y-2">
+                                  <p className="font-medium text-sm">{service.title}</p>
+                                  <p className="text-sm leading-relaxed whitespace-normal break-words">
+                                    {service.description}
+                                  </p>
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -393,7 +389,7 @@ export default function AdminServicesPage() {
                             </DialogContent>
                           </Dialog>
 
-                          <Select onValueChange={(value) => updateServiceStatus(service.id, value === "true")}>
+                          <Select onValueChange={(value) => updateServiceStatus(service.id, value)}>
                             <SelectTrigger className="w-24">
                               <SelectValue placeholder="Status" />
                             </SelectTrigger>
@@ -403,7 +399,7 @@ export default function AdminServicesPage() {
                             </SelectContent>
                           </Select>
 
-                          <Select onValueChange={(value) => updateServiceVerification(service.id, value === "true")}>
+                          <Select onValueChange={(value) => updateVerificationStatus(service.id, value)}>
                             <SelectTrigger className="w-24">
                               <SelectValue placeholder="Verify" />
                             </SelectTrigger>

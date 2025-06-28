@@ -14,6 +14,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -27,6 +29,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { login } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -43,9 +46,8 @@ export default function LoginPage() {
     try {
       const result = await api.login(data.email, data.password);
       
-      // Store token and user data
-      localStorage.setItem("authToken", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
+      // Use Auth Context to login
+      login(result.token, result.user);
       
       toast.success("Login successful!");
       
@@ -147,10 +149,7 @@ export default function LoginPage() {
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
-                    </>
+                    <LoadingSpinner size="sm" text="Signing in..." />
                   ) : (
                     "Sign in"
                   )}
@@ -158,7 +157,7 @@ export default function LoginPage() {
               </form>
             </Form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-4 text-center">
               <Link
                 href="/auth/forgot-password"
                 className="text-sm text-blue-600 hover:text-blue-500"

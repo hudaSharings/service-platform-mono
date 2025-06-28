@@ -15,23 +15,31 @@ import {
   Eye, 
   DollarSign
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/lib/api";
 
 interface Contract {
   id: string;
-  contractNumber: string;
-  service: {
+  contractNumber?: string;
+  serviceId: string;
+  serviceTitle: string;
+  service?: {
     id: string;
     title: string;
     basePrice: number;
     currency: string;
   };
-  provider: {
+  providerId: string;
+  providerName: string;
+  provider?: {
     id: string;
     firstName: string;
     lastName: string;
     profilePictureUrl: string;
   };
-  requester: {
+  requesterId: string;
+  requesterName: string;
+  requester?: {
     id: string;
     firstName: string;
     lastName: string;
@@ -47,6 +55,7 @@ interface Contract {
 }
 
 export default function AdminContractsPage() {
+  const { user } = useAuth();
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,25 +66,13 @@ export default function AdminContractsPage() {
   const fetchContracts = useCallback(async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const params = new URLSearchParams({
-        page: "1",
-        pageSize: "50",
-      });
+      const filters: any = {};
+      if (searchTerm) filters.search = searchTerm;
+      if (selectedStatus && selectedStatus !== 'all') filters.status = selectedStatus;
+      if (selectedContractType && selectedContractType !== 'all') filters.contractType = selectedContractType;
 
-      if (searchTerm) params.append("search", searchTerm);
-      if (selectedStatus) params.append("status", selectedStatus);
-      if (selectedContractType) params.append("contractType", selectedContractType);
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/contracts?${params}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      if (result.success) {
-        setContracts(result.data);
-      }
+      const result = await api.getContracts(1, 50, filters);
+      setContracts(result.contracts || []);
     } catch (error) {
       console.error("Error fetching contracts:", error);
     } finally {
@@ -315,35 +312,43 @@ export default function AdminContractsPage() {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{contract.service.title}</p>
+                          <p className="font-medium">{contract.service?.title || contract.serviceTitle || 'Unknown Service'}</p>
                           <p className="text-sm text-gray-500">
-                            ${contract.service.basePrice} {contract.service.currency}
+                            ${contract.service?.basePrice || 0} {contract.service?.currency || 'USD'}
                           </p>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <AvatarImage src={contract.provider.profilePictureUrl} />
+                            <AvatarImage src={contract.provider?.profilePictureUrl || ''} />
                             <AvatarFallback>
-                              {contract.provider.firstName[0]}{contract.provider.lastName[0]}
+                              {contract.provider?.firstName?.[0] || contract.providerName?.[0] || 'U'}
+                              {contract.provider?.lastName?.[0] || ''}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-sm">
-                            {contract.provider.firstName} {contract.provider.lastName}
+                            {contract.provider?.firstName && contract.provider?.lastName 
+                              ? `${contract.provider.firstName} ${contract.provider.lastName}`
+                              : contract.providerName || 'Unknown Provider'
+                            }
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
-                            <AvatarImage src={contract.requester.profilePictureUrl} />
+                            <AvatarImage src={contract.requester?.profilePictureUrl || ''} />
                             <AvatarFallback>
-                              {contract.requester.firstName[0]}{contract.requester.lastName[0]}
+                              {contract.requester?.firstName?.[0] || contract.requesterName?.[0] || 'U'}
+                              {contract.requester?.lastName?.[0] || ''}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-sm">
-                            {contract.requester.firstName} {contract.requester.lastName}
+                            {contract.requester?.firstName && contract.requester?.lastName 
+                              ? `${contract.requester.firstName} ${contract.requester.lastName}`
+                              : contract.requesterName || 'Unknown Requester'
+                            }
                           </span>
                         </div>
                       </TableCell>

@@ -1,9 +1,14 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/categories/page": "app/admin/categories/page.js",
+  "/admin/contracts/page": "app/admin/contracts/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/services/page": "app/admin/services/page.js",
+  "/admin/users/page": "app/admin/users/page.js",
   "/auth/login/page": "app/auth/login/page.js",
+  "/availability/page": "app/availability/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/payment/page": "app/payment/page.js",
+  "/profile/page": "app/profile/page.js",
   "/services/page": "app/services/page.js"
 }

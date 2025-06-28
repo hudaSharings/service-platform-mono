@@ -7,13 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Filter, Star, MapPin, Clock, DollarSign, Calendar, Clock as ClockIcon } from "lucide-react";
+import { Search, Filter, Star, MapPin, Clock, DollarSign, Calendar, Clock as ClockIcon, User } from "lucide-react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Service {
   id: string;
@@ -48,7 +49,7 @@ interface Category {
 }
 
 interface BookingForm {
-  contractType: 'Hourly' | 'Weekly' | 'Monthly' | 'FixedPrice';
+  contractType: 'Hourly' | 'Weekly' | 'Monthly' | 'FixedPrice' | 'Estimation';
   startDate: string;
   startTime: string;
   duration?: number;
@@ -57,6 +58,7 @@ interface BookingForm {
 }
 
 export default function ServicesPage() {
+  const { isAuthenticated } = useAuth();
   const [services, setServices] = useState<Service[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +73,7 @@ export default function ServicesPage() {
     startDate: '',
     startTime: '',
     duration: 1,
+    endDate: '',
     specialRequirements: ''
   });
   const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
@@ -137,18 +140,23 @@ export default function ServicesPage() {
 
   const getDisplayPrice = (service: Service) => {
     if (service.fixedPrice) {
-      return `$${service.fixedPrice}`;
+      return `${service.fixedPrice}`;
     }
-    return `$${service.hourlyRate}/hr`;
+    return `${service.hourlyRate}/hr`;
   };
 
   const handleBookService = (service: Service) => {
+    let defaultContractType: any = service.fixedPrice ? 'FixedPrice' : 'Hourly';
+    if (service.title === 'Laundry and Dry Cleaning') {
+      defaultContractType = 'Estimation';
+    }
     setSelectedService(service);
     setBookingForm({
-      contractType: service.fixedPrice ? 'FixedPrice' : 'Hourly',
+      contractType: defaultContractType,
       startDate: '',
       startTime: '',
       duration: 1,
+      endDate: '',
       specialRequirements: ''
     });
     setIsBookingDialogOpen(true);
@@ -159,8 +167,7 @@ export default function ServicesPage() {
 
     try {
       // Check if user is logged in
-      const isLoggedIn = localStorage.getItem('authToken');
-      if (!isLoggedIn) {
+      if (!isAuthenticated) {
         toast.error("Please log in to book a service");
         return;
       }
@@ -210,6 +217,12 @@ export default function ServicesPage() {
 
   const getContractTypeOptions = (service: Service) => {
     const options = [];
+    
+    // Special case for Laundry and Dry Cleaning service
+    if (service.title === 'Laundry and Dry Cleaning') {
+      options.push({ value: 'Estimation', label: 'Estimation - Price determined after inspection' });
+      return options;
+    }
     
     if (service.hourlyRate > 0) {
       options.push({ value: 'Hourly', label: `Hourly - $${service.hourlyRate}/hr` });

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { LoadingProvider } from "@/contexts/LoadingContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +27,11 @@ export default function RootLayout({
             🚀 Running in Mock Mode - No Backend Required
           </div>
         )}
-        {children}
+        <AuthProvider>
+          <LoadingProvider>
+            {children}
+          </LoadingProvider>
+        </AuthProvider>
         <Toaster position="top-right" />
       </body>
     </html>

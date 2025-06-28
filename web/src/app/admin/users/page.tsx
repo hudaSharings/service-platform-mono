@@ -23,6 +23,8 @@ import {
   Mail,
   Phone
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/lib/api";
 
 interface User {
   id: string;
@@ -39,6 +41,7 @@ interface User {
 }
 
 export default function AdminUsersPage() {
+  const { user } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,25 +56,8 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const params = new URLSearchParams({
-        page: "1",
-        pageSize: "50",
-      });
-
-      if (searchTerm) params.append("search", searchTerm);
-      if (selectedUserType) params.append("userType", selectedUserType);
-      if (selectedStatus) params.append("status", selectedStatus);
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users?${params}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      if (result.success) {
-        setUsers(result.data);
-      }
+      const result = await api.getUsers(1, 50, searchTerm);
+      setUsers(result.users || []);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
@@ -92,19 +78,8 @@ export default function AdminUsersPage() {
 
   const updateUserStatus = async (userId: string, status: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users/${userId}/status`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status }),
-      });
-      
-      if (response.ok) {
-        fetchUsers(); // Refresh the list
-      }
+      await api.updateUserStatus(userId, status === 'Active');
+      fetchUsers(); // Refresh the list
     } catch (error) {
       console.error("Error updating user status:", error);
     }
@@ -112,19 +87,10 @@ export default function AdminUsersPage() {
 
   const updateVerificationStatus = async (userId: string, verificationStatus: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users/${userId}/verification`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ verificationStatus }),
-      });
-      
-      if (response.ok) {
-        fetchUsers(); // Refresh the list
+      if (verificationStatus === 'Verified') {
+        await api.verifyUser(userId);
       }
+      fetchUsers(); // Refresh the list
     } catch (error) {
       console.error("Error updating verification status:", error);
     }

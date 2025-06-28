@@ -54,7 +54,16 @@ export default function AdminDashboardComponent() {
     setLoading(true);
     try {
       const result = await api.getDashboardStats();
-      setStats(result);
+      // Ensure all required properties exist with fallback values
+      setStats({
+        totalUsers: result?.totalUsers || 0,
+        totalServices: result?.totalServices || 0,
+        totalContracts: result?.totalContracts || 0,
+        totalRevenue: result?.totalRevenue || 0,
+        activeUsers: result?.activeUsers || 0,
+        pendingVerifications: result?.pendingVerifications || 0,
+        recentActivity: result?.recentActivity || [],
+      });
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
       toast.error("Failed to load dashboard statistics");
@@ -142,7 +151,7 @@ export default function AdminDashboardComponent() {
           />
           <StatCard
             title="Total Revenue"
-            value={`$${stats.totalRevenue.toLocaleString()}`}
+            value={`$${(stats.totalRevenue || 0).toLocaleString()}`}
             description="Platform revenue"
             icon={DollarSign}
             trend="+20% from last month"

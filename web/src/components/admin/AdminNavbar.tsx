@@ -18,6 +18,7 @@ import {
   Menu,
   X
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -31,19 +32,10 @@ const navigation = [
 export default function AdminNavbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const [user, setUser] = useState<any>(null);
-
-  useState(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  });
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/auth/login";
+    logout();
   };
 
   return (
@@ -132,7 +124,7 @@ export default function AdminNavbar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.profilePictureUrl} />
+                      <AvatarImage src={user?.profilePicture} />
                       <AvatarFallback>
                         <User className="h-4 w-4" />
                       </AvatarFallback>

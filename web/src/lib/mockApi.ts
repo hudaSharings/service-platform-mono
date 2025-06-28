@@ -1,5 +1,5 @@
 // Mock API service for standalone UI development
-import { mockUsers, mockCategories, mockServices, mockContracts, mockRatings, mockNotifications, mockDashboardStats, mockSearchFilters } from './mocks';
+import { mockUsers, mockCategories, mockServices, mockContracts, mockRatings, mockNotifications, mockDashboardStats, mockSearchFilters, mockServiceRequests, mockAvailability } from './mocks';
 
 // Simulate API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -156,8 +156,27 @@ export const mockApi = {
     const end = start + limit;
     const paginatedServices = filteredServices.slice(start, end);
     
+    // Transform to expected structure
+    const transformedServices = paginatedServices.map(service => {
+      // Find provider user
+      const providerUser = mockUsers.find(u => u.id === service.providerId);
+      return {
+        ...service,
+        provider: {
+          id: service.providerId,
+          firstName: providerUser?.firstName || service.providerName.split(' ')[0] || '',
+          lastName: providerUser?.lastName || service.providerName.split(' ')[1] || '',
+          profilePictureUrl: providerUser?.profilePicture || service.providerAvatar || '',
+        },
+        category: {
+          id: service.categoryId,
+          name: service.categoryName,
+        }
+      };
+    });
+    
     return {
-      services: paginatedServices,
+      services: transformedServices,
       total: filteredServices.length,
       page,
       limit,
@@ -198,13 +217,62 @@ export const mockApi = {
         c.providerId === filters.userId || c.requesterId === filters.userId
       );
     }
+
+    if (filters.contractType) {
+      filteredContracts = filteredContracts.filter(c => c.contractType === filters.contractType);
+    }
+
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filteredContracts = filteredContracts.filter(c => 
+        c.serviceTitle.toLowerCase().includes(searchTerm) ||
+        c.providerName.toLowerCase().includes(searchTerm) ||
+        c.requesterName.toLowerCase().includes(searchTerm)
+      );
+    }
     
     const start = (page - 1) * limit;
     const end = start + limit;
     const paginatedContracts = filteredContracts.slice(start, end);
+
+    // Transform contracts to match the expected interface
+    const transformedContracts = paginatedContracts.map(contract => {
+      // Find the corresponding service for base price
+      const service = mockServices.find(s => s.id === contract.serviceId);
+      
+      return {
+        id: contract.id,
+        contractNumber: `CON-${contract.id.padStart(4, '0')}`,
+        service: {
+          id: contract.serviceId,
+          title: contract.serviceTitle,
+          basePrice: service?.hourlyRate || 0,
+          currency: 'USD'
+        },
+        provider: {
+          id: contract.providerId,
+          firstName: contract.providerName.split(' ')[0] || '',
+          lastName: contract.providerName.split(' ')[1] || '',
+          profilePictureUrl: ''
+        },
+        requester: {
+          id: contract.requesterId,
+          firstName: contract.requesterName.split(' ')[0] || '',
+          lastName: contract.requesterName.split(' ')[1] || '',
+          profilePictureUrl: ''
+        },
+        contractType: contract.contractType,
+        status: contract.status,
+        totalAmount: contract.totalAmount,
+        startDate: contract.startDate,
+        endDate: contract.endDate,
+        createdAt: contract.createdAt,
+        paymentStatus: contract.paymentStatus
+      };
+    });
     
     return {
-      contracts: paginatedContracts,
+      contracts: transformedContracts,
       total: filteredContracts.length,
       page,
       limit,
@@ -269,13 +337,279 @@ export const mockApi = {
   // Dashboard
   async getDashboardStats() {
     await delay(400);
-    return mockDashboardStats;
+    return {
+      totalUsers: mockUsers.length,
+      totalServices: mockServices.length,
+      totalContracts: mockContracts.length,
+      totalRevenue: mockContracts.reduce((sum, contract) => sum + contract.totalAmount, 0),
+      activeUsers: mockUsers.filter(user => user.isActive).length,
+      pendingVerifications: mockUsers.filter(user => !user.isVerified).length,
+      recentActivity: [
+        {
+          type: 'user_registration',
+          message: 'New user registered: Sarah Johnson',
+          time: '2 hours ago'
+        },
+        {
+          type: 'service_created',
+          message: 'New service created: Professional House Cleaning',
+          time: '4 hours ago'
+        },
+        {
+          type: 'contract_completed',
+          message: 'Contract completed: Private Chef Services',
+          time: '6 hours ago'
+        },
+        {
+          type: 'payment_received',
+          message: 'Payment received: $200 for Garden Maintenance',
+          time: '8 hours ago'
+        },
+        {
+          type: 'user_verification',
+          message: 'User verified: Mike Wilson',
+          time: '1 day ago'
+        }
+      ]
+    };
   },
 
   // Search and Filters
   async getSearchFilters() {
     await delay(200);
     return mockSearchFilters;
+  },
+
+  // Enhanced Dashboard
+  async getDashboard(userId: string) {
+    await delay(800);
+    
+    const user = mockUsers.find(u => u.id === userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const userStats = mockDashboardStats.find(s => {
+      if (user.userType === 'Provider') {
+        return user.id === '2' || user.id === '4' || user.id === '6';
+      } else {
+        return user.id === '3' || user.id === '5';
+      }
+    }) || mockDashboardStats[0];
+
+    // Get user-specific data
+    let userContracts = mockContracts.filter(c => 
+      c.providerId === userId || c.requesterId === userId
+    );
+
+    let userServices = mockServices.filter(s => 
+      s.providerId === userId
+    );
+
+    let userServiceRequests = mockServiceRequests.filter(sr => 
+      sr.providerId === userId || sr.requesterId === userId
+    );
+
+    let userAvailability = mockAvailability.filter(a => 
+      a.userId === userId
+    );
+
+    return {
+      user,
+      stats: userStats,
+      recentContracts: userContracts.slice(0, 5),
+      recentServices: userServices.slice(0, 5),
+      serviceRequests: userServiceRequests,
+      availability: userAvailability
+    };
+  },
+
+  // Service Requests
+  async getServiceRequests(userId: string, filters: any = {}) {
+    await delay(500);
+    
+    let filteredRequests = mockServiceRequests.filter(sr => 
+      sr.providerId === userId || sr.requesterId === userId
+    );
+    
+    if (filters.status) {
+      filteredRequests = filteredRequests.filter(sr => sr.status === filters.status);
+    }
+    
+    if (filters.type) {
+      filteredRequests = filteredRequests.filter(sr => sr.requestType === filters.type);
+    }
+    
+    return {
+      requests: filteredRequests,
+      total: filteredRequests.length
+    };
+  },
+
+  async getServiceRequestById(id: string) {
+    await delay(300);
+    const request = mockServiceRequests.find(sr => sr.id === id);
+    if (!request) {
+      throw new Error('Service request not found');
+    }
+    return request;
+  },
+
+  async updateServiceRequestStatus(id: string, status: string) {
+    await delay(300);
+    const request = mockServiceRequests.find(sr => sr.id === id);
+    if (request) {
+      request.status = status as any;
+      request.updatedAt = new Date().toISOString();
+    }
+    return { message: 'Service request status updated successfully' };
+  },
+
+  async createServiceRequest(requestData: any) {
+    await delay(500);
+    const newRequest = {
+      id: (mockServiceRequests.length + 1).toString(),
+      ...requestData,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    mockServiceRequests.push(newRequest);
+    return newRequest;
+  },
+
+  // Availability Management
+  async getAvailability(userId: string) {
+    await delay(300);
+    return mockAvailability.filter(a => a.userId === userId);
+  },
+
+  async updateAvailability(userId: string, availabilityData: any[]) {
+    await delay(500);
+    // Remove existing availability for user
+    const existingIndexes = mockAvailability
+      .map((a, index) => a.userId === userId ? index : -1)
+      .filter(index => index !== -1);
+    
+    existingIndexes.reverse().forEach(index => {
+      mockAvailability.splice(index, 1);
+    });
+    
+    // Add new availability
+    availabilityData.forEach(data => {
+      mockAvailability.push({
+        id: (mockAvailability.length + 1).toString(),
+        userId,
+        ...data
+      });
+    });
+    
+    return { message: 'Availability updated successfully' };
+  },
+
+  // Enhanced User Profile
+  async getUserProfile(userId: string) {
+    await delay(300);
+    const user = mockUsers.find(u => u.id === userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    // Get user's services, contracts, and ratings
+    const userServices = mockServices.filter(s => s.providerId === userId);
+    const userContracts = mockContracts.filter(c => 
+      c.providerId === userId || c.requesterId === userId
+    );
+    const userRatings = mockRatings.filter(r => {
+      const service = mockServices.find(s => s.id === r.serviceId);
+      return service?.providerId === userId;
+    });
+    
+    return {
+      user,
+      services: userServices,
+      contracts: userContracts,
+      ratings: userRatings
+    };
+  },
+
+  async updateUserProfile(userId: string, profileData: any) {
+    await delay(500);
+    const user = mockUsers.find(u => u.id === userId);
+    if (user) {
+      Object.assign(user, profileData);
+    }
+    return { message: 'Profile updated successfully' };
+  },
+
+  // Provider-specific endpoints
+  async getProviderDashboard(userId: string) {
+    await delay(800);
+    
+    const user = mockUsers.find(u => u.id === userId && u.userType === 'Provider');
+    if (!user) {
+      throw new Error('Provider not found');
+    }
+
+    const userStats = mockDashboardStats.find(s => {
+      return user.id === '2' || user.id === '4' || user.id === '6';
+    }) || mockDashboardStats[0];
+
+    const pendingRequests = mockServiceRequests.filter(sr => 
+      sr.providerId === userId && sr.status === 'Pending'
+    );
+
+    const upcomingServices = mockServiceRequests.filter(sr => 
+      sr.providerId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress')
+    );
+
+    const completedServices = mockServiceRequests.filter(sr => 
+      sr.providerId === userId && sr.status === 'Completed'
+    );
+
+    const userAvailability = mockAvailability.filter(a => a.userId === userId);
+
+    return {
+      user,
+      stats: userStats,
+      pendingRequests,
+      upcomingServices,
+      completedServices,
+      availability: userAvailability
+    };
+  },
+
+  // Requester-specific endpoints
+  async getRequesterDashboard(userId: string) {
+    await delay(800);
+    
+    const user = mockUsers.find(u => u.id === userId && u.userType === 'Requester');
+    if (!user) {
+      throw new Error('Requester not found');
+    }
+
+    const userStats = mockDashboardStats.find(s => {
+      return user.id === '3' || user.id === '5';
+    }) || mockDashboardStats[1];
+
+    const activeServices = mockServiceRequests.filter(sr => 
+      sr.requesterId === userId && (sr.status === 'Accepted' || sr.status === 'InProgress')
+    );
+
+    const pastServices = mockServiceRequests.filter(sr => 
+      sr.requesterId === userId && sr.status === 'Completed'
+    );
+
+    const pendingServices = mockServiceRequests.filter(sr => 
+      sr.requesterId === userId && sr.status === 'Pending'
+    );
+
+    return {
+      user,
+      stats: userStats,
+      activeServices,
+      pastServices,
+      pendingServices
+    };
   }
 };
 

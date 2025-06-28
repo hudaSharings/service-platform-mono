@@ -1,0 +1,10 @@
+{
+  "[project]/src/app/admin/dashboard/AdminDashboardComponent.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/app/admin/dashboard/AdminDashboardComponent.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/src_a3b0b6db._.js",
+      "static/chunks/node_modules_00c5f040._.js",
+      "static/chunks/src_app_admin_dashboard_AdminDashboardComponent_tsx_9d716ffb._.js"
+    ]
+  }
+}
