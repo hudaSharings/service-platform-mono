@@ -176,3 +176,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+// Make Program class accessible to test projects
+public partial class Program { }

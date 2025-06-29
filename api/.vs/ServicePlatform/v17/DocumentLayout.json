@@ -66,8 +66,7 @@
               "RelativeToolTip": "ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAACQBAAAAAAAAAAAAADABAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T04:00:49.463Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T04:00:49.463Z"
             },
             {
               "$type": "Document",
@@ -77,7 +76,7 @@
               "RelativeDocumentMoniker": "ServicePlatform.Api\\Program.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Program.cs",
               "RelativeToolTip": "ServicePlatform.Api\\Program.cs",
-              "ViewState": "AgIAAJkAAAAAAAAAAAAwwKkAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAwwKkAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-28T02:24:44.87Z",
               "EditorCaption": ""
@@ -92,8 +91,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\Dockerfile",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-06-28T02:43:40.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:43:40.602Z"
             },
             {
               "$type": "Document",
@@ -105,8 +103,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAEUAAAAAAAAAAAAYwA4AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T02:31:32.088Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:31:32.088Z"
             },
             {
               "$type": "Document",
@@ -118,8 +115,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-28T02:25:29.102Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:25:29.102Z"
             },
             {
               "$type": "Document",
@@ -131,8 +127,7 @@
               "RelativeToolTip": "ServicePlatform.Domain\\Entities\\UserDocument.cs",
               "ViewState": "AgIAACMAAAAAAAAAAAAwwDoAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T01:24:50.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T01:24:50.978Z"
             },
             {
               "$type": "Document",
@@ -144,8 +139,7 @@
               "RelativeToolTip": "ServicePlatform.Domain\\Entities\\User.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAcwEEAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T01:23:39.181Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T01:23:39.181Z"
             }
           ]
         },

@@ -17,3 +17,4 @@ C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net8.0\ServicePlatform.Infrastructure.pdb
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net8.0\ServicePlatform.Infrastructure.genruntimeconfig.cache
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net8.0\ref\ServicePlatform.Infrastructure.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Infrastructure\obj\Debug\net8.0\ServicePlatform.Infrastructure.sourcelink.json

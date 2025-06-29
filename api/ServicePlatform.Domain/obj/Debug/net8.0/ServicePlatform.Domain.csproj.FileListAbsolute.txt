@@ -10,3 +10,4 @@ C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Domain\obj\Debug\net8.0\S
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Domain\obj\Debug\net8.0\refint\ServicePlatform.Domain.dll
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Domain\obj\Debug\net8.0\ServicePlatform.Domain.pdb
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Domain\obj\Debug\net8.0\ref\ServicePlatform.Domain.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Domain\obj\Debug\net8.0\ServicePlatform.Domain.sourcelink.json

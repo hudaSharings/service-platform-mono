@@ -13,3 +13,4 @@ C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net8.0\refint\ServicePlatform.Application.dll
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net8.0\ServicePlatform.Application.pdb
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net8.0\ref\ServicePlatform.Application.dll
+C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Application\obj\Debug\net8.0\ServicePlatform.Application.sourcelink.json
