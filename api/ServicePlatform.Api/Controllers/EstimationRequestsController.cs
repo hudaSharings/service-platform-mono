@@ -13,11 +13,13 @@ public class EstimationRequestsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<EstimationRequestsController> _logger;
+    private readonly IUserContextService _userContextService;
 
-    public EstimationRequestsController(ApplicationDbContext context, ILogger<EstimationRequestsController> logger)
+    public EstimationRequestsController(ApplicationDbContext context, ILogger<EstimationRequestsController> logger, IUserContextService userContextService)
     {
         _context = context;
         _logger = logger;
+        _userContextService = userContextService;
     }
 
     [HttpPost]
@@ -26,7 +28,7 @@ public class EstimationRequestsController : ControllerBase
         try
         {
             // Get the current user ID from the token (you'll need to implement this based on your auth setup)
-            var currentUserId = GetCurrentUserId();
+            var currentUserId = _userContextService.GetCurrentUserId();
             if (currentUserId == Guid.Empty)
             {
                 return Unauthorized(new ServiceResponse<ServiceRequestDto>
@@ -124,7 +126,7 @@ public class EstimationRequestsController : ControllerBase
     {
         try
         {
-            var currentUserId = GetCurrentUserId();
+            var currentUserId = _userContextService.GetCurrentUserId();
             if (currentUserId == Guid.Empty)
             {
                 return Unauthorized(new ServiceResponse<List<ServiceRequestDto>>
@@ -171,12 +173,5 @@ public class EstimationRequestsController : ControllerBase
                 Message = "An error occurred while retrieving estimation requests"
             });
         }
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        // This is a placeholder - you'll need to implement this based on your authentication setup
-        // For now, we'll return a default user ID for testing
-        return Guid.Parse("00000000-0000-0000-0000-000000000001");
     }
 } 

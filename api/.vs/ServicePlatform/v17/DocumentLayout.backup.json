@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|solutionrelative:serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|solutionrelative:serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|solutionrelative:serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D18B2A60-5B96-4B41-A132-0C56BFBFEB9F}|ServicePlatform.Domain\\ServicePlatform.Domain.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -37,8 +37,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "DockedWidth": 218,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,26 +58,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeToolTip": "ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAACQBAAAAAAAAAAAAADABAABBAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAuwBAAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-28T04:00:49.463Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Program.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Api\\Program.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Program.cs",
               "RelativeToolTip": "ServicePlatform.Api\\Program.cs",
-              "ViewState": "AgIAAJkAAAAAAAAAAAAwwKkAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG8AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-28T02:24:44.87Z",
               "EditorCaption": ""
@@ -92,8 +92,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\Dockerfile",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-06-28T02:43:40.602Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:43:40.602Z"
             },
             {
               "$type": "Document",
@@ -105,8 +104,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAEUAAAAAAAAAAAAYwA4AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T02:31:32.088Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:31:32.088Z"
             },
             {
               "$type": "Document",
@@ -118,8 +116,7 @@
               "RelativeToolTip": "ServicePlatform.Api\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-28T02:25:29.102Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T02:25:29.102Z"
             },
             {
               "$type": "Document",
@@ -131,8 +128,7 @@
               "RelativeToolTip": "ServicePlatform.Domain\\Entities\\UserDocument.cs",
               "ViewState": "AgIAACMAAAAAAAAAAAAwwDoAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T01:24:50.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T01:24:50.978Z"
             },
             {
               "$type": "Document",
@@ -144,13 +140,12 @@
               "RelativeToolTip": "ServicePlatform.Domain\\Entities\\User.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAcwEEAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T01:23:39.181Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-28T01:23:39.181Z"
             }
           ]
         },
         {
-          "DockedWidth": 135,
+          "DockedWidth": 117,
           "SelectedChildIndex": -1,
           "Children": [
             {

@@ -8,6 +8,8 @@ using ServicePlatform.Infrastructure.Data;
 using ServicePlatform.Infrastructure.Services;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using ServicePlatform.Application.Interfaces;
+using ServicePlatform.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +108,8 @@ builder.Services.AddAuthentication(options =>
 // Add Infrastructure and Application services
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 var app = builder.Build();
 

@@ -839,6 +839,7 @@ public class ServiceRequestDto
     public string RequesterName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public string? FormattedRequestId { get; set; }
 }
 
 public class ServiceRequestResponseDto
