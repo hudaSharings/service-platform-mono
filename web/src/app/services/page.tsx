@@ -37,6 +37,7 @@ interface Service {
   tags: string[];
   images: string[];
   createdAt: string;
+  serviceType?: string;
 }
 
 interface Category {
@@ -77,6 +78,8 @@ export default function ServicesPage() {
     specialRequirements: ''
   });
   const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
+  const [requestId, setRequestId] = useState<string>('');
 
   useEffect(() => {
     fetchCategories();
@@ -139,6 +142,11 @@ export default function ServicesPage() {
   };
 
   const getDisplayPrice = (service: Service) => {
+    // Don't show price for estimation services
+    if (service.serviceType === 'Estimation') {
+      return 'Price determined after inspection';
+    }
+    
     if (service.fixedPrice) {
       return `${service.fixedPrice}`;
     }
@@ -147,7 +155,7 @@ export default function ServicesPage() {
 
   const handleBookService = (service: Service) => {
     let defaultContractType: any = service.fixedPrice ? 'FixedPrice' : 'Hourly';
-    if (service.title === 'Laundry and Dry Cleaning') {
+    if (service.serviceType === 'Estimation' || service.title === 'Laundry and Dry Cleaning') {
       defaultContractType = 'Estimation';
     }
     setSelectedService(service);
@@ -172,7 +180,43 @@ export default function ServicesPage() {
         return;
       }
 
-      // Calculate total amount
+      // Check if this is an estimation service
+      if (bookingForm.contractType === 'Estimation' || selectedService.serviceType === 'Estimation') {
+        // For estimation services, create a service request instead of going to payment
+        const estimationRequest = {
+          serviceId: selectedService.id,
+          requesterId: '', // Will be set by the API based on current user
+          title: `${selectedService.title} - Estimation Request`,
+          description: bookingForm.specialRequirements || `Request for ${selectedService.title} estimation`,
+          location: selectedService.location,
+          preferredDate: bookingForm.startDate ? new Date(bookingForm.startDate).toISOString() : null,
+          specialRequirements: bookingForm.specialRequirements
+        };
+
+        try {
+          // Call API to create estimation request
+          const response = await api.createEstimationRequest(estimationRequest);
+          
+          if (response.success) {
+            setIsBookingDialogOpen(false);
+            // Generate formatted request ID with service type and category prefix
+            const categoryPrefix = selectedService.categoryName.replace(/\s+/g, '').substring(0, 3).toUpperCase();
+            const serviceTypePrefix = selectedService.serviceType === 'Estimation' ? 'EST' : 'REG';
+            const requestNumber = String(response.data?.id || Date.now()).padStart(4, '0');
+            const formattedRequestId = `${categoryPrefix}-${serviceTypePrefix}-${requestNumber}`;
+            setRequestId(formattedRequestId);
+            setIsConfirmationDialogOpen(true);
+          } else {
+            toast.error(response.message || "Failed to send estimation request");
+          }
+        } catch (error) {
+          console.error("Error creating estimation request:", error);
+          toast.error("Failed to send estimation request");
+        }
+        return;
+      }
+
+      // Calculate total amount for regular services
       let totalAmount = 0;
       if (bookingForm.contractType === 'FixedPrice' && selectedService.fixedPrice) {
         totalAmount = selectedService.fixedPrice;
@@ -215,11 +259,19 @@ export default function ServicesPage() {
     }
   };
 
+  const handleConfirmationClose = () => {
+    setIsConfirmationDialogOpen(false);
+    // Navigate to dashboard after a short delay
+    setTimeout(() => {
+      window.location.href = '/dashboard';
+    }, 500);
+  };
+
   const getContractTypeOptions = (service: Service) => {
     const options = [];
     
-    // Special case for Laundry and Dry Cleaning service
-    if (service.title === 'Laundry and Dry Cleaning') {
+    // Check if this is an estimation service
+    if (service.serviceType === 'Estimation' || service.title === 'Laundry and Dry Cleaning') {
       options.push({ value: 'Estimation', label: 'Estimation - Price determined after inspection' });
       return options;
     }
@@ -509,26 +561,28 @@ export default function ServicesPage() {
                 />
               </div>
 
-              {/* Total Amount Display */}
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Total Amount:</span>
-                  <span className="text-lg font-bold text-green-600">
-                    ${(() => {
-                      if (bookingForm.contractType === 'FixedPrice' && selectedService.fixedPrice) {
-                        return selectedService.fixedPrice;
-                      } else if (bookingForm.contractType === 'Hourly' && bookingForm.duration) {
-                        return selectedService.hourlyRate * bookingForm.duration;
-                      } else if (bookingForm.contractType === 'Weekly') {
-                        return selectedService.weeklyRate;
-                      } else if (bookingForm.contractType === 'Monthly') {
-                        return selectedService.monthlyRate;
-                      }
-                      return 0;
-                    })()}
-                  </span>
+              {/* Total Amount Display - Only show for non-estimation services */}
+              {bookingForm.contractType !== 'Estimation' && (
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Total Amount:</span>
+                    <span className="text-lg font-bold text-green-600">
+                      ${(() => {
+                        if (bookingForm.contractType === 'FixedPrice' && selectedService.fixedPrice) {
+                          return selectedService.fixedPrice;
+                        } else if (bookingForm.contractType === 'Hourly' && bookingForm.duration) {
+                          return selectedService.hourlyRate * bookingForm.duration;
+                        } else if (bookingForm.contractType === 'Weekly') {
+                          return selectedService.weeklyRate;
+                        } else if (bookingForm.contractType === 'Monthly') {
+                          return selectedService.monthlyRate;
+                        }
+                        return 0;
+                      })()}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Action Buttons */}
               <div className="flex gap-2 pt-4">
@@ -544,11 +598,43 @@ export default function ServicesPage() {
                   className="flex-1"
                   disabled={!bookingForm.startDate || !bookingForm.startTime}
                 >
-                  Proceed to Payment
+                  {bookingForm.contractType === 'Estimation' ? 'Send Request' : 'Proceed to Payment'}
                 </Button>
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={isConfirmationDialogOpen} onOpenChange={setIsConfirmationDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Estimation Request Sent</DialogTitle>
+            <DialogDescription>
+              Your estimation request has been sent successfully! Providers will review and respond with quotes.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Request ID</Label>
+              <Input
+                value={requestId}
+                readOnly
+              />
+            </div>
+
+            <div className="flex gap-2 pt-4">
+              <Button 
+                variant="outline" 
+                onClick={handleConfirmationClose}
+                className="flex-1"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

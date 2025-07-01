@@ -32,6 +32,10 @@ public class Service
     [MaxLength(20)]
     public string PricingType { get; set; } = string.Empty; // Hourly, Weekly, Monthly, Fixed
 
+    [Required]
+    [MaxLength(20)]
+    public string ServiceType { get; set; } = "Regular"; // Regular, Estimation
+
     [MaxLength(200)]
     public string? Location { get; set; }
 
@@ -68,4 +72,5 @@ public class Service
     public bool HasImages => ServiceImages.Length > 0;
     public bool HasCertifications => Certifications.Length > 0;
     public string DisplayPrice => $"{BasePrice:C}";
+    public bool IsEstimationService => ServiceType.Equals("Estimation", StringComparison.OrdinalIgnoreCase);
 } 

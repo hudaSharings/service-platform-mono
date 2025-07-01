@@ -359,6 +359,17 @@ class ApiService {
     });
   }
 
+  async createEstimationRequest(requestData: any) {
+    if (USE_MOCK_API) {
+      return mockApi.createEstimationRequest(requestData);
+    }
+
+    return apiRequest('/estimation-requests', {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+    });
+  }
+
   // Availability Management
   async getAvailability(userId: string) {
     if (USE_MOCK_API) {

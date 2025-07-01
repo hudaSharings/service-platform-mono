@@ -477,6 +477,20 @@ export const mockApi = {
     return newRequest;
   },
 
+  async createEstimationRequest(requestData: any) {
+    await delay(500);
+    const requestNumber = mockServiceRequests.length + 1;
+    const newRequest = {
+      id: requestNumber.toString(),
+      ...requestData,
+      status: 'Pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    mockServiceRequests.push(newRequest);
+    return { success: true, message: 'Estimation request created successfully', data: newRequest };
+  },
+
   // Availability Management
   async getAvailability(userId: string) {
     await delay(300);

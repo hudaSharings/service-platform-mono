@@ -87,6 +87,7 @@ public class ServiceDto
     public decimal BasePrice { get; set; }
     public string Currency { get; set; } = string.Empty;
     public string PricingType { get; set; } = string.Empty;
+    public string ServiceType { get; set; } = "Regular";
     public string? Location { get; set; }
     public string? ServiceImages { get; set; }
     public bool IsActive { get; set; }

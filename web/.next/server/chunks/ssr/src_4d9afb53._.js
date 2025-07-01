@@ -1965,6 +1965,23 @@ const mockApi = {
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
         return newRequest;
     },
+    async createEstimationRequest (requestData) {
+        await delay(500);
+        const requestNumber = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].length + 1;
+        const newRequest = {
+            id: requestNumber.toString(),
+            ...requestData,
+            status: 'Pending',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
+        return {
+            success: true,
+            message: 'Estimation request created successfully',
+            data: newRequest
+        };
+    },
     // Availability Management
     async getAvailability (userId) {
         await delay(300);
@@ -2095,7 +2112,7 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mockApi.ts [app-ssr] (ecmascript)");
 ;
 // Configuration
-const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true' || !process.env.NEXT_PUBLIC_API_URL;
+const USE_MOCK_API = ("TURBOPACK compile-time value", "true ") === 'true' || !process.env.NEXT_PUBLIC_API_URL;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 // API client configuration
 const apiClient = {
@@ -2398,6 +2415,15 @@ class ApiService {
             return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
         }
         return apiRequest('/service-requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData)
+        });
+    }
+    async createEstimationRequest(requestData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createEstimationRequest(requestData);
+        }
+        return apiRequest('/estimation-requests', {
             method: 'POST',
             body: JSON.stringify(requestData)
         });
@@ -3478,6 +3504,8 @@ function ServicesPage() {
         specialRequirements: ''
     });
     const [isBookingDialogOpen, setIsBookingDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [requestId, setRequestId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         fetchCategories();
         fetchServices();
@@ -3527,11 +3555,15 @@ function ServicesPage() {
                 className: `h-4 w-4 ${i < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`
             }, i, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 132,
+                lineNumber: 135,
                 columnNumber: 7
             }, this));
     };
     const getDisplayPrice = (service)=>{
+        // Don't show price for estimation services
+        if (service.serviceType === 'Estimation') {
+            return 'Price determined after inspection';
+        }
         if (service.fixedPrice) {
             return `${service.fixedPrice}`;
         }
@@ -3539,7 +3571,7 @@ function ServicesPage() {
     };
     const handleBookService = (service)=>{
         let defaultContractType = service.fixedPrice ? 'FixedPrice' : 'Hourly';
-        if (service.title === 'Laundry and Dry Cleaning') {
+        if (service.serviceType === 'Estimation' || service.title === 'Laundry and Dry Cleaning') {
             defaultContractType = 'Estimation';
         }
         setSelectedService(service);
@@ -3561,7 +3593,40 @@ function ServicesPage() {
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Please log in to book a service");
                 return;
             }
-            // Calculate total amount
+            // Check if this is an estimation service
+            if (bookingForm.contractType === 'Estimation' || selectedService.serviceType === 'Estimation') {
+                // For estimation services, create a service request instead of going to payment
+                const estimationRequest = {
+                    serviceId: selectedService.id,
+                    requesterId: '',
+                    title: `${selectedService.title} - Estimation Request`,
+                    description: bookingForm.specialRequirements || `Request for ${selectedService.title} estimation`,
+                    location: selectedService.location,
+                    preferredDate: bookingForm.startDate ? new Date(bookingForm.startDate).toISOString() : null,
+                    specialRequirements: bookingForm.specialRequirements
+                };
+                try {
+                    // Call API to create estimation request
+                    const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["api"].createEstimationRequest(estimationRequest);
+                    if (response.success) {
+                        setIsBookingDialogOpen(false);
+                        // Generate formatted request ID with service type and category prefix
+                        const categoryPrefix = selectedService.categoryName.replace(/\s+/g, '').substring(0, 3).toUpperCase();
+                        const serviceTypePrefix = selectedService.serviceType === 'Estimation' ? 'EST' : 'REG';
+                        const requestNumber = String(response.data?.id || Date.now()).padStart(4, '0');
+                        const formattedRequestId = `${categoryPrefix}-${serviceTypePrefix}-${requestNumber}`;
+                        setRequestId(formattedRequestId);
+                        setIsConfirmationDialogOpen(true);
+                    } else {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(response.message || "Failed to send estimation request");
+                    }
+                } catch (error) {
+                    console.error("Error creating estimation request:", error);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to send estimation request");
+                }
+                return;
+            }
+            // Calculate total amount for regular services
             let totalAmount = 0;
             if (bookingForm.contractType === 'FixedPrice' && selectedService.fixedPrice) {
                 totalAmount = selectedService.fixedPrice;
@@ -3600,10 +3665,17 @@ function ServicesPage() {
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to create booking");
         }
     };
+    const handleConfirmationClose = ()=>{
+        setIsConfirmationDialogOpen(false);
+        // Navigate to dashboard after a short delay
+        setTimeout(()=>{
+            window.location.href = '/dashboard';
+        }, 500);
+    };
     const getContractTypeOptions = (service)=>{
         const options = [];
-        // Special case for Laundry and Dry Cleaning service
-        if (service.title === 'Laundry and Dry Cleaning') {
+        // Check if this is an estimation service
+        if (service.serviceType === 'Estimation' || service.title === 'Laundry and Dry Cleaning') {
             options.push({
                 value: 'Estimation',
                 label: 'Estimation - Price determined after inspection'
@@ -3641,7 +3713,7 @@ function ServicesPage() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Navbar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 245,
+                lineNumber: 297,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3655,7 +3727,7 @@ function ServicesPage() {
                                 children: "Find Services"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 249,
+                                lineNumber: 301,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3663,13 +3735,13 @@ function ServicesPage() {
                                 children: "Discover and book professional services"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 250,
+                                lineNumber: 302,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 248,
+                        lineNumber: 300,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3683,19 +3755,19 @@ function ServicesPage() {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 257,
+                                            lineNumber: 309,
                                             columnNumber: 15
                                         }, this),
                                         "Search & Filters"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 256,
+                                    lineNumber: 308,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 255,
+                                lineNumber: 307,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -3710,7 +3782,7 @@ function ServicesPage() {
                                                         className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 264,
+                                                        lineNumber: 316,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3720,13 +3792,13 @@ function ServicesPage() {
                                                         className: "pl-10"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 265,
+                                                        lineNumber: 317,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 263,
+                                                lineNumber: 315,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -3738,12 +3810,12 @@ function ServicesPage() {
                                                             placeholder: "All Categories"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 275,
+                                                            lineNumber: 327,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 274,
+                                                        lineNumber: 326,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -3753,7 +3825,7 @@ function ServicesPage() {
                                                                 children: "All Categories"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                                lineNumber: 278,
+                                                                lineNumber: 330,
                                                                 columnNumber: 19
                                                             }, this),
                                                             categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -3761,19 +3833,19 @@ function ServicesPage() {
                                                                     children: category.name
                                                                 }, category.id, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 280,
+                                                                    lineNumber: 332,
                                                                     columnNumber: 21
                                                                 }, this))
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 277,
+                                                        lineNumber: 329,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 273,
+                                                lineNumber: 325,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3782,7 +3854,7 @@ function ServicesPage() {
                                                 onChange: (e)=>setSelectedLocation(e.target.value)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 287,
+                                                lineNumber: 339,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3795,7 +3867,7 @@ function ServicesPage() {
                                                         onChange: (e)=>setMinPrice(e.target.value)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 294,
+                                                        lineNumber: 346,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3805,19 +3877,19 @@ function ServicesPage() {
                                                         onChange: (e)=>setMaxPrice(e.target.value)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 300,
+                                                        lineNumber: 352,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 293,
+                                                lineNumber: 345,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 262,
+                                        lineNumber: 314,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3831,14 +3903,14 @@ function ServicesPage() {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 311,
+                                                        lineNumber: 363,
                                                         columnNumber: 17
                                                     }, this),
                                                     "Search"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 310,
+                                                lineNumber: 362,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3847,25 +3919,25 @@ function ServicesPage() {
                                                 children: "Clear Filters"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 366,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 309,
+                                        lineNumber: 361,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 261,
+                                lineNumber: 313,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 254,
+                        lineNumber: 306,
                         columnNumber: 9
                     }, this),
                     loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3875,7 +3947,7 @@ function ServicesPage() {
                                 className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 324,
+                                lineNumber: 376,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3883,13 +3955,13 @@ function ServicesPage() {
                                 children: "Loading services..."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 325,
+                                lineNumber: 377,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 323,
+                        lineNumber: 375,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6",
@@ -3907,19 +3979,19 @@ function ServicesPage() {
                                                     className: "w-full h-full object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 334,
+                                                    lineNumber: 386,
                                                     columnNumber: 23
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "w-full h-full flex items-center justify-center text-gray-400",
                                                     children: "No Image"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 340,
+                                                    lineNumber: 392,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 332,
+                                                lineNumber: 384,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3932,7 +4004,7 @@ function ServicesPage() {
                                                             children: service.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 347,
+                                                            lineNumber: 399,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -3940,24 +4012,24 @@ function ServicesPage() {
                                                             children: service.description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 348,
+                                                            lineNumber: 400,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 346,
+                                                    lineNumber: 398,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 345,
+                                                lineNumber: 397,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 331,
+                                        lineNumber: 383,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -3975,20 +4047,20 @@ function ServicesPage() {
                                                                     src: service.providerAvatar
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 359,
+                                                                    lineNumber: 411,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AvatarFallback"], {
                                                                     children: service.providerName.split(' ').map((n)=>n[0]).join('')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 360,
+                                                                    lineNumber: 412,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 358,
+                                                            lineNumber: 410,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3999,7 +4071,7 @@ function ServicesPage() {
                                                                     children: service.providerName
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 365,
+                                                                    lineNumber: 417,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4015,19 +4087,19 @@ function ServicesPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                                            lineNumber: 370,
+                                                                            lineNumber: 422,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 368,
+                                                                    lineNumber: 420,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 364,
+                                                            lineNumber: 416,
                                                             columnNumber: 23
                                                         }, this),
                                                         service.isVerified && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -4036,13 +4108,13 @@ function ServicesPage() {
                                                             children: "Verified"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 376,
+                                                            lineNumber: 428,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 357,
+                                                    lineNumber: 409,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4055,14 +4127,14 @@ function ServicesPage() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 385,
+                                                                    lineNumber: 437,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 service.location
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 384,
+                                                            lineNumber: 436,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4072,20 +4144,20 @@ function ServicesPage() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                                    lineNumber: 389,
+                                                                    lineNumber: 441,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 getDisplayPrice(service)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 388,
+                                                            lineNumber: 440,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 383,
+                                                    lineNumber: 435,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4096,7 +4168,7 @@ function ServicesPage() {
                                                             children: service.categoryName
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 396,
+                                                            lineNumber: 448,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4106,35 +4178,35 @@ function ServicesPage() {
                                                             children: "Book Now"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 397,
+                                                            lineNumber: 449,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 395,
+                                                    lineNumber: 447,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 355,
+                                            lineNumber: 407,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 354,
+                                        lineNumber: 406,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, service.id, true, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 330,
+                                lineNumber: 382,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 328,
+                        lineNumber: 380,
                         columnNumber: 11
                     }, this),
                     !loading && services.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4145,7 +4217,7 @@ function ServicesPage() {
                                 children: "No services found matching your criteria."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 414,
+                                lineNumber: 466,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4155,19 +4227,19 @@ function ServicesPage() {
                                 children: "Clear Filters"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/services/page.tsx",
-                                lineNumber: 415,
+                                lineNumber: 467,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/services/page.tsx",
-                        lineNumber: 413,
+                        lineNumber: 465,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 247,
+                lineNumber: 299,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -4182,20 +4254,20 @@ function ServicesPage() {
                                     children: "Book Service"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 426,
+                                    lineNumber: 478,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
                                     children: selectedService?.title
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 427,
+                                    lineNumber: 479,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/services/page.tsx",
-                            lineNumber: 425,
+                            lineNumber: 477,
                             columnNumber: 11
                         }, this),
                         selectedService && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4208,7 +4280,7 @@ function ServicesPage() {
                                             children: "Contract Type"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 436,
+                                            lineNumber: 488,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -4221,12 +4293,12 @@ function ServicesPage() {
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                         fileName: "[project]/src/app/services/page.tsx",
-                                                        lineNumber: 442,
+                                                        lineNumber: 494,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 441,
+                                                    lineNumber: 493,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -4235,24 +4307,24 @@ function ServicesPage() {
                                                             children: option.label
                                                         }, option.value, false, {
                                                             fileName: "[project]/src/app/services/page.tsx",
-                                                            lineNumber: 446,
+                                                            lineNumber: 498,
                                                             columnNumber: 23
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 444,
+                                                    lineNumber: 496,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 437,
+                                            lineNumber: 489,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 435,
+                                    lineNumber: 487,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4265,7 +4337,7 @@ function ServicesPage() {
                                                     children: "Start Date"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 457,
+                                                    lineNumber: 509,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4278,13 +4350,13 @@ function ServicesPage() {
                                                     min: new Date().toISOString().split('T')[0]
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 458,
+                                                    lineNumber: 510,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 456,
+                                            lineNumber: 508,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4294,7 +4366,7 @@ function ServicesPage() {
                                                     children: "Start Time"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 466,
+                                                    lineNumber: 518,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4306,19 +4378,19 @@ function ServicesPage() {
                                                             }))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/services/page.tsx",
-                                                    lineNumber: 467,
+                                                    lineNumber: 519,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 465,
+                                            lineNumber: 517,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 455,
+                                    lineNumber: 507,
                                     columnNumber: 15
                                 }, this),
                                 bookingForm.contractType === 'Hourly' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4328,7 +4400,7 @@ function ServicesPage() {
                                             children: "Duration (hours)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 478,
+                                            lineNumber: 530,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4341,13 +4413,13 @@ function ServicesPage() {
                                                     }))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 479,
+                                            lineNumber: 531,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 477,
+                                    lineNumber: 529,
                                     columnNumber: 17
                                 }, this),
                                 (bookingForm.contractType === 'Weekly' || bookingForm.contractType === 'Monthly') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4357,7 +4429,7 @@ function ServicesPage() {
                                             children: "End Date"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 491,
+                                            lineNumber: 543,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -4370,13 +4442,13 @@ function ServicesPage() {
                                             min: bookingForm.startDate
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 492,
+                                            lineNumber: 544,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 490,
+                                    lineNumber: 542,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4386,7 +4458,7 @@ function ServicesPage() {
                                             children: "Special Requirements (Optional)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 503,
+                                            lineNumber: 555,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -4399,16 +4471,16 @@ function ServicesPage() {
                                             rows: 3
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 504,
+                                            lineNumber: 556,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 502,
+                                    lineNumber: 554,
                                     columnNumber: 15
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                bookingForm.contractType !== 'Estimation' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "bg-gray-50 p-3 rounded-lg",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex justify-between items-center",
@@ -4418,8 +4490,8 @@ function ServicesPage() {
                                                 children: "Total Amount:"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 515,
-                                                columnNumber: 19
+                                                lineNumber: 568,
+                                                columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "text-lg font-bold text-green-600",
@@ -4440,19 +4512,19 @@ function ServicesPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/services/page.tsx",
-                                                lineNumber: 516,
-                                                columnNumber: 19
+                                                lineNumber: 569,
+                                                columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/services/page.tsx",
-                                        lineNumber: 514,
-                                        columnNumber: 17
+                                        lineNumber: 567,
+                                        columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 513,
-                                    columnNumber: 15
+                                    lineNumber: 566,
+                                    columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex gap-2 pt-4",
@@ -4464,46 +4536,135 @@ function ServicesPage() {
                                             children: "Cancel"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 535,
+                                            lineNumber: 589,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
                                             onClick: handleBookingSubmit,
                                             className: "flex-1",
                                             disabled: !bookingForm.startDate || !bookingForm.startTime,
-                                            children: "Proceed to Payment"
+                                            children: bookingForm.contractType === 'Estimation' ? 'Send Request' : 'Proceed to Payment'
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/services/page.tsx",
-                                            lineNumber: 542,
+                                            lineNumber: 596,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/services/page.tsx",
-                                    lineNumber: 534,
+                                    lineNumber: 588,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/services/page.tsx",
-                            lineNumber: 433,
+                            lineNumber: 485,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/services/page.tsx",
-                    lineNumber: 424,
+                    lineNumber: 476,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/services/page.tsx",
-                lineNumber: 423,
+                lineNumber: 475,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
+                open: isConfirmationDialogOpen,
+                onOpenChange: setIsConfirmationDialogOpen,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
+                    className: "max-w-md",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogHeader"], {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogTitle"], {
+                                    children: "Estimation Request Sent"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/services/page.tsx",
+                                    lineNumber: 613,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
+                                    children: "Your estimation request has been sent successfully! Providers will review and respond with quotes."
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/services/page.tsx",
+                                    lineNumber: 614,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/services/page.tsx",
+                            lineNumber: 612,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Label"], {
+                                            children: "Request ID"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/services/page.tsx",
+                                            lineNumber: 621,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
+                                            value: requestId,
+                                            readOnly: true
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/services/page.tsx",
+                                            lineNumber: 622,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/services/page.tsx",
+                                    lineNumber: 620,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex gap-2 pt-4",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        variant: "outline",
+                                        onClick: handleConfirmationClose,
+                                        className: "flex-1",
+                                        children: "Close"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/services/page.tsx",
+                                        lineNumber: 629,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/services/page.tsx",
+                                    lineNumber: 628,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/services/page.tsx",
+                            lineNumber: 619,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/app/services/page.tsx",
+                    lineNumber: 611,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/app/services/page.tsx",
+                lineNumber: 610,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/services/page.tsx",
-        lineNumber: 244,
+        lineNumber: 296,
         columnNumber: 5
     }, this);
 }

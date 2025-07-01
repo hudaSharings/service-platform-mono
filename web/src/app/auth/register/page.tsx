@@ -101,6 +101,14 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-center">
+          <div className="flex justify-start mb-4">
+            <Link
+              href="/"
+              className="text-sm text-blue-600 hover:text-blue-500 flex items-center gap-1"
+            >
+              ← Back to Home
+            </Link>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900">Service Platform</h1>
           <p className="mt-2 text-sm text-gray-600">Create your account</p>
         </div>

@@ -1778,6 +1778,23 @@ const mockApi = {
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
         return newRequest;
     },
+    async createEstimationRequest (requestData) {
+        await delay(500);
+        const requestNumber = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].length + 1;
+        const newRequest = {
+            id: requestNumber.toString(),
+            ...requestData,
+            status: 'Pending',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
+        return {
+            success: true,
+            message: 'Estimation request created successfully',
+            data: newRequest
+        };
+    },
     // Availability Management
     async getAvailability (userId) {
         await delay(300);
@@ -1908,7 +1925,7 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mockApi.ts [app-ssr] (ecmascript)");
 ;
 // Configuration
-const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true' || !process.env.NEXT_PUBLIC_API_URL;
+const USE_MOCK_API = ("TURBOPACK compile-time value", "true ") === 'true' || !process.env.NEXT_PUBLIC_API_URL;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 // API client configuration
 const apiClient = {
@@ -2211,6 +2228,15 @@ class ApiService {
             return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
         }
         return apiRequest('/service-requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData)
+        });
+    }
+    async createEstimationRequest(requestData) {
+        if (USE_MOCK_API) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createEstimationRequest(requestData);
+        }
+        return apiRequest('/estimation-requests', {
             method: 'POST',
             body: JSON.stringify(requestData)
         });
