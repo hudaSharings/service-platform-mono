@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|solutionrelative:serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|solutionrelative:serviceplatform.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D18B2A60-5B96-4B41-A132-0C56BFBFEB9F}|ServicePlatform.Domain\\ServicePlatform.Domain.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D18B2A60-5B96-4B41-A132-0C56BFBFEB9F}|ServicePlatform.Domain\\ServicePlatform.Domain.csproj|solutionrelative:serviceplatform.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{318E9E97-042F-4936-92EB-9761979E8038}|ServicePlatform.Infrastructure\\ServicePlatform.Infrastructure.csproj|solutionrelative:serviceplatform.infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -21,6 +17,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|solutionrelative:serviceplatform.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D18B2A60-5B96-4B41-A132-0C56BFBFEB9F}|ServicePlatform.Domain\\ServicePlatform.Domain.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D18B2A60-5B96-4B41-A132-0C56BFBFEB9F}|ServicePlatform.Domain\\ServicePlatform.Domain.csproj|solutionrelative:serviceplatform.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D90EFE5F-C3F9-4B59-B196-E4D88EEBB45E}|ServicePlatform.Api\\ServicePlatform.Api.csproj|c:\\users\\admin\\documents\\ai-source\\api\\serviceplatform.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 218,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,7 +58,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Infrastructure\\Data\\ApplicationDbContext.cs",
@@ -71,20 +71,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Program.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Api\\Program.cs",
               "ToolTip": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Program.cs",
               "RelativeToolTip": "ServicePlatform.Api\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG8AAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAAAJoAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-28T02:24:44.87Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Dockerfile",
               "RelativeDocumentMoniker": "ServicePlatform.Api\\Dockerfile",
@@ -92,11 +92,12 @@
               "RelativeToolTip": "ServicePlatform.Api\\Dockerfile",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-06-28T02:43:40.602Z"
+              "WhenOpened": "2025-06-28T02:43:40.602Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "AdminController.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Api\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Api\\Controllers\\AdminController.cs",
@@ -104,7 +105,8 @@
               "RelativeToolTip": "ServicePlatform.Api\\Controllers\\AdminController.cs",
               "ViewState": "AgIAAEUAAAAAAAAAAAAYwA4AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-28T02:31:32.088Z"
+              "WhenOpened": "2025-06-28T02:31:32.088Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -132,7 +134,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\AI-Source\\api\\ServicePlatform.Domain\\Entities\\User.cs",
               "RelativeDocumentMoniker": "ServicePlatform.Domain\\Entities\\User.cs",
