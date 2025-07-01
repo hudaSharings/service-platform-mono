@@ -32,6 +32,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 interface Service {
   id: string;
@@ -81,7 +82,11 @@ export default function AdminServicesPage() {
       if (selectedStatus) filters.status = selectedStatus;
 
       const result = await api.getServices(1, 50, filters);
-      setServices(result.services || []);
+      if (result.success) {
+        setServices(result.data.services || []);
+      } else {
+        toast.error(result.message || "Failed to load services");
+      }
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -97,7 +102,11 @@ export default function AdminServicesPage() {
   const fetchCategories = async () => {
     try {
       const result = await api.getCategories();
-      setCategories(result || []);
+      if (result.success) {
+        setCategories(result.data || []);
+      } else {
+        toast.error(result.message || "Failed to load categories");
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }

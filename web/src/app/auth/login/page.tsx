@@ -45,14 +45,13 @@ export default function LoginPage() {
 
     try {
       const result = await api.login(data.email, data.password);
-      
+      debugger
       // Use Auth Context to login
-      login(result.token, result.user);
+      login(result.token, result.data.user);
       
-      toast.success("Login successful!");
-      
+      toast.success("Login successful!");    
       // Redirect based on user type
-      if (result.user.userType === "Admin") {
+      if (result.data.user.userType === "Admin") {
         router.push("/admin/dashboard");
       } else {
         router.push("/dashboard");

@@ -32,6 +32,7 @@ import Navbar from "@/components/Navbar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Skeleton, SkeletonCard, SkeletonText, SkeletonAvatar } from "@/components/ui/skeleton";
 import { PageTransition } from "@/components/ui/page-transition";
+import { toast } from "sonner";
 
 interface UserProfile {
   user: {
@@ -115,20 +116,24 @@ export default function ProfilePage() {
     setLoading(true);
     try {
       const result = await api.getUserProfile(user.id);
-      setProfile(result);
-      setEditForm({
-        firstName: result.user.firstName,
-        lastName: result.user.lastName,
-        phoneNumber: result.user.phoneNumber,
-        bio: result.user.bio || "",
-        address: result.user.address || "",
-        city: result.user.city || "",
-        state: result.user.state || "",
-        zipCode: result.user.zipCode || "",
-        country: result.user.country || "",
-        skills: result.user.skills || [],
-        hourlyRate: result.user.hourlyRate || 0
-      });
+      if (result.success) {
+        setProfile(result.data);
+        setEditForm({
+          firstName: result.data.user.firstName,
+          lastName: result.data.user.lastName,
+          phoneNumber: result.data.user.phoneNumber,
+          bio: result.data.user.bio || "",
+          address: result.data.user.address || "",
+          city: result.data.user.city || "",
+          state: result.data.user.state || "",
+          zipCode: result.data.user.zipCode || "",
+          country: result.data.user.country || "",
+          skills: result.data.user.skills || [],
+          hourlyRate: result.data.user.hourlyRate || 0
+        });
+      } else {
+        toast.error(result.message || "Failed to load profile");
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
     } finally {

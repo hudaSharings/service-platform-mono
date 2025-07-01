@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   async generateStaticParams() {
     return [];
   },
+  env:{
+    NEXT_PUBLIC_API_URL:'http://localhost:5111/api',
+    NEXT_PUBLIC_USE_MOCK_API:'false'
+  }
   // Enable static exports if needed
   // trailingSlash: true,
   // images: {

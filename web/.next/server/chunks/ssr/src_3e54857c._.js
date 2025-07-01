@@ -1867,6 +1867,30 @@ const mockApi = {
             pastServices,
             pendingServices
         };
+    },
+    async createService (serviceData) {
+        await delay(300);
+        return {
+            success: true,
+            message: "Mock service created",
+            data: serviceData
+        };
+    },
+    async updateService (id, serviceData) {
+        await delay(300);
+        return {
+            success: true,
+            message: "Mock service updated",
+            data: serviceData
+        };
+    },
+    async deleteService (id) {
+        await delay(300);
+        return {
+            success: true,
+            message: "Mock service deleted",
+            data: id
+        };
     }
 };
 const handleApiError = (error)=>{
@@ -1898,9 +1922,10 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mockApi.ts [app-ssr] (ecmascript)");
 ;
+console.log("Mock:" + JSON.stringify(("TURBOPACK compile-time value", "false")));
 // Configuration
-const USE_MOCK_API = ("TURBOPACK compile-time value", "true ") === 'true' || !process.env.NEXT_PUBLIC_API_URL;
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const USE_MOCK_API = ("TURBOPACK compile-time value", "false") === 'true';
+const API_BASE_URL = 'http://localhost:5111/api';
 // API client configuration
 const apiClient = {
     baseURL: API_BASE_URL,
@@ -1947,8 +1972,9 @@ const apiRequest = async (endpoint, options = {})=>{
 class ApiService {
     // Authentication
     async login(email, password) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].login(email, password);
+        console.log("login isMock:" + JSON.stringify(USE_MOCK_API));
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/auth/login', {
             method: 'POST',
@@ -1959,8 +1985,9 @@ class ApiService {
         });
     }
     async register(userData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].register(userData);
+        console.log("register isMock:" + JSON.stringify(USE_MOCK_API));
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/auth/register', {
             method: 'POST',
@@ -1968,8 +1995,8 @@ class ApiService {
         });
     }
     async forgotPassword(email) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].forgotPassword(email);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/auth/forgot-password', {
             method: 'POST',
@@ -1980,8 +2007,8 @@ class ApiService {
     }
     // Users
     async getUsers(page = 1, limit = 10, search = '') {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUsers(page, limit, search);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         const params = new URLSearchParams({
             page: page.toString(),
@@ -1993,8 +2020,8 @@ class ApiService {
         return apiRequest(`/users?${params}`);
     }
     async updateUserStatus(userId, isActive) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserStatus(userId, isActive);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/users/${userId}/status`, {
             method: 'PUT',
@@ -2004,8 +2031,8 @@ class ApiService {
         });
     }
     async verifyUser(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].verifyUser(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/users/${userId}/verify`, {
             method: 'PUT'
@@ -2013,14 +2040,14 @@ class ApiService {
     }
     // Categories
     async getCategories() {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getCategories();
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/categories');
     }
     async createCategory(categoryData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createCategory(categoryData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/categories', {
             method: 'POST',
@@ -2028,8 +2055,8 @@ class ApiService {
         });
     }
     async updateCategory(id, categoryData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateCategory(id, categoryData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/categories/${id}`, {
             method: 'PUT',
@@ -2037,8 +2064,8 @@ class ApiService {
         });
     }
     async deleteCategory(id) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].deleteCategory(id);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/categories/${id}`, {
             method: 'DELETE'
@@ -2046,8 +2073,8 @@ class ApiService {
     }
     // Services
     async getServices(page = 1, limit = 10, filters = {}) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServices(page, limit, filters);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         const params = new URLSearchParams({
             page: page.toString(),
@@ -2057,14 +2084,22 @@ class ApiService {
         return apiRequest(`/services?${params}`);
     }
     async getServiceById(id) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceById(id);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/services/${id}`);
     }
+    async deleteService(id) {
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+        return apiRequest(`/services/${id}`, {
+            method: 'DELETE'
+        });
+    }
     async updateServiceStatus(id, isVerified) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceStatus(id, isVerified);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/services/${id}/status`, {
             method: 'PUT',
@@ -2075,8 +2110,8 @@ class ApiService {
     }
     // Contracts
     async getContracts(page = 1, limit = 10, filters = {}) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getContracts(page, limit, filters);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         const params = new URLSearchParams({
             page: page.toString(),
@@ -2086,8 +2121,8 @@ class ApiService {
         return apiRequest(`/contracts?${params}`);
     }
     async createContract(contractData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createContract(contractData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/contracts', {
             method: 'POST',
@@ -2095,8 +2130,8 @@ class ApiService {
         });
     }
     async updateContractStatus(id, status) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateContractStatus(id, status);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/contracts/${id}/status`, {
             method: 'PUT',
@@ -2107,14 +2142,14 @@ class ApiService {
     }
     // Ratings
     async getServiceRatings(serviceId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRatings(serviceId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/services/${serviceId}/ratings`);
     }
     async createRating(ratingData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createRating(ratingData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/ratings', {
             method: 'POST',
@@ -2123,14 +2158,14 @@ class ApiService {
     }
     // Notifications
     async getNotifications(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getNotifications(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/users/${userId}/notifications`);
     }
     async markNotificationAsRead(id) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].markNotificationAsRead(id);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/notifications/${id}/read`, {
             method: 'PUT'
@@ -2138,41 +2173,41 @@ class ApiService {
     }
     // Dashboard
     async getDashboardStats() {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboardStats();
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/admin/dashboard/stats');
     }
     // Search and Filters
     async getSearchFilters() {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getSearchFilters();
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/services/filters');
     }
     // Enhanced Dashboard
     async getDashboard(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboard(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/dashboard/${userId}`);
     }
     async getProviderDashboard(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getProviderDashboard(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/dashboard/provider/${userId}`);
     }
     async getRequesterDashboard(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getRequesterDashboard(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/dashboard/requester/${userId}`);
     }
     // Service Requests
     async getServiceRequests(userId, filters = {}) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequests(userId, filters);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         const params = new URLSearchParams({
             userId,
@@ -2181,14 +2216,14 @@ class ApiService {
         return apiRequest(`/service-requests?${params}`);
     }
     async getServiceRequestById(id) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequestById(id);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/service-requests/${id}`);
     }
     async updateServiceRequestStatus(id, status) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceRequestStatus(id, status);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/service-requests/${id}/status`, {
             method: 'PUT',
@@ -2198,8 +2233,8 @@ class ApiService {
         });
     }
     async createServiceRequest(requestData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/service-requests', {
             method: 'POST',
@@ -2207,8 +2242,8 @@ class ApiService {
         });
     }
     async createEstimationRequest(requestData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createEstimationRequest(requestData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest('/estimation-requests', {
             method: 'POST',
@@ -2217,14 +2252,14 @@ class ApiService {
     }
     // Availability Management
     async getAvailability(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getAvailability(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/availability/${userId}`);
     }
     async updateAvailability(userId, availabilityData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateAvailability(userId, availabilityData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/availability/${userId}`, {
             method: 'PUT',
@@ -2235,18 +2270,36 @@ class ApiService {
     }
     // User Profile
     async getUserProfile(userId) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUserProfile(userId);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/users/${userId}/profile`);
     }
     async updateUserProfile(userId, profileData) {
-        if (USE_MOCK_API) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserProfile(userId, profileData);
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
         return apiRequest(`/users/${userId}/profile`, {
             method: 'PUT',
             body: JSON.stringify(profileData)
+        });
+    }
+    async createService(serviceData) {
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+        return apiRequest('/services', {
+            method: 'POST',
+            body: JSON.stringify(serviceData)
+        });
+    }
+    async updateService(id, serviceData) {
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+        return apiRequest(`/services/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(serviceData)
         });
     }
 }

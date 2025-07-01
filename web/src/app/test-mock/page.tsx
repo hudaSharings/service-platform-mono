@@ -25,6 +25,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
+import { toast } from "react-hot-toast";
 
 interface ServiceRequest {
   id: string;
@@ -92,11 +93,19 @@ export default function TestMockPage() {
     try {
       // Load provider dashboard (John Doe - ID: 2)
       const providerResult = await api.getProviderDashboard("2");
-      setProviderDashboard(providerResult);
+      if (providerResult.success) {
+        setProviderDashboard(providerResult.data);
+      } else {
+        toast.error(providerResult.message || "Failed to load provider dashboard");
+      }
 
       // Load requester dashboard (Jane Smith - ID: 3)
       const requesterResult = await api.getRequesterDashboard("3");
-      setRequesterDashboard(requesterResult);
+      if (requesterResult.success) {
+        setRequesterDashboard(requesterResult.data);
+      } else {
+        toast.error(requesterResult.message || "Failed to load requester dashboard");
+      }
     } catch (error) {
       console.error("Error loading dashboards:", error);
     } finally {

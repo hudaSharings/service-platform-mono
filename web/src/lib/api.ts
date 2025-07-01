@@ -1,9 +1,9 @@
 // Unified API service that can use real backend or mock data
 import { mockApi } from './mockApi';
-
+console.log("Mock:" +JSON.stringify(process.env.NEXT_PUBLIC_USE_MOCK_API));
 // Configuration
-const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true' || !process.env.NEXT_PUBLIC_API_URL;
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true';
+const API_BASE_URL = 'http://localhost:5111/api';
 
 // API client configuration
 const apiClient = {
@@ -54,6 +54,7 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
 class ApiService {
   // Authentication
   async login(email: string, password: string) {
+    console.log("login isMock:" +JSON.stringify(USE_MOCK_API));
     if (USE_MOCK_API) {
       return mockApi.login(email, password);
     }
@@ -65,6 +66,7 @@ class ApiService {
   }
 
   async register(userData: any) {
+    console.log("register isMock:" +JSON.stringify(USE_MOCK_API));
     if (USE_MOCK_API) {
       return mockApi.register(userData);
     }
@@ -184,6 +186,15 @@ class ApiService {
     }
 
     return apiRequest(`/services/${id}`);
+  }
+
+  async deleteService(id: string) {
+    if (USE_MOCK_API) {
+      return mockApi.deleteService(id);
+    }
+    return apiRequest(`/services/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   async updateServiceStatus(id: string, isVerified: boolean) {
@@ -407,6 +418,26 @@ class ApiService {
     return apiRequest(`/users/${userId}/profile`, {
       method: 'PUT',
       body: JSON.stringify(profileData),
+    });
+  }
+
+  async createService(serviceData: any) {
+    if (USE_MOCK_API) {
+      return mockApi.createService(serviceData);
+    }
+    return apiRequest('/services', {
+      method: 'POST',
+      body: JSON.stringify(serviceData),
+    });
+  }
+
+  async updateService(id: string, serviceData: any) {
+    if (USE_MOCK_API) {
+      return mockApi.updateService(id, serviceData);
+    }
+    return apiRequest(`/services/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(serviceData),
     });
   }
 }

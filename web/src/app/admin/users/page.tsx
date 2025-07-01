@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -57,7 +58,11 @@ export default function AdminUsersPage() {
     setLoading(true);
     try {
       const result = await api.getUsers(1, 50, searchTerm);
-      setUsers(result.users || []);
+      if (result.success) {
+        setUsers(result.data.users || []);
+      } else {
+        toast.error(result.message || "Failed to load users");
+      }
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {

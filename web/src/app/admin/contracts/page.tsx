@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
+import { toast } from "react-hot-toast";
 
 interface Contract {
   id: string;
@@ -72,7 +73,11 @@ export default function AdminContractsPage() {
       if (selectedContractType && selectedContractType !== 'all') filters.contractType = selectedContractType;
 
       const result = await api.getContracts(1, 50, filters);
-      setContracts(result.contracts || []);
+      if (result.success) {
+        setContracts(result.data.contracts || []);
+      } else {
+        toast.error(result.message || "Failed to load contracts");
+      }
     } catch (error) {
       console.error("Error fetching contracts:", error);
     } finally {

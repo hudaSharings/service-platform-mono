@@ -624,6 +624,19 @@ export const mockApi = {
       pastServices,
       pendingServices
     };
+  },
+
+  async createService(serviceData) {
+    await delay(300);
+    return { success: true, message: "Mock service created", data: serviceData };
+  },
+  async updateService(id, serviceData) {
+    await delay(300);
+    return { success: true, message: "Mock service updated", data: serviceData };
+  },
+  async deleteService(id) {
+    await delay(300);
+    return { success: true, message: "Mock service deleted", data: id };
   }
 };
 

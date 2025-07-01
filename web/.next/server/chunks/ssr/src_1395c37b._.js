@@ -771,7 +771,7 @@ function RegisterPage() {
         setError("");
         setSuccess("");
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+            const response = await fetch(`${("TURBOPACK compile-time value", "http://localhost:5111/api")}/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

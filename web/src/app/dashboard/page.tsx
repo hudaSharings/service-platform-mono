@@ -33,6 +33,8 @@ import Navbar from "@/components/Navbar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Skeleton, SkeletonCard, SkeletonText, SkeletonAvatar } from "@/components/ui/skeleton";
 import { PageTransition } from "@/components/ui/page-transition";
+import MyServicesSection from "@/components/provider/MyServicesSection";
+import { toast } from "sonner";
 
 interface ServiceRequest {
   id: string;
@@ -129,8 +131,11 @@ export default function DashboardPage() {
       } else {
         result = await api.getRequesterDashboard(user.id);
       }
-      
-      setDashboard(result);
+      if (result.success) {
+        setDashboard(result.data);
+      } else {
+        toast.error(result.message || "Failed to load dashboard");
+      }
     } catch (error) {
       console.error("Error fetching dashboard:", error);
     } finally {
@@ -443,6 +448,7 @@ export default function DashboardPage() {
                   <TabsTrigger value="pending">Pending Requests</TabsTrigger>
                   <TabsTrigger value="upcoming">Upcoming Services</TabsTrigger>
                   <TabsTrigger value="completed">Completed Services</TabsTrigger>
+                  <TabsTrigger value="my-services">My Services</TabsTrigger>
                 </>
               ) : (
                 <>
@@ -695,6 +701,10 @@ export default function DashboardPage() {
                       )}
                     </CardContent>
                   </Card>
+                </TabsContent>
+
+                <TabsContent value="my-services">
+                  <MyServicesSection userId={user.id} />
                 </TabsContent>
               </>
             )}
