@@ -73,11 +73,7 @@ export default function AdminContractsPage() {
       if (selectedContractType && selectedContractType !== 'all') filters.contractType = selectedContractType;
 
       const result = await api.getContracts(1, 50, filters);
-      if (result.success) {
-        setContracts(result.data.contracts || []);
-      } else {
-        toast.error(result.message || "Failed to load contracts");
-      }
+      setContracts(result.data?.contracts || []);
     } catch (error) {
       console.error("Error fetching contracts:", error);
     } finally {

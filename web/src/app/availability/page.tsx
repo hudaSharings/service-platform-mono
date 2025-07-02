@@ -63,7 +63,7 @@ export default function AvailabilityPage() {
     setLoading(true);
     try {
       const result = await api.getAvailability(user.id);
-      setAvailability(result);
+      setAvailability(result.data || []);
     } catch (error) {
       console.error("Error fetching availability:", error);
     } finally {

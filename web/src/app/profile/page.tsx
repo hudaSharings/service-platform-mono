@@ -116,24 +116,20 @@ export default function ProfilePage() {
     setLoading(true);
     try {
       const result = await api.getUserProfile(user.id);
-      if (result.success) {
-        setProfile(result.data);
-        setEditForm({
-          firstName: result.data.user.firstName,
-          lastName: result.data.user.lastName,
-          phoneNumber: result.data.user.phoneNumber,
-          bio: result.data.user.bio || "",
-          address: result.data.user.address || "",
-          city: result.data.user.city || "",
-          state: result.data.user.state || "",
-          zipCode: result.data.user.zipCode || "",
-          country: result.data.user.country || "",
-          skills: result.data.user.skills || [],
-          hourlyRate: result.data.user.hourlyRate || 0
-        });
-      } else {
-        toast.error(result.message || "Failed to load profile");
-      }
+      setProfile(result.data || {});
+      setEditForm({
+        firstName: result.data?.user.firstName ? result.data?.user.firstName : '',
+        lastName: result.data?.user.lastName ? result.data?.user.lastName : '',
+        phoneNumber: result.data?.user.phoneNumber,
+        bio: result.data?.user && result.data?.user.bio ? result.data?.user.bio : "",
+        address: result.data?.user.address || "",
+        city: result.data?.user.city || "",
+        state: result.data?.user.state || "",
+        zipCode: result.data?.user.zipCode || "",
+        country: result.data?.user.country || "",
+        skills: result.data?.user.skills || [],
+        hourlyRate: result.data?.user.hourlyRate || 0
+      });
     } catch (error) {
       console.error("Error fetching profile:", error);
     } finally {
@@ -158,10 +154,10 @@ export default function ProfilePage() {
     // Reset form to original values
     if (profile) {
       setEditForm({
-        firstName: profile.user.firstName,
-        lastName: profile.user.lastName,
+        firstName: profile.user.firstName ? profile.user.firstName : '',
+        lastName: profile.user.lastName ? profile.user.lastName : '',
         phoneNumber: profile.user.phoneNumber,
-        bio: profile.user.bio || "",
+        bio: profile.user && profile.user.bio ? profile.user.bio : "",
         address: profile.user.address || "",
         city: profile.user.city || "",
         state: profile.user.state || "",
@@ -251,7 +247,7 @@ export default function ProfilePage() {
     );
   }
 
-  const isProvider = profile.user.userType === "Provider";
+  const isProvider = profile && profile.user && profile.user.userType === "Provider";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -263,9 +259,10 @@ export default function ProfilePage() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={profile.user.profilePicture} />
+                  <AvatarImage src={profile && profile.user && profile.user.profilePicture ? profile.user.profilePicture : undefined} />
                   <AvatarFallback className="text-2xl">
-                    {profile.user.firstName[0]}{profile.user.lastName[0]}
+                    {profile && profile.user && typeof profile.user.firstName === 'string' && profile.user.firstName.length > 0 ? profile.user.firstName[0] : ''}
+                    {profile && profile.user && typeof profile.user.lastName === 'string' && profile.user.lastName.length > 0 ? profile.user.lastName[0] : ''}
                   </AvatarFallback>
                 </Avatar>
                 <Button
@@ -279,20 +276,20 @@ export default function ProfilePage() {
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-2">
                   <h1 className="text-3xl font-bold text-gray-900">
-                    {profile.user.firstName} {profile.user.lastName}
+                    {profile && profile.user && typeof profile.user.firstName === 'string' ? profile.user.firstName : ''} {profile && profile.user && typeof profile.user.lastName === 'string' ? profile.user.lastName : ''}
                   </h1>
-                  {profile.user.isVerified && (
+                  {profile && profile.user && profile.user.isVerified && (
                     <Badge className="bg-green-100 text-green-800">
                       <Award className="h-3 w-3 mr-1" />
                       Verified
                     </Badge>
                   )}
-                  <Badge variant={profile.user.isActive ? "default" : "secondary"}>
-                    {profile.user.isActive ? "Active" : "Inactive"}
+                  <Badge variant={profile && profile.user && profile.user.isActive ? "default" : "secondary"}>
+                    {profile && profile.user && profile.user.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </div>
-                <p className="text-gray-600 mb-2">{profile.user.userType}</p>
-                {profile.user.bio && (
+                <p className="text-gray-600 mb-2">{profile && profile.user ? profile.user.userType : ''}</p>
+                {profile && profile.user && profile.user.bio && (
                   <p className="text-gray-700 max-w-2xl">{profile.user.bio}</p>
                 )}
                 {isProvider && profile.user.rating && (
@@ -366,7 +363,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, firstName: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">{profile.user.firstName}</p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.firstName === 'string' ? profile.user.firstName : ''}</p>
                         )}
                       </div>
                       <div>
@@ -378,7 +375,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, lastName: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">{profile.user.lastName}</p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.lastName === 'string' ? profile.user.lastName : ''}</p>
                         )}
                       </div>
                     </div>
@@ -387,7 +384,7 @@ export default function ProfilePage() {
                       <Label htmlFor="email">Email</Label>
                       <div className="flex items-center gap-2 mt-1">
                         <Mail className="h-4 w-4 text-gray-400" />
-                        <p className="text-sm text-gray-900">{profile.user.email}</p>
+                        <p className="text-sm text-gray-900">{profile && profile.user && typeof profile.user.email === 'string' ? profile.user.email : ''}</p>
                       </div>
                     </div>
                     
@@ -402,7 +399,7 @@ export default function ProfilePage() {
                       ) : (
                         <div className="flex items-center gap-2 mt-1">
                           <Phone className="h-4 w-4 text-gray-400" />
-                          <p className="text-sm text-gray-900">{profile.user.phoneNumber}</p>
+                          <p className="text-sm text-gray-900">{profile && profile.user && typeof profile.user.phoneNumber === 'string' ? profile.user.phoneNumber : ''}</p>
                         </div>
                       )}
                     </div>
@@ -419,7 +416,7 @@ export default function ProfilePage() {
                         />
                       ) : (
                         <p className="text-sm text-gray-900 mt-1">
-                          {profile.user.bio || "No bio provided"}
+                          {profile && profile.user && profile.user.bio ? profile.user.bio : "No bio provided"}
                         </p>
                       )}
                     </div>
@@ -442,9 +439,7 @@ export default function ProfilePage() {
                           onChange={(e) => setEditForm({...editForm, address: e.target.value})}
                         />
                       ) : (
-                        <p className="text-sm text-gray-900 mt-1">
-                          {profile.user.address || "No address provided"}
-                        </p>
+                        <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.address === 'string' ? profile.user.address : "No address provided"}</p>
                       )}
                     </div>
                     
@@ -458,9 +453,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, city: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">
-                            {profile.user.city || "Not specified"}
-                          </p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.city === 'string' ? profile.user.city : "Not specified"}</p>
                         )}
                       </div>
                       <div>
@@ -472,9 +465,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, state: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">
-                            {profile.user.state || "Not specified"}
-                          </p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.state === 'string' ? profile.user.state : "Not specified"}</p>
                         )}
                       </div>
                     </div>
@@ -489,9 +480,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, zipCode: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">
-                            {profile.user.zipCode || "Not specified"}
-                          </p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.zipCode === 'string' ? profile.user.zipCode : "Not specified"}</p>
                         )}
                       </div>
                       <div>
@@ -503,9 +492,7 @@ export default function ProfilePage() {
                             onChange={(e) => setEditForm({...editForm, country: e.target.value})}
                           />
                         ) : (
-                          <p className="text-sm text-gray-900 mt-1">
-                            {profile.user.country || "Not specified"}
-                          </p>
+                          <p className="text-sm text-gray-900 mt-1">{profile && profile.user && typeof profile.user.country === 'string' ? profile.user.country : "Not specified"}</p>
                         )}
                       </div>
                     </div>
@@ -523,27 +510,27 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Member Since</span>
-                      <span className="font-medium">{formatDate(profile.user.createdAt)}</span>
+                      <span className="font-medium">{profile && profile.user && typeof profile.user.createdAt === 'string' ? formatDate(profile.user.createdAt) : ''}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Last Login</span>
-                      <span className="font-medium">{formatDate(profile.user.lastLoginAt)}</span>
+                      <span className="font-medium">{profile && profile.user && typeof profile.user.lastLoginAt === 'string' ? formatDate(profile.user.lastLoginAt) : ''}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Account Status</span>
-                      <Badge variant={profile.user.isActive ? "default" : "secondary"}>
-                        {profile.user.isActive ? "Active" : "Inactive"}
+                      <Badge variant={profile && profile.user && profile.user.isActive ? "default" : "secondary"}>
+                        {profile && profile.user && profile.user.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </div>
                     {isProvider && (
                       <>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Total Earnings</span>
-                          <span className="font-medium">${profile.user.totalEarnings}</span>
+                          <span className="font-medium">${profile && profile.user && typeof profile.user.totalEarnings === 'number' ? profile.user.totalEarnings : 0}</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Services Provided</span>
-                          <span className="font-medium">{profile.user.totalServices}</span>
+                          <span className="font-medium">{profile && profile.user && typeof profile.user.totalServices === 'number' ? profile.user.totalServices : 0}</span>
                         </div>
                       </>
                     )}
@@ -570,7 +557,7 @@ export default function ProfilePage() {
                         />
                       ) : (
                         <p className="text-sm text-gray-900 mt-1">
-                          ${profile.user.hourlyRate || 0}/hour
+                          ${profile && profile.user && typeof profile.user.hourlyRate === 'number' ? profile.user.hourlyRate : 0}/hour
                         </p>
                       )}
                     </div>
@@ -588,14 +575,14 @@ export default function ProfilePage() {
                         />
                       ) : (
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {profile.user.skills && profile.user.skills.length > 0 ? (
+                          {profile && profile.user && Array.isArray(profile.user.skills) && profile.user.skills.length > 0 ? (
                             profile.user.skills.map((skill, index) => (
-                              <Badge key={index} variant="outline">
+                              <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                                 {skill}
-                              </Badge>
+                              </span>
                             ))
                           ) : (
-                            <p className="text-sm text-gray-500">No skills listed</p>
+                            <span className="text-gray-500">No skills listed</span>
                           )}
                         </div>
                       )}
@@ -719,19 +706,17 @@ export default function ProfilePage() {
                                     />
                                   ))}
                                 </div>
-                                <span className="font-medium">{review.userName}</span>
+                                <span className="text-sm text-gray-600">
+                                  {review.comment}
+                                </span>
                               </div>
-                              <span className="text-sm text-gray-500">
-                                {formatDate(review.createdAt)}
-                              </span>
                             </div>
-                            <p className="text-gray-700">{review.comment}</p>
                           </div>
                         ))}
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <p className="text-gray-600">No reviews yet.</p>
+                        <p className="text-gray-600">No reviews found.</p>
                       </div>
                     )}
                   </CardContent>
@@ -743,4 +728,4 @@ export default function ProfilePage() {
       </PageTransition>
     </div>
   );
-} 
+}

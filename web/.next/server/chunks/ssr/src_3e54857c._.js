@@ -1109,6 +1109,40 @@ const mockContracts = [
         paymentStatus: 'Paid',
         createdAt: '2024-01-16T11:20:00Z',
         updatedAt: '2024-01-16T14:30:00Z'
+    },
+    {
+        id: '8',
+        serviceId: '5',
+        serviceTitle: 'Window Cleaning',
+        providerId: '2',
+        providerName: 'John Doe',
+        requesterId: '3',
+        requesterName: 'Jane Smith',
+        contractType: 'Monthly',
+        startDate: '2024-02-01T10:00:00Z',
+        endDate: '2024-02-01T12:00:00Z',
+        totalAmount: 150,
+        status: 'Pending',
+        paymentStatus: 'Pending',
+        createdAt: '2024-01-20T09:00:00Z',
+        updatedAt: '2024-01-20T09:00:00Z'
+    },
+    {
+        id: '9',
+        serviceId: '6',
+        serviceTitle: 'Laundry and Dry Cleaning',
+        providerId: '4',
+        providerName: 'Mike Wilson',
+        requesterId: '2',
+        requesterName: 'John Doe',
+        contractType: 'Estimation',
+        startDate: '2024-02-05T09:00:00Z',
+        endDate: '2024-02-05T17:00:00Z',
+        totalAmount: 90,
+        status: 'Active',
+        paymentStatus: 'Paid',
+        createdAt: '2024-01-25T11:00:00Z',
+        updatedAt: '2024-01-25T11:00:00Z'
     }
 ];
 const mockRatings = [
@@ -1357,12 +1391,20 @@ const mockApi = {
         await delay(1000);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.email === email);
         if (!user || password !== 'password') {
-            throw new Error('Invalid email or password');
+            return {
+                data: null,
+                success: false,
+                message: 'Invalid email or password'
+            };
         }
         return {
-            user,
-            token: 'mock-jwt-token-' + Date.now(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            data: {
+                user,
+                token: 'mock-jwt-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            },
+            success: true,
+            message: 'Login successful'
         };
     },
     async register (userData) {
@@ -1376,14 +1418,20 @@ const mockApi = {
             lastLoginAt: new Date().toISOString()
         };
         return {
-            user: newUser,
-            token: 'mock-jwt-token-' + Date.now(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            data: {
+                user: newUser,
+                token: 'mock-jwt-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            },
+            success: true,
+            message: 'Registration successful'
         };
     },
     async forgotPassword (email) {
         await delay(800);
         return {
+            data: null,
+            success: true,
             message: 'Password reset email sent successfully'
         };
     },
@@ -1398,11 +1446,15 @@ const mockApi = {
         const end = start + limit;
         const paginatedUsers = filteredUsers.slice(start, end);
         return {
-            users: paginatedUsers,
-            total: filteredUsers.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredUsers.length / limit)
+            data: {
+                users: paginatedUsers,
+                total: filteredUsers.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredUsers.length / limit)
+            },
+            success: true,
+            message: 'Users fetched successfully'
         };
     },
     async updateUserStatus (userId, isActive) {
@@ -1410,9 +1462,16 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             user.isActive = isActive;
+            return {
+                data: user,
+                success: true,
+                message: 'User status updated successfully'
+            };
         }
         return {
-            message: 'User status updated successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     async verifyUser (userId) {
@@ -1420,15 +1479,26 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             user.isVerified = true;
+            return {
+                data: user,
+                success: true,
+                message: 'User verified successfully'
+            };
         }
         return {
-            message: 'User verified successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     // Categories
     async getCategories () {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"];
+        return {
+            data: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"],
+            success: true,
+            message: 'Categories fetched successfully'
+        };
     },
     async createCategory (categoryData) {
         await delay(500);
@@ -1438,24 +1508,44 @@ const mockApi = {
             isActive: true,
             serviceCount: 0
         };
-        return newCategory;
+        return {
+            data: newCategory,
+            success: true,
+            message: 'Category created successfully'
+        };
     },
     async updateCategory (id, categoryData) {
         await delay(300);
         const category = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].find((c)=>c.id === id);
         if (category) {
             Object.assign(category, categoryData);
+            return {
+                data: category,
+                success: true,
+                message: 'Category updated successfully'
+            };
         }
-        return category;
+        return {
+            data: null,
+            success: false,
+            message: 'Category not found'
+        };
     },
     async deleteCategory (id) {
         await delay(300);
         const index = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].findIndex((c)=>c.id === id);
         if (index > -1) {
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].splice(index, 1);
+            return {
+                data: null,
+                success: true,
+                message: 'Category deleted successfully'
+            };
         }
         return {
-            message: 'Category deleted successfully'
+            data: null,
+            success: false,
+            message: 'Category not found'
         };
     },
     // Services
@@ -1496,29 +1586,48 @@ const mockApi = {
             };
         });
         return {
-            services: transformedServices,
-            total: filteredServices.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredServices.length / limit)
+            data: {
+                services: transformedServices,
+                total: filteredServices.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredServices.length / limit)
+            },
+            success: true,
+            message: 'Services fetched successfully'
         };
     },
     async getServiceById (id) {
         await delay(300);
         const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === id);
         if (!service) {
-            throw new Error('Service not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Service not found'
+            };
         }
-        return service;
+        return {
+            data: service,
+            success: true,
+            message: 'Service fetched successfully'
+        };
     },
     async updateServiceStatus (id, isVerified) {
         await delay(300);
         const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === id);
         if (service) {
             service.isVerified = isVerified;
+            return {
+                data: service,
+                success: true,
+                message: 'Service status updated successfully'
+            };
         }
         return {
-            message: 'Service status updated successfully'
+            data: null,
+            success: false,
+            message: 'Service not found'
         };
     },
     // Contracts
@@ -1541,9 +1650,7 @@ const mockApi = {
         const start = (page - 1) * limit;
         const end = start + limit;
         const paginatedContracts = filteredContracts.slice(start, end);
-        // Transform contracts to match the expected interface
         const transformedContracts = paginatedContracts.map((contract)=>{
-            // Find the corresponding service for base price
             const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === contract.serviceId);
             return {
                 id: contract.id,
@@ -1576,11 +1683,15 @@ const mockApi = {
             };
         });
         return {
-            contracts: transformedContracts,
-            total: filteredContracts.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredContracts.length / limit)
+            data: {
+                contracts: transformedContracts,
+                total: filteredContracts.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredContracts.length / limit)
+            },
+            success: true,
+            message: 'Contracts fetched successfully'
         };
     },
     async createContract (contractData) {
@@ -1593,7 +1704,11 @@ const mockApi = {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
-        return newContract;
+        return {
+            data: newContract,
+            success: true,
+            message: 'Contract created successfully'
+        };
     },
     async updateContractStatus (id, status) {
         await delay(300);
@@ -1601,15 +1716,27 @@ const mockApi = {
         if (contract) {
             contract.status = status;
             contract.updatedAt = new Date().toISOString();
+            return {
+                data: contract,
+                success: true,
+                message: 'Contract status updated successfully'
+            };
         }
         return {
-            message: 'Contract status updated successfully'
+            data: null,
+            success: false,
+            message: 'Contract not found'
         };
     },
     // Ratings
     async getServiceRatings (serviceId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>r.serviceId === serviceId);
+        const ratings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>r.serviceId === serviceId);
+        return {
+            data: ratings,
+            success: true,
+            message: 'Service ratings fetched successfully'
+        };
     },
     async createRating (ratingData) {
         await delay(500);
@@ -1618,73 +1745,101 @@ const mockApi = {
             ...ratingData,
             createdAt: new Date().toISOString()
         };
-        return newRating;
+        return {
+            data: newRating,
+            success: true,
+            message: 'Rating created successfully'
+        };
     },
     // Notifications
     async getNotifications (userId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].filter((n)=>n.userId === userId);
+        const notifications = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].filter((n)=>n.userId === userId);
+        return {
+            data: notifications,
+            success: true,
+            message: 'Notifications fetched successfully'
+        };
     },
     async markNotificationAsRead (id) {
         await delay(200);
         const notification = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].find((n)=>n.id === id);
         if (notification) {
             notification.isRead = true;
+            return {
+                data: notification,
+                success: true,
+                message: 'Notification marked as read'
+            };
         }
         return {
-            message: 'Notification marked as read'
+            data: null,
+            success: false,
+            message: 'Notification not found'
         };
     },
     // Dashboard
     async getDashboardStats () {
         await delay(400);
         return {
-            totalUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].length,
-            totalServices: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].length,
-            totalContracts: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].length,
-            totalRevenue: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].reduce((sum, contract)=>sum + contract.totalAmount, 0),
-            activeUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>user.isActive).length,
-            pendingVerifications: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>!user.isVerified).length,
-            recentActivity: [
-                {
-                    type: 'user_registration',
-                    message: 'New user registered: Sarah Johnson',
-                    time: '2 hours ago'
-                },
-                {
-                    type: 'service_created',
-                    message: 'New service created: Professional House Cleaning',
-                    time: '4 hours ago'
-                },
-                {
-                    type: 'contract_completed',
-                    message: 'Contract completed: Private Chef Services',
-                    time: '6 hours ago'
-                },
-                {
-                    type: 'payment_received',
-                    message: 'Payment received: $200 for Garden Maintenance',
-                    time: '8 hours ago'
-                },
-                {
-                    type: 'user_verification',
-                    message: 'User verified: Mike Wilson',
-                    time: '1 day ago'
-                }
-            ]
+            data: {
+                totalUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].length,
+                totalServices: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].length,
+                totalContracts: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].length,
+                totalRevenue: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].reduce((sum, contract)=>sum + contract.totalAmount, 0),
+                activeUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>user.isActive).length,
+                pendingVerifications: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>!user.isVerified).length,
+                recentActivity: [
+                    {
+                        type: 'user_registration',
+                        message: 'New user registered: Sarah Johnson',
+                        time: '2 hours ago'
+                    },
+                    {
+                        type: 'service_created',
+                        message: 'New service created: Professional House Cleaning',
+                        time: '4 hours ago'
+                    },
+                    {
+                        type: 'contract_completed',
+                        message: 'Contract completed: Private Chef Services',
+                        time: '6 hours ago'
+                    },
+                    {
+                        type: 'payment_received',
+                        message: 'Payment received: $200 for Garden Maintenance',
+                        time: '8 hours ago'
+                    },
+                    {
+                        type: 'user_verification',
+                        message: 'User verified: Mike Wilson',
+                        time: '1 day ago'
+                    }
+                ]
+            },
+            success: true,
+            message: 'Dashboard stats fetched successfully'
         };
     },
     // Search and Filters
     async getSearchFilters () {
         await delay(200);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockSearchFilters"];
+        return {
+            data: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockSearchFilters"],
+            success: true,
+            message: 'Search filters fetched successfully'
+        };
     },
     // Enhanced Dashboard
     async getDashboard (userId) {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (!user) {
-            throw new Error('User not found');
+            return {
+                data: null,
+                success: false,
+                message: 'User not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             if (user.userType === 'Provider') {
@@ -1693,18 +1848,21 @@ const mockApi = {
                 return user.id === '3' || user.id === '5';
             }
         }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
-        // Get user-specific data
         let userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
         let userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
         let userServiceRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
         let userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
         return {
-            user,
-            stats: userStats,
-            recentContracts: userContracts.slice(0, 5),
-            recentServices: userServices.slice(0, 5),
-            serviceRequests: userServiceRequests,
-            availability: userAvailability
+            data: {
+                user,
+                stats: userStats,
+                recentContracts: userContracts.slice(0, 5),
+                recentServices: userServices.slice(0, 5),
+                serviceRequests: userServiceRequests,
+                availability: userAvailability
+            },
+            success: true,
+            message: 'Dashboard data fetched successfully'
         };
     },
     // Service Requests
@@ -1718,17 +1876,29 @@ const mockApi = {
             filteredRequests = filteredRequests.filter((sr)=>sr.requestType === filters.type);
         }
         return {
-            requests: filteredRequests,
-            total: filteredRequests.length
+            data: {
+                requests: filteredRequests,
+                total: filteredRequests.length
+            },
+            success: true,
+            message: 'Service requests fetched successfully'
         };
     },
     async getServiceRequestById (id) {
         await delay(300);
         const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
         if (!request) {
-            throw new Error('Service request not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Service request not found'
+            };
         }
-        return request;
+        return {
+            data: request,
+            success: true,
+            message: 'Service request fetched successfully'
+        };
     },
     async updateServiceRequestStatus (id, status) {
         await delay(300);
@@ -1736,9 +1906,16 @@ const mockApi = {
         if (request) {
             request.status = status;
             request.updatedAt = new Date().toISOString();
+            return {
+                data: request,
+                success: true,
+                message: 'Service request status updated successfully'
+            };
         }
         return {
-            message: 'Service request status updated successfully'
+            data: null,
+            success: false,
+            message: 'Service request not found'
         };
     },
     async createServiceRequest (requestData) {
@@ -1750,7 +1927,11 @@ const mockApi = {
             updatedAt: new Date().toISOString()
         };
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
-        return newRequest;
+        return {
+            data: newRequest,
+            success: true,
+            message: 'Service request created successfully'
+        };
     },
     async createEstimationRequest (requestData) {
         await delay(500);
@@ -1764,24 +1945,27 @@ const mockApi = {
         };
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
         return {
+            data: newRequest,
             success: true,
-            message: 'Estimation request created successfully',
-            data: newRequest
+            message: 'Estimation request created successfully'
         };
     },
     // Availability Management
     async getAvailability (userId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        const availability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            data: availability,
+            success: true,
+            message: 'Availability fetched successfully'
+        };
     },
     async updateAvailability (userId, availabilityData) {
         await delay(500);
-        // Remove existing availability for user
         const existingIndexes = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].map((a, index)=>a.userId === userId ? index : -1).filter((index)=>index !== -1);
         existingIndexes.reverse().forEach((index)=>{
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].splice(index, 1);
         });
-        // Add new availability
         availabilityData.forEach((data)=>{
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].push({
                 id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].length + 1).toString(),
@@ -1790,6 +1974,8 @@ const mockApi = {
             });
         });
         return {
+            data: null,
+            success: true,
             message: 'Availability updated successfully'
         };
     },
@@ -1798,9 +1984,12 @@ const mockApi = {
         await delay(300);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (!user) {
-            throw new Error('User not found');
+            return {
+                data: null,
+                success: false,
+                message: 'User not found'
+            };
         }
-        // Get user's services, contracts, and ratings
         const userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
         const userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
         const userRatings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>{
@@ -1808,10 +1997,14 @@ const mockApi = {
             return service?.providerId === userId;
         });
         return {
-            user,
-            services: userServices,
-            contracts: userContracts,
-            ratings: userRatings
+            data: {
+                user,
+                services: userServices,
+                contracts: userContracts,
+                ratings: userRatings
+            },
+            success: true,
+            message: 'User profile fetched successfully'
         };
     },
     async updateUserProfile (userId, profileData) {
@@ -1819,9 +2012,16 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             Object.assign(user, profileData);
+            return {
+                data: user,
+                success: true,
+                message: 'Profile updated successfully'
+            };
         }
         return {
-            message: 'Profile updated successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     // Provider-specific endpoints
@@ -1829,7 +2029,11 @@ const mockApi = {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Provider');
         if (!user) {
-            throw new Error('Provider not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Provider not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             return user.id === '2' || user.id === '4' || user.id === '6';
@@ -1839,12 +2043,16 @@ const mockApi = {
         const completedServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Completed');
         const userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
         return {
-            user,
-            stats: userStats,
-            pendingRequests,
-            upcomingServices,
-            completedServices,
-            availability: userAvailability
+            data: {
+                user,
+                stats: userStats,
+                pendingRequests,
+                upcomingServices,
+                completedServices,
+                availability: userAvailability
+            },
+            success: true,
+            message: 'Provider dashboard data fetched successfully'
         };
     },
     // Requester-specific endpoints
@@ -1852,7 +2060,11 @@ const mockApi = {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Requester');
         if (!user) {
-            throw new Error('Requester not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Requester not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             return user.id === '3' || user.id === '5';
@@ -1861,53 +2073,55 @@ const mockApi = {
         const pastServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Completed');
         const pendingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Pending');
         return {
-            user,
-            stats: userStats,
-            activeServices,
-            pastServices,
-            pendingServices
+            data: {
+                user,
+                stats: userStats,
+                activeServices,
+                pastServices,
+                pendingServices
+            },
+            success: true,
+            message: 'Requester dashboard data fetched successfully'
         };
     },
     async createService (serviceData) {
         await delay(300);
         return {
+            data: serviceData,
             success: true,
-            message: "Mock service created",
-            data: serviceData
+            message: 'Mock service created'
         };
     },
     async updateService (id, serviceData) {
         await delay(300);
         return {
+            data: serviceData,
             success: true,
-            message: "Mock service updated",
-            data: serviceData
+            message: 'Mock service updated'
         };
     },
     async deleteService (id) {
         await delay(300);
         return {
+            data: id,
             success: true,
-            message: "Mock service deleted",
-            data: id
+            message: 'Mock service deleted'
         };
     }
 };
 const handleApiError = (error)=>{
     console.error('API Error:', error);
-    if (error.message) {
-        return {
-            error: error.message
-        };
-    }
     return {
-        error: 'An unexpected error occurred'
+        data: null,
+        success: false,
+        message: error.message || 'An unexpected error occurred'
     };
 };
-const handleApiSuccess = (data)=>{
+const handleApiSuccess = (data, message = 'Operation successful')=>{
     return {
         data,
-        success: true
+        success: true,
+        message
     };
 };
 }}),
@@ -1922,9 +2136,9 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mockApi.ts [app-ssr] (ecmascript)");
 ;
-console.log("Mock:" + JSON.stringify(("TURBOPACK compile-time value", "false")));
+console.log("Mock:" + JSON.stringify(("TURBOPACK compile-time value", "true")));
 // Configuration
-const USE_MOCK_API = ("TURBOPACK compile-time value", "false") === 'true';
+const USE_MOCK_API = ("TURBOPACK compile-time value", "true") === 'true';
 const API_BASE_URL = 'http://localhost:5111/api';
 // API client configuration
 const apiClient = {
@@ -1973,334 +2187,243 @@ class ApiService {
     // Authentication
     async login(email, password) {
         console.log("login isMock:" + JSON.stringify(USE_MOCK_API));
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].login(email, password);
         }
-        return apiRequest('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                email,
-                password
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async register(userData) {
         console.log("register isMock:" + JSON.stringify(USE_MOCK_API));
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].register(userData);
         }
-        return apiRequest('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify(userData)
-        });
+        "TURBOPACK unreachable";
     }
     async forgotPassword(email) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].forgotPassword(email);
         }
-        return apiRequest('/auth/forgot-password', {
-            method: 'POST',
-            body: JSON.stringify({
-                email
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Users
     async getUsers(page = 1, limit = 10, search = '') {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUsers(page, limit, search);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...search && {
-                search
-            }
-        });
-        return apiRequest(`/users?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async updateUserStatus(userId, isActive) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserStatus(userId, isActive);
         }
-        return apiRequest(`/users/${userId}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                isActive
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async verifyUser(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].verifyUser(userId);
         }
-        return apiRequest(`/users/${userId}/verify`, {
-            method: 'PUT'
-        });
+        "TURBOPACK unreachable";
     }
     // Categories
     async getCategories() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getCategories();
         }
-        return apiRequest('/categories');
+        "TURBOPACK unreachable";
     }
     async createCategory(categoryData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createCategory(categoryData);
         }
-        return apiRequest('/categories', {
-            method: 'POST',
-            body: JSON.stringify(categoryData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateCategory(id, categoryData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateCategory(id, categoryData);
         }
-        return apiRequest(`/categories/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(categoryData)
-        });
+        "TURBOPACK unreachable";
     }
     async deleteCategory(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].deleteCategory(id);
         }
-        return apiRequest(`/categories/${id}`, {
-            method: 'DELETE'
-        });
+        "TURBOPACK unreachable";
     }
     // Services
     async getServices(page = 1, limit = 10, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServices(page, limit, filters);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...filters
-        });
-        return apiRequest(`/services?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async getServiceById(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceById(id);
         }
-        return apiRequest(`/services/${id}`);
+        "TURBOPACK unreachable";
     }
     async deleteService(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].deleteService(id);
         }
-        return apiRequest(`/services/${id}`, {
-            method: 'DELETE'
-        });
+        "TURBOPACK unreachable";
     }
     async updateServiceStatus(id, isVerified) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceStatus(id, isVerified);
         }
-        return apiRequest(`/services/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                isVerified
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Contracts
     async getContracts(page = 1, limit = 10, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getContracts(page, limit, filters);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...filters
-        });
-        return apiRequest(`/contracts?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async createContract(contractData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createContract(contractData);
         }
-        return apiRequest('/contracts', {
-            method: 'POST',
-            body: JSON.stringify(contractData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateContractStatus(id, status) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateContractStatus(id, status);
         }
-        return apiRequest(`/contracts/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                status
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Ratings
     async getServiceRatings(serviceId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRatings(serviceId);
         }
-        return apiRequest(`/services/${serviceId}/ratings`);
+        "TURBOPACK unreachable";
     }
     async createRating(ratingData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createRating(ratingData);
         }
-        return apiRequest('/ratings', {
-            method: 'POST',
-            body: JSON.stringify(ratingData)
-        });
+        "TURBOPACK unreachable";
     }
     // Notifications
     async getNotifications(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getNotifications(userId);
         }
-        return apiRequest(`/users/${userId}/notifications`);
+        "TURBOPACK unreachable";
     }
     async markNotificationAsRead(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].markNotificationAsRead(id);
         }
-        return apiRequest(`/notifications/${id}/read`, {
-            method: 'PUT'
-        });
+        "TURBOPACK unreachable";
     }
     // Dashboard
     async getDashboardStats() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboardStats();
         }
-        return apiRequest('/admin/dashboard/stats');
+        "TURBOPACK unreachable";
     }
     // Search and Filters
     async getSearchFilters() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getSearchFilters();
         }
-        return apiRequest('/services/filters');
+        "TURBOPACK unreachable";
     }
     // Enhanced Dashboard
     async getDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboard(userId);
         }
-        return apiRequest(`/dashboard/${userId}`);
+        "TURBOPACK unreachable";
     }
     async getProviderDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getProviderDashboard(userId);
         }
-        return apiRequest(`/dashboard/provider/${userId}`);
+        "TURBOPACK unreachable";
     }
     async getRequesterDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getRequesterDashboard(userId);
         }
-        return apiRequest(`/dashboard/requester/${userId}`);
+        "TURBOPACK unreachable";
     }
     // Service Requests
     async getServiceRequests(userId, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequests(userId, filters);
         }
-        const params = new URLSearchParams({
-            userId,
-            ...filters
-        });
-        return apiRequest(`/service-requests?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async getServiceRequestById(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequestById(id);
         }
-        return apiRequest(`/service-requests/${id}`);
+        "TURBOPACK unreachable";
     }
     async updateServiceRequestStatus(id, status) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceRequestStatus(id, status);
         }
-        return apiRequest(`/service-requests/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                status
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async createServiceRequest(requestData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
         }
-        return apiRequest('/service-requests', {
-            method: 'POST',
-            body: JSON.stringify(requestData)
-        });
+        "TURBOPACK unreachable";
     }
     async createEstimationRequest(requestData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createEstimationRequest(requestData);
         }
-        return apiRequest('/estimation-requests', {
-            method: 'POST',
-            body: JSON.stringify(requestData)
-        });
+        "TURBOPACK unreachable";
     }
     // Availability Management
     async getAvailability(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getAvailability(userId);
         }
-        return apiRequest(`/availability/${userId}`);
+        "TURBOPACK unreachable";
     }
     async updateAvailability(userId, availabilityData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateAvailability(userId, availabilityData);
         }
-        return apiRequest(`/availability/${userId}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                availability: availabilityData
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // User Profile
     async getUserProfile(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUserProfile(userId);
         }
-        return apiRequest(`/users/${userId}/profile`);
+        "TURBOPACK unreachable";
     }
     async updateUserProfile(userId, profileData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserProfile(userId, profileData);
         }
-        return apiRequest(`/users/${userId}/profile`, {
-            method: 'PUT',
-            body: JSON.stringify(profileData)
-        });
+        "TURBOPACK unreachable";
     }
     async createService(serviceData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createService(serviceData);
         }
-        return apiRequest('/services', {
-            method: 'POST',
-            body: JSON.stringify(serviceData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateService(id, serviceData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateService(id, serviceData);
         }
-        return apiRequest(`/services/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(serviceData)
-        });
+        "TURBOPACK unreachable";
     }
 }
 const api = new ApiService();
@@ -3214,9 +3337,9 @@ function SkeletonCard() {
         columnNumber: 5
     }, this);
 }
-function SkeletonAvatar() {
+function SkeletonAvatar({ className }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Skeleton, {
-        className: "h-10 w-10 rounded-full"
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("h-10 w-10 rounded-full", className)
     }, void 0, false, {
         fileName: "[project]/src/components/ui/skeleton.tsx",
         lineNumber: 31,
@@ -3376,7 +3499,7 @@ function AvailabilityPage() {
         setLoading(true);
         try {
             const result = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["api"].getAvailability(user.id);
-            setAvailability(result);
+            setAvailability(result.data || []);
         } catch (error) {
             console.error("Error fetching availability:", error);
         } finally{

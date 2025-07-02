@@ -749,6 +749,40 @@ export const mockContracts: Contract[] = [
     paymentStatus: 'Paid',
     createdAt: '2024-01-16T11:20:00Z',
     updatedAt: '2024-01-16T14:30:00Z'
+  },
+  {
+    id: '8',
+    serviceId: '5',
+    serviceTitle: 'Window Cleaning',
+    providerId: '2',
+    providerName: 'John Doe',
+    requesterId: '3',
+    requesterName: 'Jane Smith',
+    contractType: 'Monthly',
+    startDate: '2024-02-01T10:00:00Z',
+    endDate: '2024-02-01T12:00:00Z',
+    totalAmount: 150,
+    status: 'Pending',
+    paymentStatus: 'Pending',
+    createdAt: '2024-01-20T09:00:00Z',
+    updatedAt: '2024-01-20T09:00:00Z'
+  },
+  {
+    id: '9',
+    serviceId: '6',
+    serviceTitle: 'Laundry and Dry Cleaning',
+    providerId: '4',
+    providerName: 'Mike Wilson',
+    requesterId: '2',
+    requesterName: 'John Doe',
+    contractType: 'Estimation',
+    startDate: '2024-02-05T09:00:00Z',
+    endDate: '2024-02-05T17:00:00Z',
+    totalAmount: 90,
+    status: 'Active',
+    paymentStatus: 'Paid',
+    createdAt: '2024-01-25T11:00:00Z',
+    updatedAt: '2024-01-25T11:00:00Z'
   }
 ];
 

@@ -33,7 +33,7 @@ export default function MyServicesSection({ userId }: { userId: string }) {
     try {
       const result = await api.getServices(1, 50, { providerId: userId });
       if (result.success) {
-        setServices(result.data.services || result.data);
+        setServices(result.data?.services || []);
       } else {
         toast.error(result.message || "Failed to load your services");
       }

@@ -24,6 +24,7 @@ import * as z from "zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 interface Category {
   id: string;
@@ -67,17 +68,15 @@ export default function AdminCategoriesPage() {
     },
   });
 
-  const fetchCategories = useCallback(async () => {
-    setLoading(true);
+  const fetchCategories = async () => {
     try {
       const result = await api.getCategories();
-      setCategories(result || []);
+      setCategories(result.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
-    } finally {
-      setLoading(false);
+      toast.error("Failed to load categories");
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchCategories();

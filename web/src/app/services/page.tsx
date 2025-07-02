@@ -89,11 +89,7 @@ export default function ServicesPage() {
   const fetchCategories = async () => {
     try {
       const result = await api.getCategories();
-      if (result.success) {
-        setCategories(result.data);
-      } else {
-        toast.error(result.message || "Failed to load categories");
-      }
+      setCategories(result.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Failed to load categories");
@@ -112,11 +108,7 @@ export default function ServicesPage() {
       if (maxPrice) filters.maxPrice = maxPrice;
 
       const result = await api.getServices(1, 20, filters);
-      if (result.success) {
-        setServices(result.data.services);
-      } else {
-        toast.error(result.message || "Failed to load services");
-      }
+      setServices(result.data?.services || []);
     } catch (error) {
       console.error("Error fetching services:", error);
       toast.error("Failed to load services");

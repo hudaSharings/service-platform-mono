@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ServicePlatform.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08f4d8de8c011b35785ca582034673c514552ad3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69502834e8e4da1bf9a15c4552893658b84701ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("ServicePlatform.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ServicePlatform.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

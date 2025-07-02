@@ -94,7 +94,7 @@ export default function TestMockPage() {
       // Load provider dashboard (John Doe - ID: 2)
       const providerResult = await api.getProviderDashboard("2");
       if (providerResult.success) {
-        setProviderDashboard(providerResult.data);
+        setProviderDashboard(providerResult.data || {});
       } else {
         toast.error(providerResult.message || "Failed to load provider dashboard");
       }
@@ -102,7 +102,7 @@ export default function TestMockPage() {
       // Load requester dashboard (Jane Smith - ID: 3)
       const requesterResult = await api.getRequesterDashboard("3");
       if (requesterResult.success) {
-        setRequesterDashboard(requesterResult.data);
+        setRequesterDashboard(requesterResult.data || {});
       } else {
         toast.error(requesterResult.message || "Failed to load requester dashboard");
       }

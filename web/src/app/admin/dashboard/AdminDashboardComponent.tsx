@@ -54,15 +54,14 @@ export default function AdminDashboardComponent() {
     setLoading(true);
     try {
       const result = await api.getDashboardStats();
-      // Ensure all required properties exist with fallback values
       setStats({
-        totalUsers: result?.totalUsers || 0,
-        totalServices: result?.totalServices || 0,
-        totalContracts: result?.totalContracts || 0,
-        totalRevenue: result?.totalRevenue || 0,
-        activeUsers: result?.activeUsers || 0,
-        pendingVerifications: result?.pendingVerifications || 0,
-        recentActivity: result?.recentActivity || [],
+        totalUsers: result.data?.totalUsers || 0,
+        totalServices: result.data?.totalServices || 0,
+        totalContracts: result.data?.totalContracts || 0,
+        totalRevenue: result.data?.totalRevenue || 0,
+        activeUsers: result.data?.activeUsers || 0,
+        pendingVerifications: result.data?.pendingVerifications || 0,
+        recentActivity: result.data?.recentActivity || [],
       });
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);

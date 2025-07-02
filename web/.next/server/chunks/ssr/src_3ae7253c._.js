@@ -2102,12 +2102,20 @@ const mockApi = {
         await delay(1000);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.email === email);
         if (!user || password !== 'password') {
-            throw new Error('Invalid email or password');
+            return {
+                data: null,
+                success: false,
+                message: 'Invalid email or password'
+            };
         }
         return {
-            user,
-            token: 'mock-jwt-token-' + Date.now(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            data: {
+                user,
+                token: 'mock-jwt-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            },
+            success: true,
+            message: 'Login successful'
         };
     },
     async register (userData) {
@@ -2121,14 +2129,20 @@ const mockApi = {
             lastLoginAt: new Date().toISOString()
         };
         return {
-            user: newUser,
-            token: 'mock-jwt-token-' + Date.now(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            data: {
+                user: newUser,
+                token: 'mock-jwt-token-' + Date.now(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+            },
+            success: true,
+            message: 'Registration successful'
         };
     },
     async forgotPassword (email) {
         await delay(800);
         return {
+            data: null,
+            success: true,
             message: 'Password reset email sent successfully'
         };
     },
@@ -2143,11 +2157,15 @@ const mockApi = {
         const end = start + limit;
         const paginatedUsers = filteredUsers.slice(start, end);
         return {
-            users: paginatedUsers,
-            total: filteredUsers.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredUsers.length / limit)
+            data: {
+                users: paginatedUsers,
+                total: filteredUsers.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredUsers.length / limit)
+            },
+            success: true,
+            message: 'Users fetched successfully'
         };
     },
     async updateUserStatus (userId, isActive) {
@@ -2155,9 +2173,16 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             user.isActive = isActive;
+            return {
+                data: user,
+                success: true,
+                message: 'User status updated successfully'
+            };
         }
         return {
-            message: 'User status updated successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     async verifyUser (userId) {
@@ -2165,15 +2190,26 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             user.isVerified = true;
+            return {
+                data: user,
+                success: true,
+                message: 'User verified successfully'
+            };
         }
         return {
-            message: 'User verified successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     // Categories
     async getCategories () {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"];
+        return {
+            data: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"],
+            success: true,
+            message: 'Categories fetched successfully'
+        };
     },
     async createCategory (categoryData) {
         await delay(500);
@@ -2183,24 +2219,44 @@ const mockApi = {
             isActive: true,
             serviceCount: 0
         };
-        return newCategory;
+        return {
+            data: newCategory,
+            success: true,
+            message: 'Category created successfully'
+        };
     },
     async updateCategory (id, categoryData) {
         await delay(300);
         const category = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].find((c)=>c.id === id);
         if (category) {
             Object.assign(category, categoryData);
+            return {
+                data: category,
+                success: true,
+                message: 'Category updated successfully'
+            };
         }
-        return category;
+        return {
+            data: null,
+            success: false,
+            message: 'Category not found'
+        };
     },
     async deleteCategory (id) {
         await delay(300);
         const index = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].findIndex((c)=>c.id === id);
         if (index > -1) {
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockCategories"].splice(index, 1);
+            return {
+                data: null,
+                success: true,
+                message: 'Category deleted successfully'
+            };
         }
         return {
-            message: 'Category deleted successfully'
+            data: null,
+            success: false,
+            message: 'Category not found'
         };
     },
     // Services
@@ -2241,29 +2297,48 @@ const mockApi = {
             };
         });
         return {
-            services: transformedServices,
-            total: filteredServices.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredServices.length / limit)
+            data: {
+                services: transformedServices,
+                total: filteredServices.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredServices.length / limit)
+            },
+            success: true,
+            message: 'Services fetched successfully'
         };
     },
     async getServiceById (id) {
         await delay(300);
         const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === id);
         if (!service) {
-            throw new Error('Service not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Service not found'
+            };
         }
-        return service;
+        return {
+            data: service,
+            success: true,
+            message: 'Service fetched successfully'
+        };
     },
     async updateServiceStatus (id, isVerified) {
         await delay(300);
         const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === id);
         if (service) {
             service.isVerified = isVerified;
+            return {
+                data: service,
+                success: true,
+                message: 'Service status updated successfully'
+            };
         }
         return {
-            message: 'Service status updated successfully'
+            data: null,
+            success: false,
+            message: 'Service not found'
         };
     },
     // Contracts
@@ -2286,9 +2361,7 @@ const mockApi = {
         const start = (page - 1) * limit;
         const end = start + limit;
         const paginatedContracts = filteredContracts.slice(start, end);
-        // Transform contracts to match the expected interface
         const transformedContracts = paginatedContracts.map((contract)=>{
-            // Find the corresponding service for base price
             const service = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].find((s)=>s.id === contract.serviceId);
             return {
                 id: contract.id,
@@ -2321,11 +2394,15 @@ const mockApi = {
             };
         });
         return {
-            contracts: transformedContracts,
-            total: filteredContracts.length,
-            page,
-            limit,
-            totalPages: Math.ceil(filteredContracts.length / limit)
+            data: {
+                contracts: transformedContracts,
+                total: filteredContracts.length,
+                page,
+                limit,
+                totalPages: Math.ceil(filteredContracts.length / limit)
+            },
+            success: true,
+            message: 'Contracts fetched successfully'
         };
     },
     async createContract (contractData) {
@@ -2338,7 +2415,11 @@ const mockApi = {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
-        return newContract;
+        return {
+            data: newContract,
+            success: true,
+            message: 'Contract created successfully'
+        };
     },
     async updateContractStatus (id, status) {
         await delay(300);
@@ -2346,15 +2427,27 @@ const mockApi = {
         if (contract) {
             contract.status = status;
             contract.updatedAt = new Date().toISOString();
+            return {
+                data: contract,
+                success: true,
+                message: 'Contract status updated successfully'
+            };
         }
         return {
-            message: 'Contract status updated successfully'
+            data: null,
+            success: false,
+            message: 'Contract not found'
         };
     },
     // Ratings
     async getServiceRatings (serviceId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>r.serviceId === serviceId);
+        const ratings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>r.serviceId === serviceId);
+        return {
+            data: ratings,
+            success: true,
+            message: 'Service ratings fetched successfully'
+        };
     },
     async createRating (ratingData) {
         await delay(500);
@@ -2363,73 +2456,101 @@ const mockApi = {
             ...ratingData,
             createdAt: new Date().toISOString()
         };
-        return newRating;
+        return {
+            data: newRating,
+            success: true,
+            message: 'Rating created successfully'
+        };
     },
     // Notifications
     async getNotifications (userId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].filter((n)=>n.userId === userId);
+        const notifications = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].filter((n)=>n.userId === userId);
+        return {
+            data: notifications,
+            success: true,
+            message: 'Notifications fetched successfully'
+        };
     },
     async markNotificationAsRead (id) {
         await delay(200);
         const notification = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockNotifications"].find((n)=>n.id === id);
         if (notification) {
             notification.isRead = true;
+            return {
+                data: notification,
+                success: true,
+                message: 'Notification marked as read'
+            };
         }
         return {
-            message: 'Notification marked as read'
+            data: null,
+            success: false,
+            message: 'Notification not found'
         };
     },
     // Dashboard
     async getDashboardStats () {
         await delay(400);
         return {
-            totalUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].length,
-            totalServices: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].length,
-            totalContracts: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].length,
-            totalRevenue: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].reduce((sum, contract)=>sum + contract.totalAmount, 0),
-            activeUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>user.isActive).length,
-            pendingVerifications: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>!user.isVerified).length,
-            recentActivity: [
-                {
-                    type: 'user_registration',
-                    message: 'New user registered: Sarah Johnson',
-                    time: '2 hours ago'
-                },
-                {
-                    type: 'service_created',
-                    message: 'New service created: Professional House Cleaning',
-                    time: '4 hours ago'
-                },
-                {
-                    type: 'contract_completed',
-                    message: 'Contract completed: Private Chef Services',
-                    time: '6 hours ago'
-                },
-                {
-                    type: 'payment_received',
-                    message: 'Payment received: $200 for Garden Maintenance',
-                    time: '8 hours ago'
-                },
-                {
-                    type: 'user_verification',
-                    message: 'User verified: Mike Wilson',
-                    time: '1 day ago'
-                }
-            ]
+            data: {
+                totalUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].length,
+                totalServices: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].length,
+                totalContracts: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].length,
+                totalRevenue: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].reduce((sum, contract)=>sum + contract.totalAmount, 0),
+                activeUsers: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>user.isActive).length,
+                pendingVerifications: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].filter((user)=>!user.isVerified).length,
+                recentActivity: [
+                    {
+                        type: 'user_registration',
+                        message: 'New user registered: Sarah Johnson',
+                        time: '2 hours ago'
+                    },
+                    {
+                        type: 'service_created',
+                        message: 'New service created: Professional House Cleaning',
+                        time: '4 hours ago'
+                    },
+                    {
+                        type: 'contract_completed',
+                        message: 'Contract completed: Private Chef Services',
+                        time: '6 hours ago'
+                    },
+                    {
+                        type: 'payment_received',
+                        message: 'Payment received: $200 for Garden Maintenance',
+                        time: '8 hours ago'
+                    },
+                    {
+                        type: 'user_verification',
+                        message: 'User verified: Mike Wilson',
+                        time: '1 day ago'
+                    }
+                ]
+            },
+            success: true,
+            message: 'Dashboard stats fetched successfully'
         };
     },
     // Search and Filters
     async getSearchFilters () {
         await delay(200);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockSearchFilters"];
+        return {
+            data: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockSearchFilters"],
+            success: true,
+            message: 'Search filters fetched successfully'
+        };
     },
     // Enhanced Dashboard
     async getDashboard (userId) {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (!user) {
-            throw new Error('User not found');
+            return {
+                data: null,
+                success: false,
+                message: 'User not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             if (user.userType === 'Provider') {
@@ -2438,18 +2559,21 @@ const mockApi = {
                 return user.id === '3' || user.id === '5';
             }
         }) || __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"][0];
-        // Get user-specific data
         let userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
         let userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
         let userServiceRequests = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId || sr.requesterId === userId);
         let userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
         return {
-            user,
-            stats: userStats,
-            recentContracts: userContracts.slice(0, 5),
-            recentServices: userServices.slice(0, 5),
-            serviceRequests: userServiceRequests,
-            availability: userAvailability
+            data: {
+                user,
+                stats: userStats,
+                recentContracts: userContracts.slice(0, 5),
+                recentServices: userServices.slice(0, 5),
+                serviceRequests: userServiceRequests,
+                availability: userAvailability
+            },
+            success: true,
+            message: 'Dashboard data fetched successfully'
         };
     },
     // Service Requests
@@ -2463,17 +2587,29 @@ const mockApi = {
             filteredRequests = filteredRequests.filter((sr)=>sr.requestType === filters.type);
         }
         return {
-            requests: filteredRequests,
-            total: filteredRequests.length
+            data: {
+                requests: filteredRequests,
+                total: filteredRequests.length
+            },
+            success: true,
+            message: 'Service requests fetched successfully'
         };
     },
     async getServiceRequestById (id) {
         await delay(300);
         const request = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].find((sr)=>sr.id === id);
         if (!request) {
-            throw new Error('Service request not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Service request not found'
+            };
         }
-        return request;
+        return {
+            data: request,
+            success: true,
+            message: 'Service request fetched successfully'
+        };
     },
     async updateServiceRequestStatus (id, status) {
         await delay(300);
@@ -2481,9 +2617,16 @@ const mockApi = {
         if (request) {
             request.status = status;
             request.updatedAt = new Date().toISOString();
+            return {
+                data: request,
+                success: true,
+                message: 'Service request status updated successfully'
+            };
         }
         return {
-            message: 'Service request status updated successfully'
+            data: null,
+            success: false,
+            message: 'Service request not found'
         };
     },
     async createServiceRequest (requestData) {
@@ -2495,7 +2638,11 @@ const mockApi = {
             updatedAt: new Date().toISOString()
         };
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
-        return newRequest;
+        return {
+            data: newRequest,
+            success: true,
+            message: 'Service request created successfully'
+        };
     },
     async createEstimationRequest (requestData) {
         await delay(500);
@@ -2509,24 +2656,27 @@ const mockApi = {
         };
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].push(newRequest);
         return {
+            data: newRequest,
             success: true,
-            message: 'Estimation request created successfully',
-            data: newRequest
+            message: 'Estimation request created successfully'
         };
     },
     // Availability Management
     async getAvailability (userId) {
         await delay(300);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        const availability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
+        return {
+            data: availability,
+            success: true,
+            message: 'Availability fetched successfully'
+        };
     },
     async updateAvailability (userId, availabilityData) {
         await delay(500);
-        // Remove existing availability for user
         const existingIndexes = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].map((a, index)=>a.userId === userId ? index : -1).filter((index)=>index !== -1);
         existingIndexes.reverse().forEach((index)=>{
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].splice(index, 1);
         });
-        // Add new availability
         availabilityData.forEach((data)=>{
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].push({
                 id: (__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].length + 1).toString(),
@@ -2535,6 +2685,8 @@ const mockApi = {
             });
         });
         return {
+            data: null,
+            success: true,
             message: 'Availability updated successfully'
         };
     },
@@ -2543,9 +2695,12 @@ const mockApi = {
         await delay(300);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (!user) {
-            throw new Error('User not found');
+            return {
+                data: null,
+                success: false,
+                message: 'User not found'
+            };
         }
-        // Get user's services, contracts, and ratings
         const userServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServices"].filter((s)=>s.providerId === userId);
         const userContracts = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockContracts"].filter((c)=>c.providerId === userId || c.requesterId === userId);
         const userRatings = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockRatings"].filter((r)=>{
@@ -2553,10 +2708,14 @@ const mockApi = {
             return service?.providerId === userId;
         });
         return {
-            user,
-            services: userServices,
-            contracts: userContracts,
-            ratings: userRatings
+            data: {
+                user,
+                services: userServices,
+                contracts: userContracts,
+                ratings: userRatings
+            },
+            success: true,
+            message: 'User profile fetched successfully'
         };
     },
     async updateUserProfile (userId, profileData) {
@@ -2564,9 +2723,16 @@ const mockApi = {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId);
         if (user) {
             Object.assign(user, profileData);
+            return {
+                data: user,
+                success: true,
+                message: 'Profile updated successfully'
+            };
         }
         return {
-            message: 'Profile updated successfully'
+            data: null,
+            success: false,
+            message: 'User not found'
         };
     },
     // Provider-specific endpoints
@@ -2574,7 +2740,11 @@ const mockApi = {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Provider');
         if (!user) {
-            throw new Error('Provider not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Provider not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             return user.id === '2' || user.id === '4' || user.id === '6';
@@ -2584,12 +2754,16 @@ const mockApi = {
         const completedServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.providerId === userId && sr.status === 'Completed');
         const userAvailability = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockAvailability"].filter((a)=>a.userId === userId);
         return {
-            user,
-            stats: userStats,
-            pendingRequests,
-            upcomingServices,
-            completedServices,
-            availability: userAvailability
+            data: {
+                user,
+                stats: userStats,
+                pendingRequests,
+                upcomingServices,
+                completedServices,
+                availability: userAvailability
+            },
+            success: true,
+            message: 'Provider dashboard data fetched successfully'
         };
     },
     // Requester-specific endpoints
@@ -2597,7 +2771,11 @@ const mockApi = {
         await delay(800);
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockUsers"].find((u)=>u.id === userId && u.userType === 'Requester');
         if (!user) {
-            throw new Error('Requester not found');
+            return {
+                data: null,
+                success: false,
+                message: 'Requester not found'
+            };
         }
         const userStats = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockDashboardStats"].find((s)=>{
             return user.id === '3' || user.id === '5';
@@ -2606,53 +2784,55 @@ const mockApi = {
         const pastServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Completed');
         const pendingServices = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mocks$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockServiceRequests"].filter((sr)=>sr.requesterId === userId && sr.status === 'Pending');
         return {
-            user,
-            stats: userStats,
-            activeServices,
-            pastServices,
-            pendingServices
+            data: {
+                user,
+                stats: userStats,
+                activeServices,
+                pastServices,
+                pendingServices
+            },
+            success: true,
+            message: 'Requester dashboard data fetched successfully'
         };
     },
     async createService (serviceData) {
         await delay(300);
         return {
+            data: serviceData,
             success: true,
-            message: "Mock service created",
-            data: serviceData
+            message: 'Mock service created'
         };
     },
     async updateService (id, serviceData) {
         await delay(300);
         return {
+            data: serviceData,
             success: true,
-            message: "Mock service updated",
-            data: serviceData
+            message: 'Mock service updated'
         };
     },
     async deleteService (id) {
         await delay(300);
         return {
+            data: id,
             success: true,
-            message: "Mock service deleted",
-            data: id
+            message: 'Mock service deleted'
         };
     }
 };
 const handleApiError = (error)=>{
     console.error('API Error:', error);
-    if (error.message) {
-        return {
-            error: error.message
-        };
-    }
     return {
-        error: 'An unexpected error occurred'
+        data: null,
+        success: false,
+        message: error.message || 'An unexpected error occurred'
     };
 };
-const handleApiSuccess = (data)=>{
+const handleApiSuccess = (data, message = 'Operation successful')=>{
     return {
         data,
-        success: true
+        success: true,
+        message
     };
 };
 }}),
@@ -2667,9 +2847,9 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/mockApi.ts [app-ssr] (ecmascript)");
 ;
-console.log("Mock:" + JSON.stringify(("TURBOPACK compile-time value", "false")));
+console.log("Mock:" + JSON.stringify(("TURBOPACK compile-time value", "true")));
 // Configuration
-const USE_MOCK_API = ("TURBOPACK compile-time value", "false") === 'true';
+const USE_MOCK_API = ("TURBOPACK compile-time value", "true") === 'true';
 const API_BASE_URL = 'http://localhost:5111/api';
 // API client configuration
 const apiClient = {
@@ -2718,334 +2898,243 @@ class ApiService {
     // Authentication
     async login(email, password) {
         console.log("login isMock:" + JSON.stringify(USE_MOCK_API));
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].login(email, password);
         }
-        return apiRequest('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                email,
-                password
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async register(userData) {
         console.log("register isMock:" + JSON.stringify(USE_MOCK_API));
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].register(userData);
         }
-        return apiRequest('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify(userData)
-        });
+        "TURBOPACK unreachable";
     }
     async forgotPassword(email) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].forgotPassword(email);
         }
-        return apiRequest('/auth/forgot-password', {
-            method: 'POST',
-            body: JSON.stringify({
-                email
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Users
     async getUsers(page = 1, limit = 10, search = '') {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUsers(page, limit, search);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...search && {
-                search
-            }
-        });
-        return apiRequest(`/users?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async updateUserStatus(userId, isActive) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserStatus(userId, isActive);
         }
-        return apiRequest(`/users/${userId}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                isActive
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async verifyUser(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].verifyUser(userId);
         }
-        return apiRequest(`/users/${userId}/verify`, {
-            method: 'PUT'
-        });
+        "TURBOPACK unreachable";
     }
     // Categories
     async getCategories() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getCategories();
         }
-        return apiRequest('/categories');
+        "TURBOPACK unreachable";
     }
     async createCategory(categoryData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createCategory(categoryData);
         }
-        return apiRequest('/categories', {
-            method: 'POST',
-            body: JSON.stringify(categoryData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateCategory(id, categoryData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateCategory(id, categoryData);
         }
-        return apiRequest(`/categories/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(categoryData)
-        });
+        "TURBOPACK unreachable";
     }
     async deleteCategory(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].deleteCategory(id);
         }
-        return apiRequest(`/categories/${id}`, {
-            method: 'DELETE'
-        });
+        "TURBOPACK unreachable";
     }
     // Services
     async getServices(page = 1, limit = 10, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServices(page, limit, filters);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...filters
-        });
-        return apiRequest(`/services?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async getServiceById(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceById(id);
         }
-        return apiRequest(`/services/${id}`);
+        "TURBOPACK unreachable";
     }
     async deleteService(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].deleteService(id);
         }
-        return apiRequest(`/services/${id}`, {
-            method: 'DELETE'
-        });
+        "TURBOPACK unreachable";
     }
     async updateServiceStatus(id, isVerified) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceStatus(id, isVerified);
         }
-        return apiRequest(`/services/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                isVerified
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Contracts
     async getContracts(page = 1, limit = 10, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getContracts(page, limit, filters);
         }
-        const params = new URLSearchParams({
-            page: page.toString(),
-            limit: limit.toString(),
-            ...filters
-        });
-        return apiRequest(`/contracts?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async createContract(contractData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createContract(contractData);
         }
-        return apiRequest('/contracts', {
-            method: 'POST',
-            body: JSON.stringify(contractData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateContractStatus(id, status) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateContractStatus(id, status);
         }
-        return apiRequest(`/contracts/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                status
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // Ratings
     async getServiceRatings(serviceId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRatings(serviceId);
         }
-        return apiRequest(`/services/${serviceId}/ratings`);
+        "TURBOPACK unreachable";
     }
     async createRating(ratingData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createRating(ratingData);
         }
-        return apiRequest('/ratings', {
-            method: 'POST',
-            body: JSON.stringify(ratingData)
-        });
+        "TURBOPACK unreachable";
     }
     // Notifications
     async getNotifications(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getNotifications(userId);
         }
-        return apiRequest(`/users/${userId}/notifications`);
+        "TURBOPACK unreachable";
     }
     async markNotificationAsRead(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].markNotificationAsRead(id);
         }
-        return apiRequest(`/notifications/${id}/read`, {
-            method: 'PUT'
-        });
+        "TURBOPACK unreachable";
     }
     // Dashboard
     async getDashboardStats() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboardStats();
         }
-        return apiRequest('/admin/dashboard/stats');
+        "TURBOPACK unreachable";
     }
     // Search and Filters
     async getSearchFilters() {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getSearchFilters();
         }
-        return apiRequest('/services/filters');
+        "TURBOPACK unreachable";
     }
     // Enhanced Dashboard
     async getDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getDashboard(userId);
         }
-        return apiRequest(`/dashboard/${userId}`);
+        "TURBOPACK unreachable";
     }
     async getProviderDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getProviderDashboard(userId);
         }
-        return apiRequest(`/dashboard/provider/${userId}`);
+        "TURBOPACK unreachable";
     }
     async getRequesterDashboard(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getRequesterDashboard(userId);
         }
-        return apiRequest(`/dashboard/requester/${userId}`);
+        "TURBOPACK unreachable";
     }
     // Service Requests
     async getServiceRequests(userId, filters = {}) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequests(userId, filters);
         }
-        const params = new URLSearchParams({
-            userId,
-            ...filters
-        });
-        return apiRequest(`/service-requests?${params}`);
+        "TURBOPACK unreachable";
+        const params = undefined;
     }
     async getServiceRequestById(id) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getServiceRequestById(id);
         }
-        return apiRequest(`/service-requests/${id}`);
+        "TURBOPACK unreachable";
     }
     async updateServiceRequestStatus(id, status) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateServiceRequestStatus(id, status);
         }
-        return apiRequest(`/service-requests/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                status
-            })
-        });
+        "TURBOPACK unreachable";
     }
     async createServiceRequest(requestData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createServiceRequest(requestData);
         }
-        return apiRequest('/service-requests', {
-            method: 'POST',
-            body: JSON.stringify(requestData)
-        });
+        "TURBOPACK unreachable";
     }
     async createEstimationRequest(requestData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createEstimationRequest(requestData);
         }
-        return apiRequest('/estimation-requests', {
-            method: 'POST',
-            body: JSON.stringify(requestData)
-        });
+        "TURBOPACK unreachable";
     }
     // Availability Management
     async getAvailability(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getAvailability(userId);
         }
-        return apiRequest(`/availability/${userId}`);
+        "TURBOPACK unreachable";
     }
     async updateAvailability(userId, availabilityData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateAvailability(userId, availabilityData);
         }
-        return apiRequest(`/availability/${userId}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                availability: availabilityData
-            })
-        });
+        "TURBOPACK unreachable";
     }
     // User Profile
     async getUserProfile(userId) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].getUserProfile(userId);
         }
-        return apiRequest(`/users/${userId}/profile`);
+        "TURBOPACK unreachable";
     }
     async updateUserProfile(userId, profileData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateUserProfile(userId, profileData);
         }
-        return apiRequest(`/users/${userId}/profile`, {
-            method: 'PUT',
-            body: JSON.stringify(profileData)
-        });
+        "TURBOPACK unreachable";
     }
     async createService(serviceData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].createService(serviceData);
         }
-        return apiRequest('/services', {
-            method: 'POST',
-            body: JSON.stringify(serviceData)
-        });
+        "TURBOPACK unreachable";
     }
     async updateService(id, serviceData) {
-        if ("TURBOPACK compile-time falsy", 0) {
-            "TURBOPACK unreachable";
+        if ("TURBOPACK compile-time truthy", 1) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$mockApi$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mockApi"].updateService(id, serviceData);
         }
-        return apiRequest(`/services/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(serviceData)
-        });
+        "TURBOPACK unreachable";
     }
 }
 const api = new ApiService();
@@ -3082,7 +3171,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$dist$
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/select.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/api.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
 "use client";
+;
 ;
 ;
 ;
@@ -3128,17 +3219,15 @@ function AdminCategoriesPage() {
             icon: ""
         }
     });
-    const fetchCategories = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
-        setLoading(true);
+    const fetchCategories = async ()=>{
         try {
             const result = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["api"].getCategories();
-            setCategories(result || []);
+            setCategories(result.data || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
-        } finally{
-            setLoading(false);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to load categories");
         }
-    }, []);
+    };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         fetchCategories();
     }, [
@@ -3217,14 +3306,14 @@ function AdminCategoriesPage() {
             children: "Active"
         }, void 0, false, {
             fileName: "[project]/src/app/admin/categories/page.tsx",
-            lineNumber: 161,
+            lineNumber: 160,
             columnNumber: 7
         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
             variant: "secondary",
             children: "Inactive"
         }, void 0, false, {
             fileName: "[project]/src/app/admin/categories/page.tsx",
-            lineNumber: 163,
+            lineNumber: 162,
             columnNumber: 7
         }, this);
     };
@@ -3266,7 +3355,7 @@ function AdminCategoriesPage() {
                             children: "Category Management"
                         }, void 0, false, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 193,
+                            lineNumber: 192,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3274,13 +3363,13 @@ function AdminCategoriesPage() {
                             children: "Manage service categories and classifications"
                         }, void 0, false, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 194,
+                            lineNumber: 193,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                    lineNumber: 192,
+                    lineNumber: 191,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3294,19 +3383,19 @@ function AdminCategoriesPage() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                        lineNumber: 201,
+                                        lineNumber: 200,
                                         columnNumber: 15
                                     }, this),
                                     "Search & Actions"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                lineNumber: 200,
+                                lineNumber: 199,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 199,
+                            lineNumber: 198,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -3320,7 +3409,7 @@ function AdminCategoriesPage() {
                                                 className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 208,
+                                                lineNumber: 207,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -3330,13 +3419,13 @@ function AdminCategoriesPage() {
                                                 className: "pl-10"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 209,
+                                                lineNumber: 208,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                        lineNumber: 207,
+                                        lineNumber: 206,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3350,14 +3439,14 @@ function AdminCategoriesPage() {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 218,
+                                                        lineNumber: 217,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Search"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 217,
+                                                lineNumber: 216,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3366,7 +3455,7 @@ function AdminCategoriesPage() {
                                                 children: "Clear"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 221,
+                                                lineNumber: 220,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3377,37 +3466,37 @@ function AdminCategoriesPage() {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 225,
+                                                        lineNumber: 224,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Add Category"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 224,
+                                                lineNumber: 223,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                        lineNumber: 216,
+                                        lineNumber: 215,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                lineNumber: 206,
+                                lineNumber: 205,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 205,
+                            lineNumber: 204,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                    lineNumber: 198,
+                    lineNumber: 197,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -3422,20 +3511,20 @@ function AdminCategoriesPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 236,
+                                    lineNumber: 235,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                     children: "Manage service categories and their properties"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 237,
+                                    lineNumber: 236,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 235,
+                            lineNumber: 234,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -3447,7 +3536,7 @@ function AdminCategoriesPage() {
                                             className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 242,
+                                            lineNumber: 241,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3455,13 +3544,13 @@ function AdminCategoriesPage() {
                                             children: "Loading categories..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 243,
+                                            lineNumber: 242,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 241,
+                                    lineNumber: 240,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Table"], {
                                     children: [
@@ -3472,53 +3561,53 @@ function AdminCategoriesPage() {
                                                         children: "Category"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 249,
+                                                        lineNumber: 248,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                         children: "Description"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 250,
+                                                        lineNumber: 249,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                         children: "Services"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 251,
+                                                        lineNumber: 250,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                         children: "Status"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 252,
+                                                        lineNumber: 251,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                         children: "Created"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 253,
+                                                        lineNumber: 252,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                         children: "Actions"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                        lineNumber: 254,
+                                                        lineNumber: 253,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                lineNumber: 248,
+                                                lineNumber: 247,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 247,
+                                            lineNumber: 246,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -3535,12 +3624,12 @@ function AdminCategoriesPage() {
                                                                             children: category.icon
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                            lineNumber: 263,
+                                                                            lineNumber: 262,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                        lineNumber: 262,
+                                                                        lineNumber: 261,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3548,18 +3637,18 @@ function AdminCategoriesPage() {
                                                                         children: category.name
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                        lineNumber: 265,
+                                                                        lineNumber: 264,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 261,
+                                                                lineNumber: 260,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 260,
+                                                            lineNumber: 259,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -3568,12 +3657,12 @@ function AdminCategoriesPage() {
                                                                 children: category.description
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 269,
+                                                                lineNumber: 268,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 268,
+                                                            lineNumber: 267,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -3585,19 +3674,19 @@ function AdminCategoriesPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 274,
+                                                                lineNumber: 273,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 273,
+                                                            lineNumber: 272,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
                                                             children: getStatusBadge(category.isActive)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 276,
+                                                            lineNumber: 275,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -3606,12 +3695,12 @@ function AdminCategoriesPage() {
                                                                 children: new Date(category.createdAt).toLocaleDateString()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 280,
+                                                                lineNumber: 279,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 279,
+                                                            lineNumber: 278,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -3626,12 +3715,12 @@ function AdminCategoriesPage() {
                                                                             className: "h-4 w-4"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                            lineNumber: 291,
+                                                                            lineNumber: 290,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                        lineNumber: 286,
+                                                                        lineNumber: 285,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -3643,12 +3732,12 @@ function AdminCategoriesPage() {
                                                                                     placeholder: "Status"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                    lineNumber: 296,
+                                                                                    lineNumber: 295,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                lineNumber: 295,
+                                                                                lineNumber: 294,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -3658,7 +3747,7 @@ function AdminCategoriesPage() {
                                                                                         children: "Activate"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                        lineNumber: 299,
+                                                                                        lineNumber: 298,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -3666,19 +3755,19 @@ function AdminCategoriesPage() {
                                                                                         children: "Deactivate"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                        lineNumber: 300,
+                                                                                        lineNumber: 299,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                lineNumber: 298,
+                                                                                lineNumber: 297,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                        lineNumber: 294,
+                                                                        lineNumber: 293,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialog"], {
@@ -3692,17 +3781,17 @@ function AdminCategoriesPage() {
                                                                                         className: "h-4 w-4"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                        lineNumber: 307,
+                                                                                        lineNumber: 306,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                    lineNumber: 306,
+                                                                                    lineNumber: 305,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                lineNumber: 305,
+                                                                                lineNumber: 304,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogContent"], {
@@ -3713,7 +3802,7 @@ function AdminCategoriesPage() {
                                                                                                 children: "Delete Category"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                                lineNumber: 312,
+                                                                                                lineNumber: 311,
                                                                                                 columnNumber: 33
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
@@ -3730,19 +3819,19 @@ function AdminCategoriesPage() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                                        lineNumber: 316,
+                                                                                                        lineNumber: 315,
                                                                                                         columnNumber: 37
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                                lineNumber: 313,
+                                                                                                lineNumber: 312,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                        lineNumber: 311,
+                                                                                        lineNumber: 310,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogFooter"], {
@@ -3751,7 +3840,7 @@ function AdminCategoriesPage() {
                                                                                                 children: "Cancel"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                                lineNumber: 323,
+                                                                                                lineNumber: 322,
                                                                                                 columnNumber: 33
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
@@ -3760,53 +3849,53 @@ function AdminCategoriesPage() {
                                                                                                 children: "Delete"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                                lineNumber: 324,
+                                                                                                lineNumber: 323,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                        lineNumber: 322,
+                                                                                        lineNumber: 321,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                                lineNumber: 310,
+                                                                                lineNumber: 309,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                        lineNumber: 304,
+                                                                        lineNumber: 303,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 285,
+                                                                lineNumber: 284,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 284,
+                                                            lineNumber: 283,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, category.id, true, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 259,
+                                                    lineNumber: 258,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 257,
+                                            lineNumber: 256,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 246,
+                                    lineNumber: 245,
                                     columnNumber: 15
                                 }, this),
                                 !loading && categories.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3817,7 +3906,7 @@ function AdminCategoriesPage() {
                                             children: "No categories found."
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 343,
+                                            lineNumber: 342,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3826,25 +3915,25 @@ function AdminCategoriesPage() {
                                             children: "Create First Category"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 344,
+                                            lineNumber: 343,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 342,
+                                    lineNumber: 341,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                            lineNumber: 239,
+                            lineNumber: 238,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                    lineNumber: 234,
+                    lineNumber: 233,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -3858,20 +3947,20 @@ function AdminCategoriesPage() {
                                         children: selectedCategory ? "Edit Category" : "Create Category"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                        lineNumber: 356,
+                                        lineNumber: 355,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
                                         children: selectedCategory ? "Update the category information below." : "Add a new service category to the platform."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                                        lineNumber: 359,
+                                        lineNumber: 358,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                lineNumber: 355,
+                                lineNumber: 354,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Form"], {
@@ -3889,7 +3978,7 @@ function AdminCategoriesPage() {
                                                             children: "Name"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 373,
+                                                            lineNumber: 372,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormControl"], {
@@ -3898,28 +3987,28 @@ function AdminCategoriesPage() {
                                                                 ...field
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 375,
+                                                                lineNumber: 374,
                                                                 columnNumber: 25
                                                             }, void 0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 374,
+                                                            lineNumber: 373,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 377,
+                                                            lineNumber: 376,
                                                             columnNumber: 23
                                                         }, void 0)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 372,
+                                                    lineNumber: 371,
                                                     columnNumber: 21
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 368,
+                                            lineNumber: 367,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormField"], {
@@ -3931,7 +4020,7 @@ function AdminCategoriesPage() {
                                                             children: "Description"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 387,
+                                                            lineNumber: 386,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormControl"], {
@@ -3940,28 +4029,28 @@ function AdminCategoriesPage() {
                                                                 ...field
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 389,
+                                                                lineNumber: 388,
                                                                 columnNumber: 25
                                                             }, void 0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 388,
+                                                            lineNumber: 387,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 394,
+                                                            lineNumber: 393,
                                                             columnNumber: 23
                                                         }, void 0)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 386,
+                                                    lineNumber: 385,
                                                     columnNumber: 21
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 382,
+                                            lineNumber: 381,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormField"], {
@@ -3973,7 +4062,7 @@ function AdminCategoriesPage() {
                                                             children: "Icon"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 404,
+                                                            lineNumber: 403,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormControl"], {
@@ -3982,28 +4071,28 @@ function AdminCategoriesPage() {
                                                                 ...field
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 406,
+                                                                lineNumber: 405,
                                                                 columnNumber: 25
                                                             }, void 0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 405,
+                                                            lineNumber: 404,
                                                             columnNumber: 23
                                                         }, void 0),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                            lineNumber: 408,
+                                                            lineNumber: 407,
                                                             columnNumber: 23
                                                         }, void 0)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 403,
+                                                    lineNumber: 402,
                                                     columnNumber: 21
                                                 }, void 0)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 399,
+                                            lineNumber: 398,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4016,7 +4105,7 @@ function AdminCategoriesPage() {
                                                     children: "Cancel"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 414,
+                                                    lineNumber: 413,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4028,7 +4117,7 @@ function AdminCategoriesPage() {
                                                                 className: "mr-2 h-4 w-4 animate-spin"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                                lineNumber: 424,
+                                                                lineNumber: 423,
                                                                 columnNumber: 25
                                                             }, this),
                                                             "Saving..."
@@ -4036,46 +4125,46 @@ function AdminCategoriesPage() {
                                                     }, void 0, true) : selectedCategory ? "Update Category" : "Create Category"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                                    lineNumber: 421,
+                                                    lineNumber: 420,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/categories/page.tsx",
-                                            lineNumber: 413,
+                                            lineNumber: 412,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                                    lineNumber: 367,
+                                    lineNumber: 366,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/categories/page.tsx",
-                                lineNumber: 366,
+                                lineNumber: 365,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/categories/page.tsx",
-                        lineNumber: 354,
+                        lineNumber: 353,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/admin/categories/page.tsx",
-                    lineNumber: 353,
+                    lineNumber: 352,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/admin/categories/page.tsx",
-            lineNumber: 191,
+            lineNumber: 190,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/admin/categories/page.tsx",
-        lineNumber: 190,
+        lineNumber: 189,
         columnNumber: 5
     }, this);
 }

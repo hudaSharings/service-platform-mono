@@ -58,11 +58,7 @@ export default function AdminUsersPage() {
     setLoading(true);
     try {
       const result = await api.getUsers(1, 50, searchTerm);
-      if (result.success) {
-        setUsers(result.data.users || []);
-      } else {
-        toast.error(result.message || "Failed to load users");
-      }
+      setUsers(result.data?.users || []);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {

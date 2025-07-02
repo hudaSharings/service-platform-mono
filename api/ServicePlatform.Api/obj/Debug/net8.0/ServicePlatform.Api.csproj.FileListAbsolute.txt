@@ -160,4 +160,3 @@ C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Api\obj\Debug\net8.0\Serv
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Api\obj\Debug\net8.0\ServicePlatform.Api.genruntimeconfig.cache
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Api\obj\Debug\net8.0\ref\ServicePlatform.Api.dll
 C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Api\obj\Debug\net8.0\ServicePlatform.Api.sourcelink.json
-C:\Users\Admin\Documents\AI-Source\api\ServicePlatform.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

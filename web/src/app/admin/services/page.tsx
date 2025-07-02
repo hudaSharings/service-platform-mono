@@ -82,11 +82,7 @@ export default function AdminServicesPage() {
       if (selectedStatus) filters.status = selectedStatus;
 
       const result = await api.getServices(1, 50, filters);
-      if (result.success) {
-        setServices(result.data.services || []);
-      } else {
-        toast.error(result.message || "Failed to load services");
-      }
+      setServices(result.data?.services || []);
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
@@ -102,11 +98,7 @@ export default function AdminServicesPage() {
   const fetchCategories = async () => {
     try {
       const result = await api.getCategories();
-      if (result.success) {
-        setCategories(result.data || []);
-      } else {
-        toast.error(result.message || "Failed to load categories");
-      }
+      setCategories(result.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }

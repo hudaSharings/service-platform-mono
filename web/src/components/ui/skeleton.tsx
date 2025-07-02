@@ -27,8 +27,8 @@ export function SkeletonCard() {
   );
 }
 
-export function SkeletonAvatar() {
-  return <Skeleton className="h-10 w-10 rounded-full" />;
+export function SkeletonAvatar({ className }: { className?: string }) {
+  return <Skeleton className={cn("h-10 w-10 rounded-full", className)} />;
 }
 
 export function SkeletonText({ lines = 3 }: { lines?: number }) {

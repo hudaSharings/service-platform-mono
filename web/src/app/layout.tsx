@@ -17,16 +17,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isMockMode = process.env.NEXT_PUBLIC_USE_MOCK_API === 'true';
-
+  
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {isMockMode && (
-          <div className="fixed top-0 left-0 right-0 bg-yellow-500 text-black text-center py-2 text-sm font-medium z-50">
-            🚀 Running in Mock Mode - No Backend Required
-          </div>
-        )}
+      <body className={inter.className}>       
         <AuthProvider>
           <LoadingProvider>
             {children}
